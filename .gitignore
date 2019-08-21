@@ -1,0 +1,10 @@
+node_modules
+build_ui/
+build_server/
+build_app/
+
+*.pyc
+__pycache__
+*.log
+.vscode
+.DS_store
