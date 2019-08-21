@@ -1,0 +1,5 @@
+#install pyinstaller
+pip install PyInstaller==3.5
+
+#build
+pyinstaller --clean --noconfirm --log-level=WARN server.spec
