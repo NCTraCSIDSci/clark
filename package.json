@@ -96,6 +96,7 @@
     "build_ui": "webpack --config webpack.config.js",
     "build_server": "cd ./server/installer && pyinstaller --clean --noconfirm --distpath=../../build_server/dist --workpath=../../build_server/work server.spec",
     "build_standalone": "electron-builder --dir",
-    "build_installer": "electron-builder"
+    "build_installer": "electron-builder",
+    "prestart": "pre-commit install"
   }
 }
