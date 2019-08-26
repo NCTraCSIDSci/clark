@@ -5,7 +5,7 @@ CLARK is a natural language processing and machine learning-based application de
 CLARK was developed by [NC TRaCS](https://tracs.unc.edu) and [CoVar](https://covar.com).
 
 ## About
-CLARK is a cross-platform desktop applicaiton leveraging [Electron](https://electronjs.org), a Python based machine learning engine and a [React](http://Reactjs.org) based user interface.
+CLARK is a cross-platform desktop application leveraging [Electron](https://electronjs.org), a Python based machine learning engine and a [React](http://Reactjs.org) based user interface.
 
 ## Development Instructions
 
@@ -39,7 +39,7 @@ npm start
 ```
 
 ### Packaging
-Packaging is handled using [PyInstaller](http://www.pyinstaller.org) to bundle the python engine and [Electron Builder](http://electron.build) to package everything together and build standalone applications and/or installers. Execution of each of these commands can be done using npm scripts.
+Packaging is handled using [PyInstaller](http://www.pyinstaller.org) to bundle the Python engine and [Electron Builder](http://electron.build) to package everything together and build standalone applications and/or installers. Execution of each of these commands can be done using npm scripts.
 
 - Bundles python libraries into standalone binary
   ```
@@ -54,4 +54,4 @@ Packaging is handled using [PyInstaller](http://www.pyinstaller.org) to bundle t
   npm run build_installer
   ```
 
-Packages are best build on the native architecture.
+Packages are best built on the native architecture.
