@@ -1,0 +1,182 @@
+"""Blueprint for FHIR endpoints."""
+from functools import wraps
+
+from flask import Blueprint, jsonify, request
+
+import engine
+import state
+
+bp_fhir = Blueprint('fhir', __name__)
+
+
+def require_fhir(f):
+    """Helper decorator to enforce that FHIR data is loaded."""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if state.patients is None or len(state.patients) < 1:
+            return 'No FHIR data loaded.', 428, {'Content-Type': 'text/plain'}
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+@bp_fhir.route('/load', methods=['POST'])
+def load_fhir():
+    """
+    Load FHIR data into application state given path(s) to FHIR file(s).
+
+    ---
+    tags: ["FHIR"]
+    requestBody:
+        description: "Path(s) for the file(s) to load"
+        content:
+            application/json:
+                schema:
+                    type: object
+                    properties:
+                        paths:
+                            description: "Paths to FHIR files"
+                            type: array
+                            items:
+                                description: "/path/to/fhir/file"
+                                type: string
+                    required: ["paths"]
+    responses:
+        200:
+            description: "FHIR data loaded"
+            content:
+                application/json:
+                    schema:
+                        type: object
+        428:
+            description: "No patients loaded"
+            content:
+                application/json:
+                    schema:
+                        type: object
+    """
+    paths = request.json.get('paths')
+
+    messages, state.patients, state.labs, state.vitals, state.medications = \
+        engine.ingest.ingest_fhir(paths)
+
+    if state.patients is None:
+        patient_ids = []
+        code = 428
+    else:
+        patient_ids = list(state.patients.keys())
+        code = 200
+
+    d = {
+        'messages': messages,
+        'patient_ids': patient_ids
+    }
+
+    return jsonify(d), code
+
+
+@bp_fhir.route('/patients', methods=['GET'])
+@require_fhir
+def get_patients_summary():
+    """
+    Return a summary of patients.
+
+    ---
+    tags: ["FHIR"]
+    responses:
+        200:
+            description: "Corpus summary returned"
+            content:
+                application/json:
+                    schema:
+                        type: array
+                        items:
+                            type: object
+        428:
+            description: "No corpus currently in application state"
+            content:
+                text/plain:
+                    schema:
+                        type: string
+    """
+    return jsonify([])
+
+
+@bp_fhir.route('/labs', methods=['GET'])
+@require_fhir
+def get_labs_summary():
+    """
+    Return a summary of labs.
+
+    ---
+    tags: ["FHIR"]
+    responses:
+        200:
+            description: "Lab summary returned"
+            content:
+                application/json:
+                    schema:
+                        type: array
+                        items:
+                            type: object
+        428:
+            description: "No FHIR data currently in application state"
+            content:
+                text/plain:
+                    schema:
+                        type: string
+    """
+    return jsonify(state.labs.to_dict())
+
+
+@bp_fhir.route('/vitals', methods=['GET'])
+@require_fhir
+def get_vitals_summary():
+    """
+    Return a summary of vitals.
+
+    ---
+    tags: ["FHIR"]
+    responses:
+        200:
+            description: "Vitals summary returned"
+            content:
+                application/json:
+                    schema:
+                        type: array
+                        items:
+                            type: object
+        428:
+            description: "No FHIR data currently in application state"
+            content:
+                text/plain:
+                    schema:
+                        type: string
+    """
+    return jsonify(state.vitals.to_dict())
+
+
+@bp_fhir.route('/medications', methods=['GET'])
+@require_fhir
+def get_medications_summary():
+    """
+    Return a summary of medications.
+
+    ---
+    tags: ["FHIR"]
+    responses:
+        200:
+            description: "Medications summary returned"
+            content:
+                application/json:
+                    schema:
+                        type: array
+                        items:
+                            type: object
+        428:
+            description: "No FHIR data currently in application state"
+            content:
+                text/plain:
+                    schema:
+                        type: string
+    """
+    return jsonify(state.medications.to_dict())

@@ -193,6 +193,9 @@ class CodedResourceLUT:
         self.data = {}
         self.total_count = 0
 
+    def __len__(self):
+        return len(self.data.keys())
+
     def add(self, code, id_val, units=None):
         msg = []
         entry = self.data.get(code)
@@ -237,7 +240,7 @@ class CodedResourceLUT:
     def to_dict(self):
         entries = []
         d = {'total_count': self.total_count,
-             'unique_count': len(self.data.keys()),
+             'unique_count': len(self),
              'data': entries}
 
         for k, v in self.data.items():

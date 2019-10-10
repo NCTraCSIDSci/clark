@@ -3,13 +3,15 @@ from flasgger import Swagger
 # from flask_cors import CORS
 
 from blueprint_corpus import bp_corpus
-from blueprint_regex_setup import bp_regex_setup
+from blueprint_fhir import bp_fhir
 from blueprint_ml import bp_ml
+from blueprint_regex_setup import bp_regex_setup
 from blueprint_session import bp_session
 
 app = Flask("clark_server")
 app.register_blueprint(bp_session, url_prefix='/')
 app.register_blueprint(bp_corpus, url_prefix='/')
+app.register_blueprint(bp_fhir, url_prefix='/fhir')
 app.register_blueprint(bp_regex_setup, url_prefix='/')
 app.register_blueprint(bp_ml, url_prefix='/')
 
@@ -40,6 +42,10 @@ swagger_template = {
         {
             "name": "Corpus",
             "description": "Methods for loading and fetching data from the training and test corpora"
+        },
+        {
+            "name": "FHIR",
+            "description": "Methods for loading and fetching data from the FHIR data"
         },
         {
             "name": "Features",
