@@ -16,8 +16,8 @@ app.register_blueprint(bp_ml, url_prefix='/')
 swagger_template = {
     "openapi": "3.0.1",
     "info": {
-        "title": "Clark Desktop API",
-        "description": "Backend server for the Clark desktop application",
+        "title": "CLARK Desktop API",
+        "description": "Backend server for the CLARK desktop application.",
         "contact": {
             "name": "UNC TRaCS",
             "email": "kenny@covar.com",
@@ -43,15 +43,15 @@ swagger_template = {
         },
         {
             "name": "Features",
-            "description": "Methods for loading, saving and mainulating the feature regular expressions"
+            "description": "Methods for loading, saving and manipulating the feature regular expressions"
         },
         {
             "name": "Keywords",
-            "description": "Methods for loading, saving and mainulating the keyword regular expressions"
+            "description": "Methods for loading, saving and manipulating the keyword regular expressions"
         },
         {
             "name": "Sections",
-            "description": "Methods for loading, saving and mainulating the section defintion regular expressions"
+            "description": "Methods for loading, saving and manipulating the section defintion regular expressions"
         },
         {
             "name": "Machine Learning",
@@ -82,7 +82,7 @@ swagger_config = {
 }
 
 app.config['SWAGGER'] = {
-    'title': 'Clark API',
+    'title': 'CLARK API',
     'uiversion': 3
 }
 
