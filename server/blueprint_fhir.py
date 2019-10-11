@@ -1,4 +1,5 @@
 """Blueprint for FHIR endpoints."""
+from collections import defaultdict
 from functools import wraps
 
 from flask import Blueprint, jsonify, request
@@ -98,7 +99,42 @@ def get_patients_summary():
                     schema:
                         type: string
     """
-    return jsonify([])
+    count = len(state.patients)
+
+    gender_hist = defaultdict(int)
+    marital_hist = defaultdict(int)
+
+    for p in state.patients.values():
+        gender_hist[p.gender] += 1
+
+        try:
+            marital_hist[p.maritalStatus.display] += 1
+        except AttributeError:
+            pass
+
+    gender_hist.pop(None, None)
+
+    d = {
+        'count': count,
+        'properties': {
+            'gender': {
+                'display': 'Gender',
+                'type': 'categorical',
+                'percentDefined': sum(gender_hist.values()) / count * 100.0,
+                'num_categories': len(gender_hist),
+                'histogram': gender_hist
+            },
+            'marital_status': {
+                'display': 'Marital Status',
+                'type': 'categorical',
+                'percentDefined': sum(marital_hist.values()) / count * 100.0,
+                'num_categories': len(marital_hist),
+                'histogram': marital_hist
+            }
+        }
+    }
+
+    return jsonify(d)
 
 
 @bp_fhir.route('/patient/<string:identifier>', methods=['GET'])
