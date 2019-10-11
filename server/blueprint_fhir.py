@@ -101,6 +101,55 @@ def get_patients_summary():
     return jsonify([])
 
 
+@bp_fhir.route('/patient/<string:identifier>', methods=['GET'])
+@require_fhir
+def get_patient_summary(identifier):
+    """
+    Return a summary for an individual patient.
+
+    ---
+    tags: ["FHIR"]
+    parameters:
+        - name: identifier
+          in: path
+          description: ID of the patient to load
+          required: true
+          schema:
+            type: string
+    responses:
+        200:
+            description: "Individual patient summary returned"
+            content:
+                application/json:
+                    schema:
+                        type: array
+                        items:
+                            type: object
+        404:
+            description: "No patient exists with identifier"
+            content:
+                text/plain:
+                    schema:
+                        type: string
+        428:
+            description: "No FHIR data currently in application state"
+            content:
+                text/plain:
+                    schema:
+                        type: string
+    """
+    p = state.patients.get(identifier)
+
+    if p is None:
+        return (
+            f'No patient exists with identifier "{identifier}".',
+            404,
+            {'Content-Type': 'text/plain'}
+        )
+
+    return jsonify(p.to_dict())
+
+
 @bp_fhir.route('/labs', methods=['GET'])
 @require_fhir
 def get_labs_summary():
