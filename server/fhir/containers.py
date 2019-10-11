@@ -33,6 +33,7 @@ class MedicationAggregator(ResourceAggregator):
     Data structure for holding a collection of like medications and keeping
     track of aggregate statistics for those medications.
     """
+    pass
 
 
 class ObservationAggregator(ResourceAggregator):
