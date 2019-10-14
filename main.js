@@ -53,7 +53,7 @@ function createWindow() {
   const spawn = require('child_process').spawn;
   const cp = require('child_process');
   /* This is a check to see if we are running in packaged or unpackaged mode. */
-  fs.stat('./server/server.py', (err, stats) => {
+  fs.stat('./clarkproc/clarkproc/server_app.py', (err, stats) => {
     // If this errors, we can't find the server python function - We must be deployed
     if (err) {
       let appPath = app.getAppPath();
@@ -73,7 +73,7 @@ function createWindow() {
       // We can find the server python script, assume we are running from a terminal
       // with the correct python environment, and just start the script
       console.log("ELECTRON: Starting development python server.");
-      subpy = spawn('python', ['./server/server.py']);
+      subpy = spawn('python', ['./clarkproc/clarkproc/server_app.py']);
     }
 
     // Map console logging of the spawned processes into the active command line
