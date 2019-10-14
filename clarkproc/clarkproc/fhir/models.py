@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from base64 import b64decode
 
-from server.fhir.errors import *
-from server.fhir.containers import ObservationContainer, MedicationContainer
+from .errors import *
+from .containers import ObservationContainer, MedicationContainer
 
 
 class CodeValue:

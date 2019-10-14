@@ -2,11 +2,11 @@ from flask import Flask
 from flasgger import Swagger
 # from flask_cors import CORS
 
-from blueprint_corpus import bp_corpus
-from blueprint_fhir import bp_fhir
-from blueprint_ml import bp_ml
-from blueprint_regex_setup import bp_regex_setup
-from blueprint_session import bp_session
+from .blueprint_corpus import bp_corpus
+from .blueprint_fhir import bp_fhir
+from .blueprint_ml import bp_ml
+from .blueprint_regex_setup import bp_regex_setup
+from .blueprint_session import bp_session
 
 app = Flask("clark_server")
 app.register_blueprint(bp_session, url_prefix='/')

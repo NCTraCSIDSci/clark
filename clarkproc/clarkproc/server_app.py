@@ -2,9 +2,8 @@ import os
 import json
 from flask import request
 
-import state
-
-from server_setup import app
+from clarkproc import state
+from clarkproc.server_setup import app
 
 
 @app.route('/ping')

@@ -1,9 +1,8 @@
 """Blueprint for session loading and saving endpoints."""
 from flask import Blueprint, jsonify, request
 
-import engine
-import state
-
+from . import engine
+from . import state
 bp_session = Blueprint('session', __name__)
 
 @bp_session.route('/session/state', methods=['GET'])

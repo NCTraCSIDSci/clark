@@ -5,8 +5,8 @@ import csv
 import numpy as np
 import sklearn
 
-import engine
-import state
+from . import engine
+from . import state
 
 bp_ml = Blueprint('ml', __name__)
 

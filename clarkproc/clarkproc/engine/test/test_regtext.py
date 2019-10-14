@@ -1,6 +1,6 @@
 import pytest
 import re
-from engine.regtext import MultiRegexText
+from ..regtext import MultiRegexText
 
 """ You can run these tests by doing:
 

@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 
-import engine
-import state
+from . import engine
+from . import state
 
 bp_regex_setup = Blueprint('regex_setup', __name__)
 

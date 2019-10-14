@@ -6,7 +6,7 @@ application.  These session variables hold application state across the REST
 interfaces
 """
 
-import engine
+from . import engine
 
 corpus = None
 test_corpus = None

@@ -11,7 +11,7 @@ import numpy as np
 from collections import defaultdict
 from collections import OrderedDict
 
-import engine.classification
+from . import classification
 
 
 class Corpus():
@@ -206,10 +206,10 @@ class ProcessingBlock():
     def run(self, corpus):
         '''Process data from a corpus into a DataSet for classification.'''
 
-        ds = engine.classification.DataSet()
+        ds = classification.DataSet()
         for patient in corpus.get_patients():
             print('Processing pt: {}'.format(patient.id))
-            patient_ds = engine.classification.DataSet()
+            patient_ds = classification.DataSet()
 
             patient = copy.deepcopy(patient)
             num_notes = len(patient.notes)
@@ -508,7 +508,7 @@ class FeatureExtractor():
 
     def run(self, note):
 
-        ds = engine.classification.DataSet()
+        ds = classification.DataSet()
         expressions_valid = self.get_expressions_valid()
         # ds.featureInfo = expressions_valid
         # keep track of which patterns features come from for debugging
@@ -740,7 +740,7 @@ class FeatureCombiner():
         if len(ds.targets)==0:
             ds.targets = [[]]*ds.n_obs
 
-        ds_out = engine.classification.DataSet()
+        ds_out = classification.DataSet()
 
         unused = [True]*ds.n_obs
         for (expr, use, name, valid) in expr_list:

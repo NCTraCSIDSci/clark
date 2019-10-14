@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 setup(
-    name='clark-server',
+    name='clarkproc',
     version='0.0.1',
     author='CoVar Applied Technologies',
     author_email='griffin@covar.com',

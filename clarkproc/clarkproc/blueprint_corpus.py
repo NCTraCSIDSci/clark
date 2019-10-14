@@ -2,8 +2,8 @@
 import copy
 from flask import Blueprint, jsonify, request
 
-import engine
-import state
+from . import engine
+from . import state
 
 bp_corpus = Blueprint('corpus', __name__)
 
