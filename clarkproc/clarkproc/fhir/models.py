@@ -398,3 +398,14 @@ class DocumentReference(Resource):
             raise FHIRError(
                 '{} contains attachment data that could not be '
                 'decoded ({}).'.format(self.id_str, e))
+
+    def to_dict(self):
+        # TODO Consider memoizing this.
+        d = super().to_dict()
+        d.update({
+            'status': self.status,
+            'indexed': self.indexed.isoformat() if self.indexed is not None else self.indexed,
+            'data': self.data
+        })
+
+        return d

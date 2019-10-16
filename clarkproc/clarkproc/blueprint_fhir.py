@@ -304,6 +304,70 @@ def get_patient_details(patient_id, detail_type):
     return jsonify(d)
 
 
+@bp_fhir.route('/patient/<string:patient_id>/note/<string:note_id>', methods=['GET'])
+@require_fhir
+def get_patient_note(patient_id, note_id):
+    """
+    Return a note for a patient.
+
+    ---
+    tags: ["FHIR"]
+    parameters:
+        - name: patient_id
+          in: path
+          description: ID of the patient of interest
+          required: true
+          schema:
+            type: string
+        - name: note_id
+          in: path
+          description: ID of the note of interest
+          required: true
+          schema:
+            type: string
+    responses:
+        200:
+            description: "Note returned"
+            content:
+                application/json:
+                    schema:
+                        type: array
+                        items:
+                            type: object
+        404:
+            description: "No patient or note exists with identifier"
+            content:
+                text/plain:
+                    schema:
+                        type: string
+        428:
+            description: "No FHIR data currently in application state"
+            content:
+                text/plain:
+                    schema:
+                        type: string
+    """
+    p = state.patients.get(patient_id)
+
+    if p is None:
+        return (
+            f'No patient exists with identifier "{patient_id}".',
+            404,
+            {'Content-Type': 'text/plain'}
+        )
+
+    n = p.notes.get(note_id)
+
+    if n is None:
+        return (
+            f'No note exists with identifier "{note_id}".',
+            404,
+            {'Content-Type': 'text/plain'}
+        )
+
+    return jsonify(n.to_dict())
+
+
 @bp_fhir.route('/labs', methods=['GET'])
 @require_fhir
 def get_labs_summary():
