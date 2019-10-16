@@ -162,8 +162,7 @@ def ingest_fhir(paths):
         patient_id = get_patient_id(note)
 
         if patient_id is not None:
-            patients[patient_id].notes.append(note)
-            # TODO
+            patients[patient_id].notes[note.id] = note
 
     if msg_list:
         messages['linking'] = msg_list

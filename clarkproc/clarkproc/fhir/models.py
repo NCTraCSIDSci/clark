@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from base64 import b64decode
 
-from .errors import *
 from .containers import ObservationContainer, MedicationContainer
+from .errors import *
 
 
 class CodeValue:
@@ -122,7 +122,7 @@ class Patient(Resource):
         self.labs = ObservationContainer()
         self.vitals = ObservationContainer()
         self.medications = MedicationContainer()
-        self.notes = []
+        self.notes = {}
 
         self.gender = fhir_patient.gender
 
@@ -162,7 +162,7 @@ class Patient(Resource):
             'labs': self.labs.to_dict(),
             'vitals': self.vitals.to_dict(),
             'medications': self.medications.to_dict(),
-            'notes': None # TODO
+            'note_ids':  list(self.notes.keys())
         })
 
         return d
