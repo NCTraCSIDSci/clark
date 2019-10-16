@@ -273,6 +273,17 @@ class Observation(Resource):
     def _create(cls, fhir_data, msg_list=None):
         return cls.factory(fhir_data, msg_list=msg_list)
 
+    def to_dict(self):
+        # TODO Consider memoizing this.
+        d = super().to_dict()
+        d.update({
+            'effectiveDateTime': self.effectiveDateTime.isoformat(),
+            'value': self.value,
+            'unit': self.unit,
+        })
+
+        return d
+
 
 class Lab(Observation):
     OBSERVATION_CATEGORY = 'laboratory'
@@ -326,6 +337,17 @@ class MedicationRequest(Resource):
                 raise FHIRError(
                     '{} failed to parse "medicationCodeableConcept" '
                     '({}).'.format(self.id_str, e))
+
+    def to_dict(self):
+        # TODO Consider memoizing this.
+        d = super().to_dict()
+        d.update({
+            'authoredOn': self.authoredOn.isoformat() if self.authoredOn is not None else self.authoredOn,
+            'status': self.status,
+            'intent': self.intent,
+        })
+
+        return d
 
 
 class DocumentReference(Resource):

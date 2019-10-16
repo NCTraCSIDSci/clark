@@ -6,6 +6,7 @@ from flask import Blueprint, jsonify, request
 
 from . import engine
 from . import state
+from .fhir.models import CodeValue
 
 bp_fhir = Blueprint('fhir', __name__)
 
@@ -184,6 +185,123 @@ def get_patient_summary(patient_id):
         )
 
     return jsonify(p.to_dict())
+
+
+@bp_fhir.route('/patient/<string:patient_id>/details/<string:detail_type>',
+               methods=['GET'])
+@require_fhir
+def get_patient_details(patient_id, detail_type):
+    """
+    Return details for an individual patient for a particular class of data.
+
+    ---
+    tags: ["FHIR"]
+    parameters:
+        - name: patient_id
+          in: path
+          description: ID of the patient of interest
+          required: true
+          schema:
+            type: string
+        - name: detail_type
+          in: path
+          description: Class of details to return
+          required: true
+          schema:
+            type: string
+            enum: [lab, vital, medication]
+        - name: system
+          in: query
+          description: System of interest
+          required: true
+          schema:
+            type: string
+        - name: code
+          in: query
+          description: Code of interest
+          required: true
+          schema:
+            type: string
+    responses:
+        200:
+            description: "Details returned"
+            content:
+                application/json:
+                    schema:
+                        type: array
+                        items:
+                            type: object
+        400:
+            description: "Invalid request"
+            content:
+                text/plain:
+                    schema:
+                        type: string
+        404:
+            description: "No patient or system/code exists"
+            content:
+                text/plain:
+                    schema:
+                        type: string
+        428:
+            description: "No FHIR data currently in application state"
+            content:
+                text/plain:
+                    schema:
+                        type: string
+    """
+    p = state.patients.get(patient_id)
+
+    if p is None:
+        return (
+            f'No patient exists with identifier "{patient_id}".',
+            404,
+            {'Content-Type': 'text/plain'}
+        )
+
+    code = request.args.get('code')
+    system = request.args.get('system')
+
+    if code is None:
+        return (
+            '"code" parameter is missing', 400, {'Content-Type': 'text/plain'}
+        )
+
+    if system is None:
+        return (
+            '"system" parameter is missing', 400, {'Content-Type': 'text/plain'}
+        )
+
+    lut = {
+        'lab': p.labs,
+        'vital': p.vitals,
+        'medication': p.medications
+    }
+
+    try:
+        data = lut[detail_type.lower()].data
+    except KeyError:
+        return (
+            f'Unsupported detail type "{detail_type}".  '
+            f'Allowed options are {list(lut.keys())}.',
+            400,
+            {'Content-Type': 'text/plain'}
+        )
+
+    try:
+        entries = data.get(CodeValue(code, system)).data
+    except AttributeError:
+        return (
+            f'No {detail_type} exists with system/code: ({system}, {code}).',
+            404,
+            {'Content-Type': 'text/plain'}
+        )
+
+    d = {'count': len(entries),
+         'data': [e.to_dict() for e in entries]
+     }
+
+    return jsonify(d)
 
 
 @bp_fhir.route('/labs', methods=['GET'])
