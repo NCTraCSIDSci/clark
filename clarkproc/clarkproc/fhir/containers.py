@@ -255,6 +255,7 @@ class CodedResourceLUT:
 
             entries.append(entry_d)
 
-        entries.sort(key=itemgetter('unique_count'), reverse=True)
+        entries.sort(key=itemgetter('unique_count', 'total_count'),
+                     reverse=True)
 
         return d
