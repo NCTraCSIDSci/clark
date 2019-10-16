@@ -4,14 +4,14 @@ from glob import glob
 
 from fhir.resources.STU3.fhirelementfactory import FHIRElementFactory
 
-from ..fhir.containers import CodedResourceLUT
-from ..fhir.errors import FHIRError
-from ..fhir.models import (DocumentReference,
-                           Lab,
-                           Patient,
-                           MedicationRequest,
-                           Resource,
-                           VitalSigns)
+from clarkproc.fhir.containers import CodedResourceLUT
+from clarkproc.fhir.errors import FHIRError
+from clarkproc.fhir.models import (DocumentReference,
+                                   Lab,
+                                   Patient,
+                                   MedicationRequest,
+                                   Resource,
+                                   VitalSigns)
 
 
 def ingest_fhir(paths):
