@@ -3,7 +3,7 @@ from flasgger import Swagger
 # from flask_cors import CORS
 
 from .blueprint_corpus import bp_corpus
-from .blueprint_fhir import bp_fhir
+from .blueprint_fhir import TEST_DATA_INDICATOR, bp_fhir
 from .blueprint_ml import bp_ml
 from .blueprint_regex_setup import bp_regex_setup
 from .blueprint_session import bp_session
@@ -12,6 +12,8 @@ app = Flask("clark_server")
 app.register_blueprint(bp_session, url_prefix='/')
 app.register_blueprint(bp_corpus, url_prefix='/')
 app.register_blueprint(bp_fhir, url_prefix='/fhir')
+app.register_blueprint(bp_fhir, url_prefix='/test',
+                       url_defaults={TEST_DATA_INDICATOR: True})
 app.register_blueprint(bp_regex_setup, url_prefix='/')
 app.register_blueprint(bp_ml, url_prefix='/')
 

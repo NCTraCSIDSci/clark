@@ -5,24 +5,31 @@ from functools import wraps
 from flask import Blueprint, jsonify, request
 
 from . import engine
-from . import state
+from . import state as s
 from .fhir.models import CodeValue
 
 bp_fhir = Blueprint('fhir', __name__)
+
+TEST_DATA_INDICATOR = 'is_test_data'
 
 
 def require_fhir(f):
     """Helper decorator to enforce that FHIR data is loaded."""
     @wraps(f)
     def decorated_function(*args, **kwargs):
+        if kwargs.get(TEST_DATA_INDICATOR, False):
+            state = s.test
+        else:
+            state = s.train
+
         if state.patients is None or len(state.patients) < 1:
             return 'No FHIR data loaded.', 428, {'Content-Type': 'text/plain'}
-        return f(*args, **kwargs)
+        return f(state, *args, **kwargs)
     return decorated_function
 
 
 @bp_fhir.route('/load', methods=['POST'])
-def load_fhir():
+def load_fhir(**kwargs):
     """
     Load FHIR data into application state given path(s) to FHIR file(s).
 
@@ -56,6 +63,11 @@ def load_fhir():
                     schema:
                         type: object
     """
+    if kwargs.get(TEST_DATA_INDICATOR, False):
+        state = s.test
+    else:
+        state = s.train
+
     paths = request.json.get('paths')
 
     messages, state.patients, state.labs, state.vitals, state.medications = \
@@ -78,7 +90,7 @@ def load_fhir():
 
 @bp_fhir.route('/patients', methods=['GET'])
 @require_fhir
-def get_patients_summary():
+def get_patients_summary(state, *args, **kwargs):
     """
     Return a summary of patients.
 
@@ -140,7 +152,7 @@ def get_patients_summary():
 
 @bp_fhir.route('/patient/<string:patient_id>', methods=['GET'])
 @require_fhir
-def get_patient_summary(patient_id):
+def get_patient_summary(state, patient_id, *args, **kwargs):
     """
     Return a summary for an individual patient.
 
@@ -190,7 +202,7 @@ def get_patient_summary(patient_id):
 @bp_fhir.route('/patient/<string:patient_id>/details/<string:detail_type>',
                methods=['GET'])
 @require_fhir
-def get_patient_details(patient_id, detail_type):
+def get_patient_details(state, patient_id, detail_type, *args, **kwargs):
     """
     Return details for an individual patient for a particular class of data.
 
@@ -306,7 +318,7 @@ def get_patient_details(patient_id, detail_type):
 
 @bp_fhir.route('/patient/<string:patient_id>/note/<string:note_id>', methods=['GET'])
 @require_fhir
-def get_patient_note(patient_id, note_id):
+def get_patient_note(state, patient_id, note_id, *args, **kwargs):
     """
     Return a note for a patient.
 
@@ -370,7 +382,7 @@ def get_patient_note(patient_id, note_id):
 
 @bp_fhir.route('/labs', methods=['GET'])
 @require_fhir
-def get_labs_summary():
+def get_labs_summary(state, *args, **kwargs):
     """
     Return a summary of labs.
 
@@ -397,7 +409,7 @@ def get_labs_summary():
 
 @bp_fhir.route('/vitals', methods=['GET'])
 @require_fhir
-def get_vitals_summary():
+def get_vitals_summary(state, *args, **kwargs):
     """
     Return a summary of vitals.
 
@@ -424,7 +436,7 @@ def get_vitals_summary():
 
 @bp_fhir.route('/medications', methods=['GET'])
 @require_fhir
-def get_medications_summary():
+def get_medications_summary(state, *args, **kwargs):
     """
     Return a summary of medications.
 

@@ -8,30 +8,41 @@ interfaces
 
 from . import engine
 
+
+# Reference: https://stackoverflow.com/a/5021467
+class AttributeDict(dict):
+    __getattr__ = dict.__getitem__
+    __setattr__ = dict.__setitem__
+
+
 corpus = None
 test_corpus = None
 last_result = None
 proc = engine.text.ProcessingBlock()
 classifier = None
-patients = None
-labs = None
-vitals = None
-medications = None
+
+train = AttributeDict(patients=None, labs=None, vitals=None, medications=None)
+test = AttributeDict(patients=None, labs=None, vitals=None, medications=None)
 
 
 def reset():
-    global corpus, test_corpus, last_result, proc, classifier, patients, labs, \
-        vitals, medications
+    global corpus, test_corpus, last_result, proc, classifier, train, test
 
     corpus = None
     test_corpus = None
     last_result = None
     proc = engine.text.ProcessingBlock()
     classifier = None
-    patients = None
-    labs = None
-    vitals = None
-    medications = None
+
+    train.patients = None
+    train.labs = None
+    train.vitals = None
+    train.medications = None
+
+    test.patients = None
+    test.labs = None
+    test.vitals = None
+    test.medications = None
 
 
 def summary():
@@ -40,8 +51,16 @@ def summary():
         'has_test_corpus': test_corpus is not None,
         'has_results': last_result is not None,
         'has_classifier': classifier is not None,
-        'num_patients': len(patients) if patients is not None else 0,
-        'num_labs': len(labs) if labs is not None else 0,
-        'num_vitals': len(vitals)  if vitals is not None else 0,
-        'num_medications': len(medications) if medications is not None else 0,
+        'train': {
+            'num_patients': len(train.patients or []),
+            'num_labs': len(train.labs or []),
+            'num_vitals': len(train.vitals or []),
+            'num_medications': len(train.medications or []),
+        },
+        'test': {
+            'num_patients': len(test.patients or []),
+            'num_labs': len(test.labs or []),
+            'num_vitals': len(test.vitals or []),
+            'num_medications': len(test.medications or []),
+        }
     }
