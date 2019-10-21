@@ -1,0 +1,4 @@
+{
+  "parent": "\\b(mother)|(father)|(parent)",
+  "beak": "\\b(beak)|(bill)\\b"
+}
