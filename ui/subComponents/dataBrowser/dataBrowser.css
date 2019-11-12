@@ -1,0 +1,12 @@
+#dataBrowser {
+    width: 50%;
+    height: 90%;
+    margin: auto;
+}
+.dataBrowserRow {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: white;
+    border-bottom: 1px solid black;
+}

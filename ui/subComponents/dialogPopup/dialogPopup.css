@@ -1,0 +1,16 @@
+#errorDialogHeader {
+    background-color: red;
+    text-align: center;
+}
+#dialogHeader {
+    background-color: green;
+    text-align: center;
+}
+#dialogContent {
+    background-color: #fafbfc;
+    font-size: 20px;
+    padding: 40px;
+}
+#dialogActions {
+    background-color: #e6e7e8;
+}

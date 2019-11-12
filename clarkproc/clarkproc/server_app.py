@@ -20,13 +20,17 @@ def reset():
         return 'Failed to reset.', 500
 
 
-@app.route('/shutdownoverride')
-def shutdown():
+def shutdown_server():
     """Shut down the server after handling current requests."""
     func = request.environ.get('werkzeug.server.shutdown')
     if func is None:
         raise RuntimeError('Not running the server')
     func()
+
+@app.route('/shutdown')
+def shutdown():
+    """Allow frontend to shut down server."""
+    shutdown_server()
     return 'Server is shutting down...'
 
 

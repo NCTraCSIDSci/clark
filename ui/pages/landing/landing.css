@@ -1,0 +1,11 @@
+.blueButton {
+    background-color: #4E92C2;
+}
+.blueButton:hover {
+    background-color: #247ebf;
+}
+#landingButtonContainer > * {
+    width: 200px;
+    height: 75px;
+    margin: 50px;
+}

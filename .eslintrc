@@ -1,16 +1,41 @@
 {
   "extends": "airbnb",
+  "plugins": [
+      "react",
+      "jsx-a11y",
+      "import"
+  ],
+  "settings": {
+    "import/core-modules": ["electron"]
+  },
   "env": {
+    "browser": true,
     "node": true,
-    "es6": true
+    "jest": true,
+    "mocha": true
   },
   "rules": {
-    "linebreak-style": "off",
-    "object-curly-spacing": "off",
+    "react/prop-types": "off",
+    "class-methods-use-this": "off",
     "max-len": "off",
-    "indent" : "off",
-    "react/jsx-boolean-value": "off",
-    "quotes": "off",
-    "react/prop-types": "off"
+    "no-return-assign": ["error", "except-parens"],
+    "operator-linebreak": "off",
+    "react/no-array-index-key": "off",
+    "react/sort-comp": ["error", {
+      "order": [
+        "static-methods",
+        "instance-variables",
+        "lifecycle",
+        "instance-methods",
+        "everything-else",
+        "rendering"
+      ],
+      "groups": {
+        "rendering": [
+          "/^render.+$/",
+          "render"
+        ]
+      }
+    }]
   }
 }
