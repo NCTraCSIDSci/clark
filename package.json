@@ -33,18 +33,26 @@
     "url-loader": "^2.2.0",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0",
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
+    "@ag-grid-community/all-modules": "^22.0.0",
+    "@ag-grid-community/react": "^22.0.0",
     "@material-ui/core": "^4.6.0",
     "@material-ui/icons": "^4.5.1",
     "@material-ui/styles": "^4.6.0",
     "axios": "^0.19.0",
+    "lodash": "^4.17.15",
     "markdown-it": "^10.0.0",
     "minimist": "^1.2.0",
     "react": "^16.11.0",
+    "react-data-grid": "^7.0.0-alpha.22",
     "react-dom": "^16.11.0",
     "react-virtualized": "^9.21.1",
+    "react-virtualized-auto-sizer": "^1.0.2",
+    "react-virtuoso": "^0.12.3",
+    "react-window": "^1.8.5",
     "request": "^2.88.0",
     "request-promise": "^4.2.5",
     "shortid": "^2.2.15"
@@ -86,8 +94,9 @@
     "extends": null
   },
   "scripts": {
-    "start": "npm run build_ui && electron ./main.js -d",
-    "build_ui": "webpack --config webpack.config.js",
+    "watch": "webpack-dev-server --config webpack.dev.js",
+    "start": "electron ./main.js -d",
+    "build_ui": "webpack --config webpack.prod.js",
     "build_server": "cd ./server/installer && pyinstaller --clean --noconfirm --distpath=../../build_server/dist --workpath=../../build_server/work server.spec",
     "build_standalone": "electron-builder --dir",
     "build_installer": "electron-builder",

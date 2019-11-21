@@ -2,7 +2,7 @@
 
 const electron = require('electron');
 // Module to control application life.
-const { app, ipcMain } = electron;
+const { app } = electron;
 
 const config = require('./config.json');
 
@@ -22,7 +22,6 @@ const os = require('os');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
-let serverStatus = 'server-not-ready';
 
 // Grab command line input arguments for later processing
 const args = require('minimist')(process.argv.slice(2)); // slice off electron call and main.js
@@ -40,10 +39,6 @@ let binaryEnding = '.exe';
 if (type === 'Linux' || type === 'Darwin') {
   binaryEnding = '';
 }
-
-ipcMain.on('server-status', () => {
-  mainWindow.webContents.send(serverStatus);
-});
 
 
 function createWindow() {
