@@ -49,6 +49,66 @@ const API = {
         reject(error);
       });
   }),
+  getPatientList: () => new Promise((resolve, reject) => {
+    axios.get(url('fhir/patient_list'))
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        const error = errorHandling(err);
+        reject(error);
+      });
+  }),
+  getPatientDetails: (id) => new Promise((resolve, reject) => {
+    axios.get(url(`fhir/patient/${id}`))
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        const error = errorHandling(err);
+        reject(error);
+      });
+  }),
+  getPatientNote: (patientId, noteId) => new Promise((resolve, reject) => {
+    axios.get(url(`fhir/patient/${patientId}/note/${noteId}`))
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        const error = errorHandling(err);
+        reject(error);
+      });
+  }),
+  getLabs: () => new Promise((resolve, reject) => {
+    axios.get(url('fhir/labs'))
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        const error = errorHandling(err);
+        reject(error);
+      });
+  }),
+  getMeds: () => new Promise((resolve, reject) => {
+    axios.get(url('fhir/medications'))
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        const error = errorHandling(err);
+        reject(error);
+      });
+  }),
+  getVitals: () => new Promise((resolve, reject) => {
+    axios.get(url('fhir/vitals'))
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        const error = errorHandling(err);
+        reject(error);
+      });
+  }),
 };
 
 export default API;

@@ -1,0 +1,42 @@
+#patientModalTitle {
+    text-align: center;
+    background-color: #97bedb;
+    color: #183042;
+    padding: 5px;
+    position: relative;
+}
+#patientModalTitle > h2 {
+    margin: 5px 0px;
+}
+#patientDetails {
+    position: relative;
+    background-color: #fafbfc;
+    font-size: 17px;
+    height: 300px;
+    padding: 0;
+}
+#drawerOpenButton {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+}
+#drawerCloseButton {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 5px;
+    padding: 2px 0px;
+}
+#patientNotes {
+    display: flex;
+    height: 100%;
+}
+#noteIds {
+    width: 30%;
+    height: 100%;
+    overflow: auto;
+}
+#patientNote {
+    width: 70%;
+    height: 100%;
+    overflow: auto;
+}

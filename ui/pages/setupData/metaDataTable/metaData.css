@@ -1,0 +1,56 @@
+.metaDataItem {
+    border-radius: 0px !important;
+    border-top: 1px solid #ededed;
+    border-bottom: 1px solid #ededed;
+}
+.metaDataItemModified {
+    width: 15%;
+    text-align: center;
+}
+.metaDataCoverage {
+    width: 30%;
+    text-align: center;
+}
+.metaDataDisplay {
+    width: 55%;
+    display: flex;
+    flex-wrap: wrap;
+}
+.uncheckedMetaData {
+    background-color: #F0F4F5;
+}
+.checkedMetaData {
+    background-color: #97bedb;
+}
+.checkedMetaData:hover {
+    background-color: #4f93c4;
+}
+.metaDataPanel {
+    display: flex;
+    flex-direction: column;
+}
+.aggregationMethodButtons {
+    display: flex;
+    justify-content: space-around;
+}
+#noMetaData {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 120px;
+}
+#metaDataTextSearch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.activeMetaDataTab {
+    background-color: lightgrey;
+}
+.metaDataItemTitle > .MuiExpansionPanelSummary-content {
+    justify-content: space-around;
+}
+.metaDataSearch {
+    width: 140%;
+}

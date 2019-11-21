@@ -1,12 +1,42 @@
 #dataBrowser {
-    width: 50%;
-    height: 90%;
-    margin: auto;
-}
-.dataBrowserRow {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
+    overflow: auto;
     background-color: white;
-    border-bottom: 1px solid black;
+}
+.oddRow {
+    background-color: #f7f7f7;
+}
+.browserHeaderRow {
+    background-color: #97bedb;
+}
+.MuiTableCell-root {
+    border-bottom: none;
+}
+.browserCell {
+    display: flex;
+    justify-content: center;
+}
+.browserHeaderCell {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding-top: 5px !important;
+    color: #183042;
+}
+.browserHeaderContainer {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+.sortIcon {
+    display: inline-block;
+}
+.searchTextField {
+    background-color: #f8f8f8;
+    border-radius: 5px;
+}
+.evenRow:hover, .oddRow:hover {
+    cursor: pointer;
+    background-color: #e5e5e5;
 }

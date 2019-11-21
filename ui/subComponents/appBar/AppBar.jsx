@@ -8,6 +8,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Badge from '@material-ui/core/Badge';
 
 import Menu from '@material-ui/icons/Menu';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
@@ -15,12 +16,17 @@ import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import TuneIcon from '@material-ui/icons/Tune';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import SearchIcon from '@material-ui/icons/Search';
+import WarningIcon from '@material-ui/icons/Warning';
 import SaveIcon from '@material-ui/icons/Save';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import ErrorIcon from '@material-ui/icons/Error';
 
 import './appBar.css';
 
 function MenuBar(props) {
-  const { tab, setTab } = props;
+  const {
+    tab, setTab, popup, stepsComplete,
+  } = props;
   const [drawerOpen, toggleDrawer] = useState(false);
 
   // const active = ['landing', 'data', 'algo', 'explore'];
@@ -29,14 +35,14 @@ function MenuBar(props) {
   return (
     <>
       <AppBar position="fixed" className={drawerOpen ? 'appBarShift' : 'appBar'}>
-        <Toolbar>
+        <Toolbar className="appToolbar">
           <IconButton
             onClick={() => toggleDrawer(true)}
             className={drawerOpen ? 'hide' : 'show'}
           >
             <Menu />
           </IconButton>
-          <Typography variant="h4" id="appTitle">CLARK</Typography>
+          <Typography variant="h4" id="appTitle">Clark/Tracs</Typography>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -58,25 +64,62 @@ function MenuBar(props) {
         </div>
         <List id="drawerList">
           <ListItem button onClick={() => setTab('landing')} className={tab === 'landing' ? 'activePage' : ''}>
-            <ListItemIcon><PlaylistAddIcon /></ListItemIcon>
+            <Badge
+              badgeContent={stepsComplete.indexOf('load') > -1 ? <CheckCircleIcon className="stepCompleted" /> : ''}
+            >
+              <ListItemIcon><PlaylistAddIcon /></ListItemIcon>
+            </Badge>
             <ListItemText primary="Load Data" />
           </ListItem>
-          <ListItem button onClick={() => setTab('data')} className={tab === 'data' ? 'activePage' : ''}>
-            <ListItemIcon><TuneIcon /></ListItemIcon>
+          <ListItem
+            button
+            onClick={() => setTab('data')}
+            className={tab === 'data' ? 'activePage' : ''}
+            disabled={stepsComplete.indexOf('load') < 0}
+          >
+            <Badge
+              badgeContent={stepsComplete.indexOf('setupData') > -1 ? <CheckCircleIcon className="stepCompleted" /> : ''}
+            >
+              <ListItemIcon><TuneIcon /></ListItemIcon>
+            </Badge>
             <ListItemText primary="Setup" />
           </ListItem>
-          <ListItem button onClick={() => setTab('algo')} className={tab === 'algo' ? 'activePage' : ''}>
-            <ListItemIcon><NewReleasesIcon /></ListItemIcon>
+          <ListItem
+            button
+            onClick={() => setTab('algo')}
+            className={tab === 'algo' ? 'activePage' : ''}
+            disabled={stepsComplete.indexOf('setupData') < 0}
+          >
+            <Badge
+              badgeContent={stepsComplete.indexOf('algo') > -1 ? <CheckCircleIcon className="stepCompleted" /> : ''}
+            >
+              <ListItemIcon><NewReleasesIcon /></ListItemIcon>
+            </Badge>
             <ListItemText primary="Algorithm" />
           </ListItem>
-          <ListItem button onClick={() => setTab('explore')} className={tab === 'explore' ? 'activePage' : ''}>
+          <ListItem
+            button
+            onClick={() => setTab('explore')}
+            className={tab === 'explore' ? 'activePage' : ''}
+            disabled={stepsComplete.indexOf('algo') < 0}
+          >
             <ListItemIcon><SearchIcon /></ListItemIcon>
             <ListItemText primary="Explore" />
           </ListItem>
-          <ListItem id="saveButton" button onClick={() => console.log('save')}>
-            <ListItemIcon><SaveIcon /></ListItemIcon>
-            <ListItemText primary="Save" />
-          </ListItem>
+          <div id="bottomDrawerButtons">
+            <ListItem button onClick={popup.showErrors} disabled={!popup.errors}>
+              <Badge
+                badgeContent={popup.errors ? <ErrorIcon id="errorsPresent" /> : ''}
+              >
+                <ListItemIcon><WarningIcon /></ListItemIcon>
+              </Badge>
+              <ListItemText primary="Data Errors" />
+            </ListItem>
+            <ListItem button onClick={() => console.log('save')} disabled>
+              <ListItemIcon><SaveIcon /></ListItemIcon>
+              <ListItemText primary="Save" />
+            </ListItem>
+          </div>
         </List>
       </Drawer>
     </>

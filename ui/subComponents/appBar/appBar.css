@@ -1,5 +1,8 @@
+.appToolbar {
+    padding: 0;
+}
 #appTitle {
-    margin: auto;
+    margin-left: 20px;
 }
 .drawerOpen {
     width: 186px;
@@ -24,6 +27,7 @@
 .show {
     margin-right: 20px !important;
     color: #FFFFFF;
+    margin-left: 3px;
 }
 .appBar {
     z-index: 1201 !important;
@@ -53,6 +57,18 @@
     flex-direction: column;
     height: calc(100% - 64px);
 }
-#saveButton {
+#bottomDrawerButtons {
     margin-top: auto;
+}
+.stepCompleted {
+    color: green;
+    font-size: 18px;
+    position: absolute;
+    right: 16px;
+}
+#errorsPresent {
+    color: red;
+    font-size: 18px;
+    position: absolute;
+    right: 16px;
 }

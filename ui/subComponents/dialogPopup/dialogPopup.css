@@ -2,6 +2,10 @@
     background-color: red;
     text-align: center;
 }
+#errorMessage {
+    white-space: pre;
+    text-align: left;
+}
 #dialogHeader {
     background-color: green;
     text-align: center;

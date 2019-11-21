@@ -1,7 +1,7 @@
 import { remote } from 'electron';
 import API from '../API';
 
-function loadData(popup, data, setLoading, setTab) {
+function loadData(popup, setLoading, setTab, updateSteps) {
   const dirPathPromise = remote.dialog.showOpenDialogSync({
     properties: ['openDirectory'],
     filters: [{
@@ -17,11 +17,11 @@ function loadData(popup, data, setLoading, setTab) {
       .then((result) => {
         console.log('result', result);
         setLoading(false);
-        data.setData(result.patient_ids);
+        popup.parseErrors(result.messages);
         setTab('data');
+        updateSteps('load');
       })
       .catch((err) => {
-        console.log('error', err);
         setLoading(false);
         popup.showModal({
           disableBackdrop: false,

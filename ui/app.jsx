@@ -4,6 +4,7 @@ import StylesProvider from '@material-ui/styles/StylesProvider';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import './app.css';
+import 'react-virtualized/styles.css';
 
 import AppBar from './subComponents/appBar/AppBar';
 import Landing from './pages/landing/Landing';
@@ -13,16 +14,19 @@ import Explore from './pages/explore/Explore';
 import DialogPopup from './subComponents/dialogPopup/DialogPopup';
 
 import usePopup from './customHooks/usePopup';
-import useData from './customHooks/useData';
 
 import pingServer from './helperFunctions/pingServer';
-import loadData from './helperFunctions/uploadData';
 
 function App() {
   const [tab, setTab] = useState('landing');
   const [serverUp, updateServer] = useState(false);
+  const [stepsComplete, updateSteps] = useState([]);
   const popup = usePopup();
-  const data = useData();
+
+  function updateCompletedSteps(value) {
+    stepsComplete.push(value);
+    updateSteps([...stepsComplete]);
+  }
 
   useEffect(() => {
     pingServer(popup, updateServer);
@@ -32,21 +36,24 @@ function App() {
     <StylesProvider injectFirst>
       <CssBaseline />
       <div id="mainContainer">
-        <AppBar tab={tab} setTab={setTab} />
+        <AppBar
+          tab={tab}
+          setTab={setTab}
+          popup={popup}
+          stepsComplete={stepsComplete}
+        />
         <div id="content">
           {serverUp ? (
             <>
               <Landing
                 tab={tab}
-                loadData={loadData}
                 popup={popup}
-                data={data}
                 setTab={setTab}
+                updateSteps={updateCompletedSteps}
               />
               <SetupData
                 tab={tab}
                 popup={popup}
-                data={data}
               />
               <SetupAlgo
                 tab={tab}
