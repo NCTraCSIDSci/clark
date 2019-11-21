@@ -150,6 +150,34 @@ def get_patients_summary(state, *args, **kwargs):
     return jsonify(d)
 
 
+@bp_fhir.route('/patient_list', methods=['GET'])
+@require_fhir
+def get_patient_list(state, *args, **kwargs):
+    """
+    Return a list of all patients.
+
+    ---
+    tags: ["FHIR"]
+    responses:
+        200:
+            description: "Patient list returned"
+            content:
+                application/json:
+                    schema:
+                        type: array
+                        items:
+                            type: object
+        428:
+            description: "No FHIR data currently in application state"
+            content:
+                text/plain:
+                    schema:
+                        type: string
+    """
+
+    return jsonify([state.patients.get(patient).to_dict_summary() for patient in state.patients])
+
+
 @bp_fhir.route('/patient/<string:patient_id>', methods=['GET'])
 @require_fhir
 def get_patient_summary(state, patient_id, *args, **kwargs):

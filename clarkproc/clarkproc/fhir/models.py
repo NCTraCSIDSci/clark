@@ -162,7 +162,22 @@ class Patient(Resource):
             'labs': self.labs.to_dict(),
             'vitals': self.vitals.to_dict(),
             'medications': self.medications.to_dict(),
-            'note_ids':  list(self.notes.keys())
+            'note_ids': list(self.notes.keys())
+        })
+
+        return d
+
+    def to_dict_summary(self):
+        # TODO Consider memoizing this.
+        d = super().to_dict()
+        d.update({
+            'gender': self.gender,
+            'birthDate': self.birthDate.isoformat(),
+            'maritalStatus': self.maritalStatus.display,
+            'num_labs': self.labs.unique_count,
+            'num_vitals': self.vitals.unique_count,
+            'num_medications': self.medications.unique_count,
+            'num_notes': len(self.notes)
         })
 
         return d
