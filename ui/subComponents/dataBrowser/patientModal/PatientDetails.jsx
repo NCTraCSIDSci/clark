@@ -27,7 +27,7 @@ const blacklist = ['birthDate', 'gender', 'id', 'maritalStatus'];
 const Transition = React.forwardRef((props, ref) => <Zoom ref={ref} {...props} />); // eslint-disable-line react/jsx-props-no-spreading
 
 const PatientDetails = (props) => {
-  const { patientDetails, container } = props;
+  const { patientDetails, container, regex } = props;
   const {
     birthDate, gender, id, maritalStatus,
   } = patientDetails.patient;
@@ -45,6 +45,8 @@ const PatientDetails = (props) => {
       container={container}
       BackdropProps={{ style: { position: 'absolute' } }}
       style={{ position: 'absolute' }}
+      PaperProps={{ style: { height: '100%' } }}
+      disableEnforceFocus
     >
       {!patientDetails.loading ? (
         <>
@@ -75,6 +77,7 @@ const PatientDetails = (props) => {
                   <PatientNotes
                     noteIds={patientDetails.patient[open]}
                     patientId={patientDetails.patient.id}
+                    regex={regex}
                   />
                 ) : (
                   <PatientTable

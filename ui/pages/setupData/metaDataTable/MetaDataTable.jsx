@@ -39,7 +39,7 @@ function MetaDataTable(props) {
 
   function generateItem(index) {
     const item = metaData.filteredList[index];
-    const selectedMetaData = metaData.metaData[metaData.tab][`${item.code} ${item.system}`] ? metaData.metaData[metaData.tab][`${item.code} ${item.system}`].aggregationMethod : [];
+    const selectedMetaData = metaData.metaData[metaData.tab][`${item.code} ${item.system}`] || [];
     return (
       <ExpansionPanel
         key={shortid.generate()}

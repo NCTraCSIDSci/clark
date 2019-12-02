@@ -1,159 +1,178 @@
 import { useState, useEffect } from 'react';
 import { cloneDeep } from 'lodash';
 
+import isValidRegex from '../helperFunctions/isValidRegex';
+
+const colors = ['rgb(242, 46, 78)', 'rgb(54, 173, 164)', 'rgb(220, 137, 50)', 'rgb(174, 157, 49)', 'rgb(119, 171, 49)', 'rgb(51, 176, 122)', 'rgb(56, 169, 197)', 'rgb(110, 155, 244)', 'rgb(204, 122, 244)', 'rgb(245, 101, 204)'];
+
 const initialRegex = {
-  library: [
-    {
-      name: 'Test',
-      regex: '/_/g',
-    },
-    {
-      name: 'Foo',
-      regex: '/bird/g',
-    },
-  ],
+  library: [],
   expressions: [],
   sections: [],
 };
 
+const columnData = {
+  library: [
+    {
+      id: 'name',
+      label: 'Name',
+      width: '50%',
+    },
+    {
+      id: 'regex',
+      label: 'Reg. Exp',
+      width: '50%',
+    },
+  ],
+  expressions: [
+    { id: 'name', label: 'Name' },
+    { id: 'rawRegex', label: 'Reg. Exp' },
+  ],
+  sections: [
+    { id: 'name', label: 'Name' },
+    { id: 'regex', label: 'Reg. Exp' },
+    { id: 'ignore', label: 'Ignore' },
+  ],
+};
+
 function useRegex() {
-  const [regex, setRegex] = useState(initialRegex);
+  const [regexList, updateRegexList] = useState(initialRegex);
   const [tab, setTab] = useState(Object.keys(initialRegex)[0]);
-  const [gridApi, setGridApi] = useState(null);
-  const [columnApi, setColumnApi] = useState(null);
+  const [activeName, updateActiveName] = useState('');
+  const [activeRegex, updateActiveRegex] = useState('');
+  const [compiled, updateCompiled] = useState('');
+  const [validRegex, updateValidRegex] = useState([]);
+  const [showModal, toggleModal] = useState(false);
+  const [regexIndex, setRegexIndex] = useState(undefined);
+  const [sectionBreak, updateSectionBreak] = useState('');
+  const [ignore, updateIgnore] = useState(false);
 
-  function handleRegexChange(params) {
-    const tempRegex = cloneDeep(regex);
-    tempRegex[tab][params.node.childIndex] = params.data;
-    setRegex(tempRegex);
+  function remove(i) {
+    const tempRegex = cloneDeep(regexList);
+    tempRegex[tab].splice(i, 1);
+    updateRegexList(tempRegex);
   }
 
-  function removeRow() {
-    const cell = gridApi.getFocusedCell();
-    if (cell) {
-      const tempRegex = cloneDeep(regex);
-      tempRegex[tab].splice(cell.rowIndex, 1);
-      setRegex(tempRegex);
-    }
-  }
-
-  function rowDrag(event) {
-    const { overNode, node: movingNode } = event;
-    const rowNeedsToMove = movingNode !== overNode;
-    if (rowNeedsToMove) {
-      const movingData = movingNode.data;
-      const overData = overNode.data;
-      const fromIndex = regex[tab].indexOf(movingData);
-      const toIndex = regex[tab].indexOf(overData);
-      const tempRegex = cloneDeep(regex);
-      const element = tempRegex[tab][fromIndex];
-      tempRegex[tab].splice(fromIndex, 1);
-      tempRegex[tab].splice(toIndex, 0, element); // swap nodes
-      setRegex(tempRegex);
-      gridApi.clearFocusedCell();
-    }
-  }
-
-  const columnData = {
-    library: [
-      {
-        field: 'name',
-        headerName: 'Name',
-        editable: true,
-        onCellValueChanged: handleRegexChange,
-        rowDrag: true,
-      },
-      {
-        field: 'regex',
-        headerName: 'Reg. Exp',
-        editable: true,
-        onCellValueChanged: handleRegexChange,
-      },
-    ],
-    expressions: [
-      {
-        field: 'name',
-        headerName: 'Name',
-        editable: true,
-        onCellValueChanged: handleRegexChange,
-        rowDrag: true,
-      },
-      {
-        field: 'rawRegex',
-        headerName: 'Reg. Exp',
-        editable: true,
-        onCellValueChanged: handleRegexChange,
-      },
-      {
-        field: 'regex',
-        headerName: 'Compiled',
-        editable: false,
-      },
-    ],
-    sections: [
-      {
-        field: 'name',
-        headerName: 'Name',
-        rowDrag: true,
-      },
-      {
-        field: 'regex',
-        headerName: 'Reg. Exp',
-      },
-      {
-        field: 'inuse',
-        headerName: 'In Use',
-      },
-    ],
-  };
-
-  function addRow() {
-    if (regex[tab].find((row) => row.name === '')) {
+  function save() {
+    const tempRegex = cloneDeep(regexList);
+    if (regexList[tab].find((row, i) => regexIndex !== i && row.name === activeName)) {
+      // TODO: replace this with modal error
+      window.alert('a row with that name already exists');
       return;
     }
-    const tempRegex = cloneDeep(regex);
-    const keys = columnData[tab].map((col) => col.field);
-    console.log('keys', keys);
-    const newRow = {};
-    keys.forEach((key) => {
-      newRow[key] = '';
-    });
-    console.log('new row', newRow);
-    tempRegex[tab].push(newRow);
-    setRegex(tempRegex);
+    const row = {
+      name: activeName,
+      regex: activeRegex,
+      compiled,
+      color: colors[regexIndex % colors.length],
+    };
+    if (tab === 'sections') {
+      row.ignore = ignore;
+    }
+    tempRegex[tab][regexIndex] = row;
+    updateRegexList(tempRegex);
+    updateActiveName('');
+    updateActiveRegex('');
+    updateCompiled('');
+    toggleModal(false);
+  }
+
+  function openModal(i) {
+    if (i === undefined) {
+      setRegexIndex(regexList[tab].length);
+    } else {
+      const { name, regex } = regexList[tab][i];
+      updateActiveName(name);
+      updateActiveRegex(regex);
+      if (tab === 'sections') {
+        const { ignore: ign } = regexList[tab][i];
+        updateIgnore(ign);
+      }
+      updateIgnore(ignore);
+      if (tab === 'expressions' && regex.startsWith('#')) {
+        // do the search
+        const libRegex = regexList.library.find((reg) => reg.name === regex.substring(1));
+        if (libRegex) {
+          updateCompiled(libRegex.regex);
+        } else {
+          updateCompiled('');
+        }
+      }
+      setRegexIndex(i);
+    }
+    toggleModal(true);
+  }
+
+  function update(value) {
+    if (tab === 'expressions' && value.startsWith('#')) { // if the expression starts with a #
+      // find the label in the library and set that regex as the active value
+      const regex = regexList.library.find((reg) => reg.name === value.substring(1));
+      if (regex) {
+        updateCompiled(regex.regex);
+      } else {
+        updateCompiled('');
+      }
+    } else {
+      updateCompiled('');
+    }
+    updateActiveRegex(value);
   }
 
   useEffect(() => {
-    if (gridApi) {
-      gridApi.sizeColumnsToFit();
-      gridApi.setRowData(regex[tab]);
+    if (showModal) {
+      const regex = compiled || activeRegex;
+      if (isValidRegex(regex)) {
+        updateValidRegex([{
+          regex,
+          color: colors[regexIndex % colors.length],
+          name: activeName,
+        }]);
+      } else {
+        updateValidRegex([]);
+      }
+    } else {
+      const tempValidRegex = regexList.expressions.filter((regex) => {
+        if (!regex.name) {
+          return false;
+        }
+        if (!isValidRegex(regex.regex)) {
+          return false;
+        }
+        return true;
+      });
+      updateValidRegex(tempValidRegex);
     }
-  }, [tab, gridApi]);
-
-  useEffect(() => {
-    if (gridApi) {
-      console.log(regex);
-      gridApi.setRowData(regex[tab]);
-    }
-  }, [regex]);
-
-  function getRowNodeId(data) {
-    console.log('data', data);
-    return data.name;
-  }
+  }, [
+    regexList,
+    activeRegex,
+    showModal,
+    regexIndex,
+    activeName,
+    compiled,
+  ]);
 
   return {
     tabs: Object.keys(initialRegex),
     tab,
     setTab,
-    columnData: columnData[tab],
-    // rowData: regex[tab],
-    getRowNodeId,
-    addRow,
-    removeRow,
-    rowDrag,
-    setGridApi,
-    setColumnApi,
+    columns: columnData[tab],
+    rows: regexList[tab],
+    activeName,
+    updateActiveName,
+    activeRegex,
+    compiled,
+    update,
+    save,
+    remove,
+    validRegex,
+    sectionBreak,
+    updateSectionBreak,
+    ignore,
+    updateIgnore,
+    showModal,
+    toggleModal,
+    openModal,
+    badgeNum: regexList.expressions.length + regexList.sections.length,
   };
 }
 

@@ -11,7 +11,9 @@ import usePatientDetails from '../../customHooks/usePatientDetails';
 import PatientDetails from './patientModal/PatientDetails';
 
 function DataBrowser(props) {
-  const { patients, w, h } = props;
+  const {
+    patients, w, h, regex,
+  } = props;
   const patientDetails = usePatientDetails();
 
   function headerRenderer({
@@ -22,7 +24,7 @@ function DataBrowser(props) {
         component="div"
         variant="head"
         padding="none"
-        className="browserHeaderCell"
+        className="browserHeaderCell no-border"
       >
         {disableSort ? (
           <>
@@ -53,6 +55,7 @@ function DataBrowser(props) {
         component="div"
         variant="body"
         padding="none"
+        className="no-border"
       >
         {cellData}
       </TableCell>
@@ -105,6 +108,7 @@ function DataBrowser(props) {
       <PatientDetails
         patientDetails={patientDetails}
         container={document.getElementById('dataBrowser')}
+        regex={regex}
       />
     </Paper>
   );

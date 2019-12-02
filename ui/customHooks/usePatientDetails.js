@@ -18,7 +18,6 @@ function usePatientDetails() {
     setLoading(true);
     API.getPatientDetails(patientId)
       .then((res) => {
-        console.log('patient details', res);
         setPatient(res);
         setLoading(false);
       })

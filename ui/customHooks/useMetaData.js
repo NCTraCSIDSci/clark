@@ -37,6 +37,7 @@ function useMetaData() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState(initialFilter);
   const [tab, setTab] = useState(Object.keys(initialFilter)[0]);
+  const [badgeNum, updateBadgeNum] = useState(0);
 
   function updateFilteredList() {
     const tempFilteredList = initialLists[tab].filter((patient) => {
@@ -75,20 +76,21 @@ function useMetaData() {
   function updateMetaData(code, system, value) {
     const key = `${code} ${system}`;
     if (metaData[tab][key]) {
-      const aggregationArray = metaData[tab][key].aggregationMethod;
+      const aggregationArray = metaData[tab][key];
       const index = aggregationArray.indexOf(value);
       if (index !== -1) {
+        updateBadgeNum((prev) => prev - 1);
         aggregationArray.splice(index, 1);
         if (!aggregationArray.length) {
           delete metaData[tab][key];
         }
       } else {
+        updateBadgeNum((prev) => prev + 1);
         aggregationArray.push(value);
       }
     } else {
-      metaData[tab][key] = {
-        aggregationMethod: [value],
-      };
+      updateBadgeNum((prev) => prev + 1);
+      metaData[tab][key] = [value];
     }
     setMetaData({ ...metaData });
   }
@@ -119,6 +121,7 @@ function useMetaData() {
     tab,
     setTab,
     filteredList,
+    badgeNum,
   };
 }
 

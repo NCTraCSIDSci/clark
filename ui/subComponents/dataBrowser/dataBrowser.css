@@ -8,7 +8,7 @@
 .browserHeaderRow {
     background-color: #97bedb;
 }
-.MuiTableCell-root {
+.no-border {
     border-bottom: none;
 }
 .browserCell {

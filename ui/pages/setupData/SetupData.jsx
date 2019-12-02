@@ -20,10 +20,10 @@ function SetupData(props) {
   const patients = usePatientBrowser();
   const metaData = useMetaData();
   const regex = useRegex();
-  const metaDataBadgeNum = (
-    Object.keys(metaData.metaData.labs).length +
-    Object.keys(metaData.metaData.meds).length +
-    Object.keys(metaData.metaData.vitals).length);
+
+  const metaDataBadgeNum = metaData.badgeNum;
+
+  const notesBadgeNum = regex.badgeNum;
 
   useEffect(() => {
     if (tab === 'data') {
@@ -46,7 +46,7 @@ function SetupData(props) {
               <Tab
                 label={(
                   <div className="setupDataTab">
-                    MetaData
+                    Structured Data
                     <Avatar>
                       {`${metaDataBadgeNum}`}
                     </Avatar>
@@ -58,7 +58,7 @@ function SetupData(props) {
                   <div className="setupDataTab">
                     Notes
                     <Avatar>
-                      {`${metaDataBadgeNum}`}
+                      {`${notesBadgeNum}`}
                     </Avatar>
                   </div>
                 )}
@@ -79,6 +79,11 @@ function SetupData(props) {
             patients={patients}
             w="50%"
             h="100%"
+            regex={{
+              validRegex: regex.validRegex,
+              tab: regex.tab,
+              sectionBreak: regex.sectionBreak,
+            }}
           />
         </div>
       )}
