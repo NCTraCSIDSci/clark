@@ -3,7 +3,8 @@
   "plugins": [
       "react",
       "jsx-a11y",
-      "import"
+      "import",
+      "react-hooks"
   ],
   "settings": {
     "import/core-modules": ["electron"]
@@ -36,6 +37,8 @@
           "render"
         ]
       }
-    }]
+    }],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   }
 }
