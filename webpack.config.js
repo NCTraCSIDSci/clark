@@ -2,7 +2,7 @@ const path = require('path');
 
 const config = {
   resolve: {
-    extensions: ['.mjs', '.js', '.jsx', '.json'],
+    extensions: ['.js', '.jsx', '.json'],
     modules: [
       path.join(__dirname, '.'),
       'node_modules',
