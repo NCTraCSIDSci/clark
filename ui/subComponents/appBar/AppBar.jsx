@@ -75,7 +75,7 @@ function MenuBar(props) {
             button
             onClick={() => setTab('data')}
             className={tab === 'data' ? 'activePage' : ''}
-            disabled={stepsComplete.indexOf('load') < 0}
+            // disabled={stepsComplete.indexOf('load') < 0}
           >
             <Badge
               badgeContent={stepsComplete.indexOf('setupData') > -1 ? <CheckCircleIcon className="stepCompleted" /> : ''}
@@ -88,7 +88,7 @@ function MenuBar(props) {
             button
             onClick={() => setTab('algo')}
             className={tab === 'algo' ? 'activePage' : ''}
-            disabled={stepsComplete.indexOf('setupData') < 0}
+            // disabled={stepsComplete.indexOf('setupData') < 0}
           >
             <Badge
               badgeContent={stepsComplete.indexOf('algo') > -1 ? <CheckCircleIcon className="stepCompleted" /> : ''}
@@ -101,12 +101,12 @@ function MenuBar(props) {
             button
             onClick={() => setTab('explore')}
             className={tab === 'explore' ? 'activePage' : ''}
-            disabled={stepsComplete.indexOf('algo') < 0}
+            // disabled={stepsComplete.indexOf('algo') < 0}
           >
             <ListItemIcon><SearchIcon /></ListItemIcon>
             <ListItemText primary="Explore" />
           </ListItem>
-          <div id="bottomDrawerButtons">
+          <div className="bottomDrawerButtons">
             <ListItem button onClick={popup.showErrors} disabled={!popup.errors}>
               <Badge
                 badgeContent={popup.errors ? <ErrorIcon id="errorsPresent" /> : ''}

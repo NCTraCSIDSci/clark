@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { cloneDeep } from 'lodash';
 
+import API from '../API';
 import isValidRegex from '../helperFunctions/isValidRegex';
 
 const colors = ['rgb(242, 46, 78)', 'rgb(54, 173, 164)', 'rgb(220, 137, 50)', 'rgb(174, 157, 49)', 'rgb(119, 171, 49)', 'rgb(51, 176, 122)', 'rgb(56, 169, 197)', 'rgb(110, 155, 244)', 'rgb(204, 122, 244)', 'rgb(245, 101, 204)'];
@@ -113,6 +114,7 @@ function useRegex() {
         updateCompiled('');
       }
     } else {
+      // TODO: if library name changes, we need to update compiled expressions
       updateCompiled('');
     }
     updateActiveRegex(value);
@@ -151,6 +153,16 @@ function useRegex() {
     compiled,
   ]);
 
+  function uploadRegex() {
+    // use tab to determine the type of regex to upload
+    API.uploadRegex();
+  }
+
+  function saveRegex() {
+    // use tab to determine the type of regex to save
+    API.saveRegex();
+  }
+
   return {
     tabs: Object.keys(initialRegex),
     tab,
@@ -173,6 +185,8 @@ function useRegex() {
     toggleModal,
     openModal,
     badgeNum: regexList.expressions.length + regexList.sections.length,
+    uploadRegex,
+    saveRegex,
   };
 }
 

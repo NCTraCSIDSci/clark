@@ -27,20 +27,32 @@ function RegexTable(props) {
 
   return (
     <div id="setupDataLeftTable">
-      <div id="setupDataLeftTab">
-        <List>
-          {regex.tabs.map((tab) => (
-            <ListItem
-              key={shortid.generate()}
-              button
-              onClick={() => regex.setTab(tab)}
-              className={regex.tab === tab ? 'activeMetaDataTab' : ''}
-            >
-              <ListItemText primary={prettyString(tab)} />
-            </ListItem>
-          ))}
-        </List>
-      </div>
+      <List id="setupDataLeftTab">
+        {regex.tabs.map((tab) => (
+          <ListItem
+            key={shortid.generate()}
+            button
+            onClick={() => regex.setTab(tab)}
+            className={regex.tab === tab ? 'activeMetaDataTab' : ''}
+          >
+            <ListItemText primary={prettyString(tab)} />
+          </ListItem>
+        ))}
+        <div className="bottomDrawerButtons">
+          <ListItem
+            button
+            onClick={regex.uploadRegex}
+          >
+            <ListItemText primary="Upload" />
+          </ListItem>
+          <ListItem
+            button
+            onClick={regex.saveRegex}
+          >
+            <ListItemText primary="Save" />
+          </ListItem>
+        </div>
+      </List>
       <div id="setupDataLeftContainer">
         {regex.tab === 'sections' && (
           <div id="sectionBreak">
@@ -52,7 +64,7 @@ function RegexTable(props) {
             />
           </div>
         )}
-        <Table stickyHeader>
+        <Table stickyHeader id="regexTable">
           <TableHead>
             <TableRow>
               <TableCell className="regexIconCell">

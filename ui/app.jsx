@@ -24,6 +24,7 @@ function App() {
   const popup = usePopup();
 
   function updateCompletedSteps(value) {
+    // TODO: make this more of a Set
     stepsComplete.push(value);
     updateSteps([...stepsComplete]);
   }
@@ -54,9 +55,14 @@ function App() {
               <SetupData
                 tab={tab}
                 popup={popup}
+                setTab={setTab}
+                updateSteps={updateCompletedSteps}
               />
               <SetupAlgo
                 tab={tab}
+                popup={popup}
+                setTab={setTab}
+                updateSteps={updateCompletedSteps}
               />
               <Explore
                 tab={tab}

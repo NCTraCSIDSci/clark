@@ -57,7 +57,7 @@
     flex-direction: column;
     height: calc(100% - 64px);
 }
-#bottomDrawerButtons {
+.bottomDrawerButtons {
     margin-top: auto;
 }
 .stepCompleted {

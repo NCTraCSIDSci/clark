@@ -3,8 +3,11 @@ import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
 
 import './data.css';
+
+// import API from '../../API';
 
 import usePatientBrowser from '../../customHooks/usePatientBrowser';
 import useMetaData from '../../customHooks/useMetaData';
@@ -15,7 +18,7 @@ import MetaDataTable from './metaDataTable/MetaDataTable';
 import RegexTable from './regexTable/RegexTable';
 
 function SetupData(props) {
-  const { tab } = props;
+  const { tab, setTab, updateSteps } = props;
   const [tabIndex, setTabIndex] = useState(0);
   const patients = usePatientBrowser();
   const metaData = useMetaData();
@@ -31,6 +34,13 @@ function SetupData(props) {
       metaData.initialize();
     }
   }, [tab]);
+
+  function submitFeatures() {
+    // const data = combineAllData(metaData, regex);
+    // API.submitFeatures();
+    setTab('algo');
+    updateSteps('setupData');
+  }
 
   return (
     <>
@@ -85,6 +95,13 @@ function SetupData(props) {
               sectionBreak: regex.sectionBreak,
             }}
           />
+          <Button
+            onClick={submitFeatures}
+            className="topRightButton"
+            variant="contained"
+          >
+            Continue
+          </Button>
         </div>
       )}
     </>
