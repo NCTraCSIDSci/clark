@@ -1,0 +1,19 @@
+#algoSetup {
+    width: 66%;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 10px;
+    justify-content: space-between;
+    text-align: center;
+}
+.algoSelect {
+    width: 48%;
+}
+.algoSelectDiv {
+    display: flex;
+    justify-content: space-around;
+}
+#algoExploreButton {
+    padding: 20px;
+}
