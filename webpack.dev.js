@@ -4,7 +4,6 @@ const webpack = require('webpack');
 const common = require('./webpack.config');
 
 module.exports = merge(common, {
-  target: 'electron-renderer',
   mode: 'development',
   devtool: 'cheap-module-eval-source-map',
   entry: ['webpack/hot/dev-server', './ui/index.jsx'],

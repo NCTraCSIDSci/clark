@@ -4,7 +4,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const common = require('./webpack.config');
 
 module.exports = merge(common, {
-  target: 'electron-renderer',
   mode: 'production',
   entry: ['./ui/index.jsx'],
   output: {

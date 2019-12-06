@@ -8,6 +8,7 @@ const config = {
       'node_modules',
     ],
   },
+  target: 'electron-renderer',
   module: {
     rules: [
       {
