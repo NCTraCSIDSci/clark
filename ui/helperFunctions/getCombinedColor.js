@@ -10,7 +10,7 @@ function getCombinedColor(colors) {
     g = g2 + (g - g2) * 0.3;
     b = b2 + (b - b2) * 0.3;
   }
-  return { r, g, b };
+  return `rgb(${r}, ${g}, ${b})`;
 }
 
 export default getCombinedColor;

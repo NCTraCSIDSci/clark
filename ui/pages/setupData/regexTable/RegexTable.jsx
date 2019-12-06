@@ -9,12 +9,17 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 import shortid from 'shortid';
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
 import CheckIcon from '@material-ui/icons/Check';
+import PublishIcon from '@material-ui/icons/Publish';
+import SaveIcon from '@material-ui/icons/Save';
 
 import './regexTable.css';
 
@@ -38,33 +43,49 @@ function RegexTable(props) {
             <ListItemText primary={prettyString(tab)} />
           </ListItem>
         ))}
-        <div className="bottomDrawerButtons">
-          <ListItem
-            button
-            onClick={regex.uploadRegex}
-          >
-            <ListItemText primary="Upload" />
-          </ListItem>
-          <ListItem
-            button
-            onClick={regex.saveRegex}
-          >
-            <ListItemText primary="Save" />
-          </ListItem>
-        </div>
       </List>
       <div id="setupDataLeftContainer">
         {regex.tab === 'sections' && (
-          <div id="sectionBreak">
-            <h2>Section Breaker: </h2>
-            <TextField
-              value={regex.sectionBreak}
-              onChange={(e) => regex.updateSectionBreak(e.target.value)}
-              variant="outlined"
-            />
+          <div id="sections">
+            <div id="sectionBreak">
+              <h2>Section Breaker: </h2>
+              <TextField
+                value={regex.sectionBreak}
+                onChange={(e) => regex.updateSectionBreak(e.target.value)}
+                variant="outlined"
+              />
+            </div>
+            <FormGroup row className="sectionHeadAndUnnamed">
+              <h4>Header</h4>
+              <FormControlLabel
+                control={(
+                  <Checkbox
+                    checked={regex.ignoreHeader}
+                    onChange={(e) => regex.updateHeaderIgnore(e.target.checked)}
+                    value="ignore"
+                  />
+                )}
+                label="Ignore"
+              />
+              <div className="regexColor" style={{ backgroundColor: 'rgb(198, 198, 198)' }} />
+            </FormGroup>
+            <FormGroup row className="sectionHeadAndUnnamed">
+              <h4>Unnamed Sections</h4>
+              <FormControlLabel
+                control={(
+                  <Checkbox
+                    checked={regex.ignoreUnnamed}
+                    onChange={(e) => regex.updateUnnamedIgnore(e.target.checked)}
+                    value="ignore"
+                  />
+                )}
+                label="Ignore"
+              />
+              <div className="regexColor" style={{ backgroundColor: 'rgb(99, 190, 255)' }} />
+            </FormGroup>
           </div>
         )}
-        <Table stickyHeader id="regexTable">
+        <Table stickyHeader id="regexTable" size="small">
           <TableHead>
             <TableRow>
               <TableCell className="regexIconCell">
@@ -77,7 +98,7 @@ function RegexTable(props) {
                   {column.label}
                 </TableCell>
               ))}
-              {regex.tab === 'expressions' && (
+              {regex.tab !== 'library' && (
                 <TableCell className="regexIconCell">
                   Color
                 </TableCell>
@@ -89,8 +110,8 @@ function RegexTable(props) {
           </TableHead>
           <TableBody>
             {regex.rows.map((row, i) => {
-              const { r, g, b } = getCombinedColor([row.color]);
-              const backgroundColor = `rgb(${r}, ${g}, ${b})`;
+              // TODO: this is getting run on every render
+              const backgroundColor = getCombinedColor([row.color]);
               return (
                 <TableRow
                   key={shortid.generate()}
@@ -108,16 +129,16 @@ function RegexTable(props) {
                   <TableCell>
                     {row.regex}
                   </TableCell>
-                  {regex.tab === 'expressions' && (
-                    <TableCell>
-                      <div className="regexColor" style={{ backgroundColor }} />
-                    </TableCell>
-                  )}
                   {regex.tab === 'sections' && (
                     <TableCell>
                       {row.ignore && (
                         <CheckIcon />
                       )}
+                    </TableCell>
+                  )}
+                  {regex.tab !== 'library' && (
+                    <TableCell>
+                      <div className="regexColor" style={{ backgroundColor }} />
                     </TableCell>
                   )}
                   <TableCell>
@@ -135,6 +156,18 @@ function RegexTable(props) {
             onClick={() => regex.openModal()}
           >
             <AddIcon />
+          </IconButton>
+        </div>
+        <div id="bottomRegexButtons">
+          <IconButton
+            onClick={regex.saveRegex}
+          >
+            <SaveIcon />
+          </IconButton>
+          <IconButton
+            onClick={regex.uploadRegex}
+          >
+            <PublishIcon />
           </IconButton>
         </div>
       </div>

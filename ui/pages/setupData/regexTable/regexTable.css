@@ -4,9 +4,9 @@
     flex-direction: column;
     padding: 15px;
 }
-#regexTable {
+/* #regexTable {
     height: calc(100% - 62px);
-}
+} */
 #addRegexButton {
     height: 78px;
     display: flex;
@@ -22,7 +22,7 @@
 }
 .regexColor {
     border-radius: 50%;
-    width: 100%;
+    width: 35px;
     height: 35px;
 }
 .regexTableRow {
@@ -33,5 +33,23 @@
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    padding: 20px;
+    padding-top: 10px;
+}
+#bottomRegexButtons {
+    margin-top: auto;
+    display: flex;
+    justify-content: flex-end;
+    padding: 5px;
+    border-top: 2px solid lightgrey;
+}
+#bottomRegexButtons > * {
+    margin-right: 5px;
+}
+.sectionHeadAndUnnamed {
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 60px;
+}
+.sectionHeadAndUnnamed > h4 {
+    margin: 0;
 }

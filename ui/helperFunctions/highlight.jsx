@@ -21,13 +21,11 @@ function innerHighlight(allMatches) {
         Math.max(match.start, breakPoints[i - 1]) < Math.min(match.stop, breakPoints[i])
       ));
       if (includedBreaks.length > 0) { // if the breakpoint is in a range
-        const {
-          r, g, b,
-        } = getCombinedColor(includedBreaks.map((x) => x.color));
+        const color = getCombinedColor(includedBreaks.map((x) => x.color));
         const flattenedBreak = {
           start: breakPoints[i - 1],
           stop: breakPoints[i],
-          color: `rgb(${r}, ${g}, ${b})`,
+          color,
           tooltip: [],
         };
         includedBreaks.forEach((x) => {
@@ -74,7 +72,7 @@ function addNonHighlight(ranges, length) {
 
 function highlight(expressions, text) {
   if (text) {
-    if (!expressions.length || (expressions.length === 1 && !expressions[0].regex)) return [text];
+    if (!expressions || !expressions.length || (expressions.length === 1 && !expressions[0].regex)) return [text];
     const highlightedText = [];
     const allMatches = [];
     expressions.forEach((regex) => {
@@ -94,12 +92,12 @@ function highlight(expressions, text) {
     const completeRanges = addNonHighlight(highlightedRanges, text.length);
     completeRanges.forEach((range, i) => {
       if (range.color) {
-        const tooltip = range.tooltip.join(',&nbsp;');
+        const tooltip = range.tooltip.join(', ');
         const backgroundColor = range.color;
         highlightedText.push(
-          <span key={i} style={{ backgroundColor }} data-md-tooltip={tooltip}>
+          <div key={i} style={{ backgroundColor, display: 'inline-block' }} data-md-tooltip={tooltip}>
             {text.substring(range.start, range.stop)}
-          </span>,
+          </div>,
         );
       } else {
         highlightedText.push(
@@ -113,11 +111,3 @@ function highlight(expressions, text) {
 }
 
 export default highlight;
-
-// const test = getCombinedColor(
-//   [
-//     'rgb(242, 46, 78)',
-//     'rgb(220, 137, 50)',
-//   ],
-// );
-// console.log('test', test);

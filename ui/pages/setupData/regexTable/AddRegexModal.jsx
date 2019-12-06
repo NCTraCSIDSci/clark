@@ -32,7 +32,7 @@ function AddRegexModal(props) {
       <DialogContent id="regexModalContent">
         <TextField
           label="Name"
-          onChange={(e) => regex.updateActiveName(e.target.value)}
+          onChange={(e) => regex.updateName(e.target.value)}
           value={regex.activeName}
         />
         <TextField
@@ -40,7 +40,7 @@ function AddRegexModal(props) {
           multiline
           rows="3"
           placeholder="\bdisease\b"
-          onChange={(e) => regex.update(e.target.value)}
+          onChange={(e) => regex.updateRegex(e.target.value)}
           value={regex.activeRegex}
         />
         {regex.compiled && (
