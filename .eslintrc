@@ -20,6 +20,7 @@
     "class-methods-use-this": "off",
     "max-len": "off",
     "no-return-assign": ["error", "except-parens"],
+    "no-param-reassign": ["error", { "props": false }],
     "operator-linebreak": "off",
     "react/no-array-index-key": "off",
     "react/sort-comp": ["error", {
