@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react';
 import { cloneDeep } from 'lodash';
+import { remote } from 'electron';
 
-import API from '../API';
 import isValidRegex from '../helperFunctions/isValidRegex';
+import makeRegExpFile from '../helperFunctions/makeRegExpFile';
+import addRegexColor from '../helperFunctions/addRegexColor';
+import validateRegExpFile from '../helperFunctions/validateRegExpFile';
+import updateCompiledExpressions from '../helperFunctions/updateCompiledExpressions';
 
-const colors = ['rgb(242, 46, 78)', 'rgb(54, 173, 164)', 'rgb(220, 137, 50)', 'rgb(174, 157, 49)', 'rgb(119, 171, 49)', 'rgb(51, 176, 122)', 'rgb(56, 169, 197)', 'rgb(110, 155, 244)', 'rgb(204, 122, 244)', 'rgb(245, 101, 204)'];
+const fs = remote.require('fs');
 
 const initialRegex = {
   library: [],
@@ -39,7 +43,7 @@ const columnData = {
 function useRegex() {
   const [regexList, updateRegexList] = useState(initialRegex);
   const [tab, setTab] = useState(Object.keys(initialRegex)[0]);
-  const [activeName, updateActiveName] = useState('');
+  const [activeName, updateName] = useState('');
   const [activeRegex, updateActiveRegex] = useState('');
   const [compiled, updateCompiled] = useState('');
   const [validRegex, updateValidRegex] = useState([]);
@@ -47,6 +51,8 @@ function useRegex() {
   const [regexIndex, setRegexIndex] = useState(undefined);
   const [sectionBreak, updateSectionBreak] = useState('');
   const [ignore, updateIgnore] = useState(false);
+  const [ignoreHeader, updateHeaderIgnore] = useState(false);
+  const [ignoreUnnamed, updateUnnamedIgnore] = useState(false);
 
   function remove(i) {
     const tempRegex = cloneDeep(regexList);
@@ -61,18 +67,18 @@ function useRegex() {
       window.alert('a row with that name already exists');
       return;
     }
-    const row = {
+    let row = {
       name: activeName,
       regex: activeRegex,
       compiled,
-      color: colors[regexIndex % colors.length],
     };
+    row = addRegexColor(row, regexIndex);
     if (tab === 'sections') {
       row.ignore = ignore;
     }
     tempRegex[tab][regexIndex] = row;
     updateRegexList(tempRegex);
-    updateActiveName('');
+    updateName('');
     updateActiveRegex('');
     updateCompiled('');
     toggleModal(false);
@@ -80,10 +86,11 @@ function useRegex() {
 
   function openModal(i) {
     if (i === undefined) {
+      // i could be index 0
       setRegexIndex(regexList[tab].length);
     } else {
       const { name, regex } = regexList[tab][i];
-      updateActiveName(name);
+      updateName(name);
       updateActiveRegex(regex);
       if (tab === 'sections') {
         const { ignore: ign } = regexList[tab][i];
@@ -104,7 +111,7 @@ function useRegex() {
     toggleModal(true);
   }
 
-  function update(value) {
+  function updateRegex(value) {
     if (tab === 'expressions' && value.startsWith('#')) { // if the expression starts with a #
       // find the label in the library and set that regex as the active value
       const regex = regexList.library.find((reg) => reg.name === value.substring(1));
@@ -113,54 +120,111 @@ function useRegex() {
       } else {
         updateCompiled('');
       }
-    } else {
-      // TODO: if library name changes, we need to update compiled expressions
-      updateCompiled('');
     }
     updateActiveRegex(value);
   }
 
   useEffect(() => {
-    if (showModal) {
+    if (tab !== 'sections' && !showModal) {
+      const tempRegexList = updateCompiledExpressions(regexList);
+      updateRegexList(tempRegexList);
+    }
+  }, [tab, showModal]);
+
+  useEffect(() => {
+    let tempValidRegex = [];
+    if (tab === 'sections') {
+      if (sectionBreak) {
+        if (showModal && isValidRegex(activeRegex)) {
+          tempValidRegex = [{
+            regex: activeRegex,
+            name: activeName,
+          }];
+          tempValidRegex = addRegexColor(tempValidRegex, regexIndex);
+        } else {
+          tempValidRegex = regexList.sections.filter((regex) => {
+            if (!regex.name || !isValidRegex(regex.regex)) return false;
+            return true;
+          });
+        }
+      }
+    } else if (showModal) {
       const regex = compiled || activeRegex;
       if (isValidRegex(regex)) {
-        updateValidRegex([{
+        tempValidRegex = [{
           regex,
-          color: colors[regexIndex % colors.length],
           name: activeName,
-        }]);
-      } else {
-        updateValidRegex([]);
+        }];
+        tempValidRegex = addRegexColor(tempValidRegex, regexIndex);
       }
-    } else {
-      const tempValidRegex = regexList.expressions.filter((regex) => {
-        if (!regex.name) {
-          return false;
-        }
-        if (!isValidRegex(regex.regex)) {
-          return false;
-        }
+    } else if (tab === 'expressions') {
+      tempValidRegex = regexList.expressions.filter((regex) => {
+        if (!regex.name || !isValidRegex(regex.regex)) return false;
         return true;
       });
-      updateValidRegex(tempValidRegex);
     }
+    updateValidRegex(tempValidRegex);
   }, [
-    regexList,
-    activeRegex,
-    showModal,
-    regexIndex,
-    activeName,
-    compiled,
+    tab, regexList, activeRegex, showModal,
+    regexIndex, activeName, compiled, sectionBreak,
   ]);
 
   function uploadRegex() {
-    // use tab to determine the type of regex to upload
-    API.uploadRegex();
+    const filePath = remote.dialog.showOpenDialogSync({
+      filters: [{
+        name: 'JSON',
+        extensions: ['json'],
+      }],
+    });
+    if (filePath) {
+      // use tab to determine the type of regex to upload
+      fs.readFile(filePath[0], 'utf8', (err, data) => { // filepath is an array
+        if (err) {
+          console.log('something went wrong');
+        } else {
+          let tempRegexList = cloneDeep(regexList);
+          const valid = validateRegExpFile(tab, JSON.parse(data));
+          if (valid) {
+            if (tab === 'sections') {
+              const sections = JSON.parse(data);
+              updateSectionBreak(sections.section_break);
+              updateHeaderIgnore(sections.ignore_header);
+              updateUnnamedIgnore(sections.ignore_unnamed_sections);
+              tempRegexList[tab] = addRegexColor(sections.named_sections);
+            } else {
+              tempRegexList[tab] = addRegexColor(JSON.parse(data));
+            }
+            tempRegexList = updateCompiledExpressions(tempRegexList);
+            updateRegexList(tempRegexList);
+          } else {
+            console.log('the file uploaded is malformed.');
+          }
+        }
+      });
+    }
   }
 
   function saveRegex() {
-    // use tab to determine the type of regex to save
-    API.saveRegex();
+    const filePath = remote.dialog.showSaveDialogSync({
+      title: 'Save file as',
+      defaultPath: `clark_${tab}`,
+      filters: [{
+        name: 'JSON',
+        extensions: ['json'],
+      }],
+    });
+    if (filePath) {
+      // use tab to determine the type of regex to save
+      const regexFile = makeRegExpFile(
+        tab, regexList[tab], sectionBreak, ignoreHeader, ignoreUnnamed,
+      );
+      fs.writeFile(filePath, regexFile, (err) => {
+        if (err) {
+          return console.log('something went wrong');
+        }
+        return console.log('the file has been saved');
+      });
+    }
   }
 
   return {
@@ -170,10 +234,10 @@ function useRegex() {
     columns: columnData[tab],
     rows: regexList[tab],
     activeName,
-    updateActiveName,
+    updateName,
     activeRegex,
     compiled,
-    update,
+    updateRegex,
     save,
     remove,
     validRegex,
@@ -181,6 +245,10 @@ function useRegex() {
     updateSectionBreak,
     ignore,
     updateIgnore,
+    ignoreHeader,
+    updateHeaderIgnore,
+    ignoreUnnamed,
+    updateUnnamedIgnore,
     showModal,
     toggleModal,
     openModal,
