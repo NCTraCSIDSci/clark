@@ -14,19 +14,42 @@ import Explore from './pages/explore/Explore';
 import DialogPopup from './subComponents/dialogPopup/DialogPopup';
 
 import usePopup from './customHooks/usePopup';
+import useRegex from './customHooks/useRegex';
+import useMetaData from './customHooks/useMetaData';
+import useAlgoSetup from './customHooks/useAlgoSetup';
 
+import loadDataFunction from './helperFunctions/dataAndSession/loadData';
+import saveSessionFunction from './helperFunctions/dataAndSession/saveSession';
+import loadSessionFunction from './helperFunctions/dataAndSession/loadSession';
 import pingServer from './helperFunctions/pingServer';
 
 function App() {
   const [tab, setTab] = useState('landing');
   const [serverUp, updateServer] = useState(false);
   const [stepsComplete, updateSteps] = useState([]);
+  const [directory, setDirPath] = useState('');
+  const [loading, setLoading] = useState(false);
   const popup = usePopup();
+  const regex = useRegex();
+  const metaData = useMetaData();
+  const algo = useAlgoSetup();
 
   function updateCompletedSteps(value) {
-    // TODO: make this more of a Set
-    stepsComplete.push(value);
-    updateSteps([...stepsComplete]);
+    const tempSteps = new Set(stepsComplete);
+    tempSteps.add(value);
+    updateSteps([...tempSteps]);
+  }
+
+  function loadData() {
+    loadDataFunction(popup, setLoading, setTab, updateCompletedSteps, setDirPath);
+  }
+
+  function loadSession() {
+    loadSessionFunction(setDirPath, updateSteps, metaData, regex, algo);
+  }
+
+  function saveSession() {
+    saveSessionFunction(directory, stepsComplete, metaData.metaData, regex.completeRegex, algo.completeAlgo);
   }
 
   useEffect(() => {
@@ -42,27 +65,34 @@ function App() {
           setTab={setTab}
           popup={popup}
           stepsComplete={stepsComplete}
+          saveSession={saveSession}
+          disableSave={!directory}
         />
         <div id="content">
           {serverUp ? (
             <>
               <Landing
                 tab={tab}
-                popup={popup}
-                setTab={setTab}
-                updateSteps={updateCompletedSteps}
+                loading={loading}
+                loadData={loadData}
+                loadSession={loadSession}
               />
               <SetupData
                 tab={tab}
                 popup={popup}
                 setTab={setTab}
                 updateSteps={updateCompletedSteps}
+                regex={regex}
+                metaData={metaData}
               />
               <SetupAlgo
                 tab={tab}
                 popup={popup}
                 setTab={setTab}
                 updateSteps={updateCompletedSteps}
+                regex={regex}
+                metaData={metaData}
+                algo={algo}
               />
               <Explore
                 tab={tab}

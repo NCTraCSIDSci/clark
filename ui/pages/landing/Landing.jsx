@@ -1,16 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import './landing.css';
 
-import loadData from '../../helperFunctions/loadData';
-
 function Landing(props) {
   const {
-    tab, popup, updateSteps, setTab,
+    tab, loading, loadData, loadSession,
   } = props;
-  const [loading, setLoading] = useState(false);
 
   return (
     <>
@@ -22,7 +19,7 @@ function Landing(props) {
           <div id="landingButtons">
             <Button
               variant="outlined"
-              onClick={() => loadData(popup, setLoading, setTab, updateSteps)}
+              onClick={loadData}
               className="blueButton"
             >
               {!loading ? (
@@ -33,9 +30,8 @@ function Landing(props) {
             </Button>
             <Button
               variant="outlined"
-              onClick={() => window.alert('Sorry. We currently don\'t support sessions.')}
+              onClick={loadSession}
               className="blueButton"
-              disabled
             >
               Load Session
             </Button>

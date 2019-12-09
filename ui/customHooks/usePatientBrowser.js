@@ -59,24 +59,8 @@ const initialFilter = {
   sort: {},
 };
 
-function dummyData(num) {
-  const dummyList = [];
-  for (let i = 0; i < num; i += 1) {
-    dummyList.push({
-      id: Math.floor(Math.random() * 1000).toString(),
-      birthDate: Math.floor(Math.random() * 2019).toString(),
-      gender: Math.random() * 10 > 5 ? 'male' : 'female',
-      maritalStatus: Math.random() * 10 > 5 ? 'Married' : 'Unmarried',
-      num_labs: Math.floor(Math.random() * 100),
-      num_medications: Math.floor(Math.random() * 100),
-      num_notes: Math.floor(Math.random() * 100),
-      num_vitals: Math.floor(Math.random() * 100),
-    });
-  }
-  return dummyList;
-}
-
 function usePatientBrowser() {
+  const [initialized, setInitialized] = useState(false);
   const [patientList, setPatientList] = useState([]);
   const [sortedPatients, updateSortedPatients] = useState([]);
   const [filter, setFilter] = useState(initialFilter);
@@ -94,19 +78,13 @@ function usePatientBrowser() {
     setFilter({ ...filter });
   }
 
-  function initialize(fake) {
-    if (fake) {
-      const fakeList = dummyData(100);
-      setPatientList(fakeList);
-      updateSortedPatients(fakeList);
-      initializeFilter();
-      return;
-    }
-    API.getPatientList()
+  function initialize(type) {
+    API.getPatientList(type)
       .then((list) => {
         setPatientList(list);
         updateSortedPatients(list);
         initializeFilter();
+        setInitialized(true);
       })
       .catch(() => {
         setPatientList([]);
@@ -158,6 +136,7 @@ function usePatientBrowser() {
 
   return {
     initialize,
+    initialized,
     sortedPatients,
     numPatients: patientList.length,
     filter,

@@ -227,7 +227,23 @@ function useRegex() {
     }
   }
 
+  function loadRegex(obj) {
+    updateRegexList(obj.regex_list);
+    updateSectionBreak(obj.section_break);
+    updateHeaderIgnore(obj.ignore_header);
+    updateUnnamedIgnore(obj.ignore_unnamed);
+  }
+
+  const completeRegex = {
+    regex_list: regexList,
+    section_break: sectionBreak,
+    ignore_header: ignoreHeader,
+    ignore_unnamed: ignoreUnnamed,
+  };
+
   return {
+    completeRegex,
+    loadRegex,
     tabs: Object.keys(initialRegex),
     tab,
     setTab,

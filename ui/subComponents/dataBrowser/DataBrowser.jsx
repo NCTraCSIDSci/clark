@@ -12,9 +12,9 @@ import PatientDetails from './patientModal/PatientDetails';
 
 function DataBrowser(props) {
   const {
-    patients, w, h, regex,
+    patients, w, h, regex, type,
   } = props;
-  const patientDetails = usePatientDetails();
+  const patientDetails = usePatientDetails(type);
 
   function headerRenderer({
     dataKey, disableSort, sortBy, sortDirection, label,
@@ -109,6 +109,7 @@ function DataBrowser(props) {
         patientDetails={patientDetails}
         container={document.getElementById('dataBrowser')}
         regex={regex}
+        type={type}
       />
     </Paper>
   );

@@ -28,7 +28,7 @@ import getCombinedColor from '../../../helperFunctions/getCombinedColor';
 import AddRegexModal from './AddRegexModal';
 
 function RegexTable(props) {
-  const { regex } = props;
+  const { regex, editable } = props;
 
   return (
     <div id="setupDataLeftTable">
@@ -53,6 +53,7 @@ function RegexTable(props) {
                 value={regex.sectionBreak}
                 onChange={(e) => regex.updateSectionBreak(e.target.value)}
                 variant="outlined"
+                disabled={!editable}
               />
             </div>
             <FormGroup row className="sectionHeadAndUnnamed">
@@ -63,6 +64,7 @@ function RegexTable(props) {
                     checked={regex.ignoreHeader}
                     onChange={(e) => regex.updateHeaderIgnore(e.target.checked)}
                     value="ignore"
+                    disabled={!editable}
                   />
                 )}
                 label="Ignore"
@@ -77,6 +79,7 @@ function RegexTable(props) {
                     checked={regex.ignoreUnnamed}
                     onChange={(e) => regex.updateUnnamedIgnore(e.target.checked)}
                     value="ignore"
+                    disabled={!editable}
                   />
                 )}
                 label="Ignore"
@@ -88,9 +91,11 @@ function RegexTable(props) {
         <Table stickyHeader id="regexTable" size="small">
           <TableHead>
             <TableRow>
-              <TableCell className="regexIconCell">
-                Edit
-              </TableCell>
+              {editable && (
+                <TableCell className="regexIconCell">
+                  Edit
+                </TableCell>
+              )}
               {regex.columns.map((column) => (
                 <TableCell
                   key={shortid.generate()}
@@ -103,9 +108,11 @@ function RegexTable(props) {
                   Color
                 </TableCell>
               )}
-              <TableCell className="regexIconCell">
-                Delete
-              </TableCell>
+              {editable && (
+                <TableCell className="regexIconCell">
+                  Delete
+                </TableCell>
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -118,11 +125,13 @@ function RegexTable(props) {
                   className="regexTableRow"
                   hover
                 >
-                  <TableCell>
-                    <IconButton onClick={() => regex.openModal(i)}>
-                      <EditIcon />
-                    </IconButton>
-                  </TableCell>
+                  {editable && (
+                    <TableCell>
+                      <IconButton onClick={() => regex.openModal(i)}>
+                        <EditIcon />
+                      </IconButton>
+                    </TableCell>
+                  )}
                   <TableCell>
                     {row.name}
                   </TableCell>
@@ -141,35 +150,41 @@ function RegexTable(props) {
                       <div className="regexColor" style={{ backgroundColor }} />
                     </TableCell>
                   )}
-                  <TableCell>
-                    <IconButton onClick={() => regex.remove(i)}>
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
+                  {editable && (
+                    <TableCell>
+                      <IconButton onClick={() => regex.remove(i)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  )}
                 </TableRow>
               );
             })}
           </TableBody>
         </Table>
-        <div id="addRegexButton">
-          <IconButton
-            onClick={() => regex.openModal()}
-          >
-            <AddIcon />
-          </IconButton>
-        </div>
-        <div id="bottomRegexButtons">
-          <IconButton
-            onClick={regex.saveRegex}
-          >
-            <SaveIcon />
-          </IconButton>
-          <IconButton
-            onClick={regex.uploadRegex}
-          >
-            <PublishIcon />
-          </IconButton>
-        </div>
+        {editable && (
+          <>
+            <div id="addRegexButton">
+              <IconButton
+                onClick={() => regex.openModal()}
+              >
+                <AddIcon />
+              </IconButton>
+            </div>
+            <div id="bottomRegexButtons">
+              <IconButton
+                onClick={regex.saveRegex}
+              >
+                <SaveIcon />
+              </IconButton>
+              <IconButton
+                onClick={regex.uploadRegex}
+              >
+                <PublishIcon />
+              </IconButton>
+            </div>
+          </>
+        )}
       </div>
       <AddRegexModal
         regex={regex}

@@ -1,8 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import Paper from '@material-ui/core/Paper';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Avatar from '@material-ui/core/Avatar';
+import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 
 import './data.css';
@@ -10,19 +6,15 @@ import './data.css';
 // import API from '../../API';
 
 import usePatientBrowser from '../../customHooks/usePatientBrowser';
-import useMetaData from '../../customHooks/useMetaData';
-import useRegex from '../../customHooks/useRegex';
 
 import DataBrowser from '../../subComponents/dataBrowser/DataBrowser';
-import MetaDataTable from './metaDataTable/MetaDataTable';
-import RegexTable from './regexTable/RegexTable';
+import MetaDataBrowser from '../../subComponents/metaDataBrowser/MetaDataBrowser';
 
 function SetupData(props) {
-  const { tab, setTab, updateSteps } = props;
-  const [tabIndex, setTabIndex] = useState(0);
+  const {
+    tab, setTab, updateSteps, regex, metaData,
+  } = props;
   const patients = usePatientBrowser();
-  const metaData = useMetaData();
-  const regex = useRegex();
 
   const metaDataBadgeNum = metaData.badgeNum;
 
@@ -30,8 +22,9 @@ function SetupData(props) {
 
   useEffect(() => {
     if (tab === 'data') {
-      patients.initialize();
-      metaData.initialize();
+      console.log('intializing');
+      patients.initialize('fhir');
+      metaData.initialize('fhir');
     }
   }, [tab]);
 
@@ -39,52 +32,20 @@ function SetupData(props) {
     // const data = combineAllData(metaData, regex);
     // API.submitFeatures();
     setTab('algo');
-    updateSteps('setupData');
+    updateSteps(tab);
   }
 
   return (
     <>
       {tab === 'data' && (
         <div id="setupDataContainer">
-          <Paper id="tabsContainer">
-            <Tabs
-              value={tabIndex}
-              onChange={(e, i) => setTabIndex(i)}
-              variant="fullWidth"
-              indicatorColor="primary"
-            >
-              <Tab
-                label={(
-                  <div className="setupDataTab">
-                    Structured Data
-                    <Avatar>
-                      {`${metaDataBadgeNum}`}
-                    </Avatar>
-                  </div>
-                )}
-              />
-              <Tab
-                label={(
-                  <div className="setupDataTab">
-                    Notes
-                    <Avatar>
-                      {`${notesBadgeNum}`}
-                    </Avatar>
-                  </div>
-                )}
-              />
-            </Tabs>
-            {tabIndex === 0 ? (
-              <MetaDataTable
-                metaData={metaData}
-                numPatients={patients.numPatients}
-              />
-            ) : (
-              <RegexTable
-                regex={regex}
-              />
-            )}
-          </Paper>
+          <MetaDataBrowser
+            metaData={metaData}
+            regex={regex}
+            numPatients={patients.numPatients}
+            type="fhir"
+            height="100%"
+          />
           <DataBrowser
             patients={patients}
             w="50%"
@@ -94,11 +55,13 @@ function SetupData(props) {
               tab: regex.tab,
               sectionBreak: regex.sectionBreak,
             }}
+            type="fhir"
           />
           <Button
             onClick={submitFeatures}
             className="topRightButton"
             variant="contained"
+            disabled={!metaDataBadgeNum && !notesBadgeNum}
           >
             Continue
           </Button>

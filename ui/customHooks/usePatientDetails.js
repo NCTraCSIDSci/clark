@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 import API from '../API';
 
-function usePatientDetails() {
+function usePatientDetails(type) {
   const [show, toggle] = useState(false);
   const [patient, setPatient] = useState({});
   const [patientId, setPatientId] = useState('');
@@ -16,7 +16,7 @@ function usePatientDetails() {
 
   function getPatientInfo() {
     setLoading(true);
-    API.getPatientDetails(patientId)
+    API.getPatientDetails(patientId, type)
       .then((res) => {
         setPatient(res);
         setLoading(false);

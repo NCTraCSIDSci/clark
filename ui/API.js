@@ -33,10 +33,10 @@ const API = {
         reject(error);
       });
   }),
-  load: (directoryPath) => new Promise((resolve, reject) => {
+  load: (directoryPath, type) => new Promise((resolve, reject) => {
     axios.request({
       method: 'POST',
-      url: url('fhir/load'),
+      url: url(`${type}/load`),
       data: {
         paths: directoryPath,
       },
@@ -49,8 +49,8 @@ const API = {
         reject(error);
       });
   }),
-  getPatientList: () => new Promise((resolve, reject) => {
-    axios.get(url('fhir/patient_list'))
+  getPatientList: (type) => new Promise((resolve, reject) => {
+    axios.get(url(`${type}/patient_list`))
       .then((res) => {
         resolve(res.data);
       })
@@ -59,8 +59,8 @@ const API = {
         reject(error);
       });
   }),
-  getPatientDetails: (id) => new Promise((resolve, reject) => {
-    axios.get(url(`fhir/patient/${id}`))
+  getPatientDetails: (id, type) => new Promise((resolve, reject) => {
+    axios.get(url(`${type}/patient/${id}`))
       .then((res) => {
         resolve(res.data);
       })
@@ -69,8 +69,8 @@ const API = {
         reject(error);
       });
   }),
-  getPatientNote: (patientId, noteId) => new Promise((resolve, reject) => {
-    axios.get(url(`fhir/patient/${patientId}/note/${noteId}`))
+  getPatientNote: (patientId, noteId, type) => new Promise((resolve, reject) => {
+    axios.get(url(`${type}/patient/${patientId}/note/${noteId}`))
       .then((res) => {
         resolve(res.data);
       })
@@ -79,8 +79,8 @@ const API = {
         reject(error);
       });
   }),
-  getLabs: () => new Promise((resolve, reject) => {
-    axios.get(url('fhir/labs'))
+  getLabs: (type) => new Promise((resolve, reject) => {
+    axios.get(url(`${type}/labs`))
       .then((res) => {
         resolve(res.data);
       })
@@ -89,8 +89,8 @@ const API = {
         reject(error);
       });
   }),
-  getMeds: () => new Promise((resolve, reject) => {
-    axios.get(url('fhir/medications'))
+  getMeds: (type) => new Promise((resolve, reject) => {
+    axios.get(url(`${type}/medications`))
       .then((res) => {
         resolve(res.data);
       })
@@ -99,8 +99,8 @@ const API = {
         reject(error);
       });
   }),
-  getVitals: () => new Promise((resolve, reject) => {
-    axios.get(url('fhir/vitals'))
+  getVitals: (type) => new Promise((resolve, reject) => {
+    axios.get(url(`${type}/vitals`))
       .then((res) => {
         resolve(res.data);
       })

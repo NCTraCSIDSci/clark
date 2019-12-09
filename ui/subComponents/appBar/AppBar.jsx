@@ -25,11 +25,10 @@ import './appBar.css';
 
 function MenuBar(props) {
   const {
-    tab, setTab, popup, stepsComplete,
+    tab, setTab, popup, stepsComplete, saveSession, disableSave,
   } = props;
   const [drawerOpen, toggleDrawer] = useState(false);
 
-  // const active = ['landing', 'data', 'algo', 'explore'];
   const drawerClass = drawerOpen ? 'drawerOpen' : 'drawerClosed';
 
   return (
@@ -65,7 +64,7 @@ function MenuBar(props) {
         <List id="drawerList">
           <ListItem button onClick={() => setTab('landing')} className={tab === 'landing' ? 'activePage' : ''}>
             <Badge
-              badgeContent={stepsComplete.indexOf('load') > -1 ? <CheckCircleIcon className="stepCompleted" /> : ''}
+              badgeContent={stepsComplete.indexOf('landing') > -1 ? <CheckCircleIcon className="stepCompleted" /> : ''}
             >
               <ListItemIcon><PlaylistAddIcon /></ListItemIcon>
             </Badge>
@@ -78,7 +77,7 @@ function MenuBar(props) {
             // disabled={stepsComplete.indexOf('load') < 0}
           >
             <Badge
-              badgeContent={stepsComplete.indexOf('setupData') > -1 ? <CheckCircleIcon className="stepCompleted" /> : ''}
+              badgeContent={stepsComplete.indexOf('data') > -1 ? <CheckCircleIcon className="stepCompleted" /> : ''}
             >
               <ListItemIcon><TuneIcon /></ListItemIcon>
             </Badge>
@@ -115,7 +114,7 @@ function MenuBar(props) {
               </Badge>
               <ListItemText primary="Data Errors" />
             </ListItem>
-            <ListItem button onClick={() => console.log('save')} disabled>
+            <ListItem button onClick={saveSession} disabled={disableSave}>
               <ListItemIcon><SaveIcon /></ListItemIcon>
               <ListItemText primary="Save" />
             </ListItem>

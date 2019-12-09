@@ -39,6 +39,10 @@
     width: 70%;
     height: 100%;
     overflow: auto;
+    text-align: left;
+}
+#patientNoteText {
+    margin: 25px;
 }
 [data-md-tooltip] {
     position: relative;
@@ -58,7 +62,7 @@
     font-size: 12px;
     font-family: Roboto,sans-serif;
     font-weight: 400;
-    max-width: 200px;
+    max-width: 100px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

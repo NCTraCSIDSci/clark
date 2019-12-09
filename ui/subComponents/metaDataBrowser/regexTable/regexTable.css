@@ -46,10 +46,10 @@
     margin-right: 5px;
 }
 .sectionHeadAndUnnamed {
-    justify-content: space-between;
     align-items: center;
-    padding: 0px 60px;
+    padding: 0px 20px;
 }
 .sectionHeadAndUnnamed > h4 {
     margin: 0;
+    margin-right: auto;
 }

@@ -21,14 +21,16 @@ function doMarkup(tab, sectionBreak, validRegex, note, setText) {
 const markup = debounce(doMarkup, 500);
 
 function PatientNotes(props) {
-  const { noteIds, patientId, regex } = props;
+  const {
+    noteIds, patientId, regex, type,
+  } = props;
   const [note, setNote] = useState({});
   const [noteId, setNoteId] = useState('');
   const [noteText, setNoteText] = useState(['Loading...']);
 
   function getNote(id) {
     if (id !== noteId) {
-      API.getPatientNote(patientId, id)
+      API.getPatientNote(patientId, id, type)
         .then((res) => {
           setNote(res);
           setNoteId(id);

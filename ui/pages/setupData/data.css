@@ -40,6 +40,8 @@
     width: calc(100% - 115px);
     height: 100%;
     overflow: auto;
+    display: flex;
+    flex-direction: column;
 }
 #setupDataSortBar {
     height: 60px;
