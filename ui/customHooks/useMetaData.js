@@ -4,40 +4,71 @@ import { cloneDeep } from 'lodash';
 import API from '../API';
 
 const initialMetaData = {
+  patient: {},
   labs: {},
   meds: {},
   vitals: {},
 };
 
 const initialFilter = {
+  patient: {},
   labs: {
     text: '',
     sort: 'desc',
     features: ['max', 'min', 'recent', 'oldest'],
-    count: 0,
   },
   meds: {
     text: '',
     sort: 'desc',
     features: ['count', 'boolean'],
-    count: 0,
   },
   vitals: {
     text: '',
     sort: 'desc',
     features: ['max', 'min', 'recent', 'oldest'],
-    count: 0,
   },
 };
+
+const patientMetaData = [
+  {
+    display: 'Age',
+  },
+  {
+    display: 'Gender',
+  },
+  {
+    display: 'Race',
+  },
+  {
+    display: 'Ethnicity',
+  },
+  {
+    display: 'Marital Status',
+  },
+];
 
 function useMetaData() {
   const [metaData, setMetaData] = useState(initialMetaData);
   const [initialLists, setInitialLists] = useState({});
+  const [initialized, setInitialized] = useState(false);
   const [filteredList, setFilteredList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState(initialFilter);
   const [tab, setTab] = useState(Object.keys(initialFilter)[0]);
   const [badgeNum, updateBadgeNum] = useState(0);
+
+  function updateDate(d) {
+    const tempMetaData = cloneDeep(metaData);
+    if (d) {
+      tempMetaData.patient.date = d;
+    } else { // null date, need to clear the selected metaData
+      delete tempMetaData.patient.date;
+      const len = tempMetaData.patient.Age ? tempMetaData.patient.Age.length : 0;
+      updateBadgeNum((prev) => prev - len);
+      delete tempMetaData.patient.Age;
+    }
+    setMetaData(tempMetaData);
+  }
 
   function updateFilteredList() {
     const tempFilteredList = initialLists[tab].filter((patient) => {
@@ -56,17 +87,19 @@ function useMetaData() {
     setFilteredList(tempFilteredList);
   }
 
-  function initialize() {
+  function initialize(type) {
     setLoading(true);
-    const calls = [API.getLabs(), API.getMeds(), API.getVitals()];
+    const calls = [API.getLabs(type), API.getMeds(type), API.getVitals(type)];
     Promise.all(calls)
       .then((res) => {
         setInitialLists({
           labs: res[0].data,
           meds: res[1].data,
           vitals: res[2].data,
+          patient: patientMetaData,
         });
         setLoading(false);
+        setInitialized(true);
       })
       .catch((err) => {
         console.log('error', err);
@@ -74,7 +107,7 @@ function useMetaData() {
   }
 
   function updateMetaData(code, system, value) {
-    const key = `${code} ${system}`;
+    const key = `${code}${system ? ` ${system}` : ''}`;
     if (metaData[tab][key]) {
       const aggregationArray = metaData[tab][key];
       const index = aggregationArray.indexOf(value);
@@ -107,14 +140,31 @@ function useMetaData() {
 
   useEffect(() => {
     if (!loading) {
-      updateFilteredList();
+      if (tab !== 'patient') {
+        updateFilteredList();
+      } else {
+        setFilteredList(['patient']);
+      }
     }
   }, [filter, tab, loading]);
 
+  function loadMetaData(obj) {
+    setMetaData(obj);
+    let num = 0;
+    Object.keys(obj).forEach((metaDataKey) => {
+      Object.keys(obj[metaDataKey]).forEach((feature) => {
+        num += obj[metaDataKey][feature].length;
+      });
+    });
+    updateBadgeNum(num);
+  }
+
   return {
     metaData,
+    setMetaData,
     updateMetaData,
     initialize,
+    initialized,
     loading,
     filter,
     updateFilter,
@@ -122,6 +172,9 @@ function useMetaData() {
     setTab,
     filteredList,
     badgeNum,
+    patientMetaData,
+    updateDate,
+    loadMetaData,
   };
 }
 
