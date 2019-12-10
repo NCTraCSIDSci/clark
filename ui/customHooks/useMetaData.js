@@ -102,10 +102,16 @@ function useMetaData(popup) {
         setInitialized(true);
       })
       .catch((err) => {
-        // TODO: make this better
         popup.showModal({
+          disableBackdrop: false,
+          error: true,
+          header: 'Error getting information from uploaded data',
           text: err,
-          type: 'error',
+          actions: [{
+            text: 'Close',
+            autoFocus: true,
+            click: () => popup.toggle(false),
+          }],
         });
       });
   }

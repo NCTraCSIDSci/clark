@@ -57,10 +57,16 @@ function useAlgoSetup(popup) {
         })
         .catch((err) => {
           setLoading(false);
-          // TODO: make this better
           popup.showModal({
+            disableBackdrop: false,
+            error: true,
+            header: 'Error Uploading Data',
             text: err,
-            type: 'error',
+            actions: [{
+              text: 'Close',
+              autoFocus: true,
+              click: () => popup.toggle(false),
+            }],
           });
         });
     }
