@@ -39,9 +39,8 @@ function addSections(text, regex) {
       regex.validRegex.forEach((r) => {
         reg = new RegExp(r.regex, 'gi');
         if (reg.test(match[0])) {
-          // TODO: this should probably work with more than one color
           section.color = r.color; // if a regex matches, give the section that color
-          section.ignore = r.ignore; // if ignore section, color text grey
+          section.ignore = section.ignore || r.ignore; // if ignore section, color text grey
         }
       });
       sections.push(section);
