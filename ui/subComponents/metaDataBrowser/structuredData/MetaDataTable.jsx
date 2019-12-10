@@ -116,7 +116,7 @@ function MetaDataTable(props) {
       return patientMetaDataList();
     }
     const item = metaData.filteredList[index];
-    const selectedMetaData = metaData.metaData[metaData.tab][`${item.code} ${item.system}`] || [];
+    const selectedMetaData = metaData.metaData[metaData.tab][`(${item.system}, ${item.code})`] || [];
     return (
       <ExpansionPanel
         key={shortid.generate()}
@@ -149,7 +149,7 @@ function MetaDataTable(props) {
                 variant="contained"
                 className={selectedMetaData.indexOf(feature) !== -1 ? 'checkedMetaData' : 'uncheckedMetaData'}
                 endIcon={selectedMetaData.indexOf(feature) !== -1 ? <CheckCircleIcon /> : <CheckCircleOutlineIcon />}
-                onClick={() => metaData.updateMetaData(item.code, item.system, feature)}
+                onClick={() => metaData.updateMetaData(item.system, item.code, feature)}
                 disabled={!editable}
               >
                 {prettyString(feature)}

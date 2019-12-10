@@ -106,8 +106,8 @@ function useMetaData() {
       });
   }
 
-  function updateMetaData(code, system, value) {
-    const key = `${code}${system ? ` ${system}` : ''}`;
+  function updateMetaData(system, code, value) {
+    const key = `(${system}${code ? `, ${code}` : ''}`;
     if (metaData[tab][key]) {
       const aggregationArray = metaData[tab][key];
       const index = aggregationArray.indexOf(value);

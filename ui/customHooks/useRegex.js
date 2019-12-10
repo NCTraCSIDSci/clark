@@ -229,7 +229,6 @@ function useRegex() {
   }
 
   function loadRegex(obj) {
-    console.log(obj);
     updateRegexList({
       library: addRegexColor(obj.regex_library),
       expressions: addRegexColor(obj.features),
