@@ -21,11 +21,11 @@ function SetupAlgo(props) {
   const patients = usePatientBrowser();
 
   useEffect(() => {
-    if (algo.loadedTestData) {
+    if (tab === 'algo' && algo.loadedTestData) {
       patients.initialize('test');
       metaData.initialize('test');
     }
-  }, [algo.loadedTestData]);
+  }, [tab, algo.loadedTestData]);
 
   function explore() {
     // const data = algo;
