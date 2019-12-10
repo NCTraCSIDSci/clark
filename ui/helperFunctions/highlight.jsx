@@ -70,7 +70,7 @@ function addNonHighlight(ranges, length) {
   return inflated;
 }
 
-function highlight(expressions, text) {
+function highlight(text, expressions) {
   if (text) {
     if (!expressions || !expressions.length || (expressions.length === 1 && !expressions[0].regex)) return [text];
     const highlightedText = [];

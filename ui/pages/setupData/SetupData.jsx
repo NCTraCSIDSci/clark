@@ -54,6 +54,8 @@ function SetupData(props) {
               validRegex: regex.validRegex,
               tab: regex.tab,
               sectionBreak: regex.sectionBreak,
+              ignoreHeader: regex.ignoreHeader,
+              ignoreUnnamed: regex.ignoreUnnamed,
             }}
             type="fhir"
           />

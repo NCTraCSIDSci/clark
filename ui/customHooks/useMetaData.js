@@ -15,7 +15,7 @@ const initialFilter = {
   labs: {
     text: '',
     sort: 'desc',
-    features: ['max', 'min', 'recent', 'oldest'],
+    features: ['max', 'min', 'newest', 'oldest'],
   },
   meds: {
     text: '',
@@ -25,25 +25,25 @@ const initialFilter = {
   vitals: {
     text: '',
     sort: 'desc',
-    features: ['max', 'min', 'recent', 'oldest'],
+    features: ['max', 'min', 'newest', 'oldest'],
   },
 };
 
 const patientMetaData = [
   {
-    display: 'Age',
+    display: 'age',
   },
   {
-    display: 'Gender',
+    display: 'gender',
   },
   {
-    display: 'Race',
+    display: 'race',
   },
   {
-    display: 'Ethnicity',
+    display: 'ethnicity',
   },
   {
-    display: 'Marital Status',
+    display: 'marital status',
   },
 ];
 
@@ -63,9 +63,9 @@ function useMetaData() {
       tempMetaData.patient.date = d;
     } else { // null date, need to clear the selected metaData
       delete tempMetaData.patient.date;
-      const len = tempMetaData.patient.Age ? tempMetaData.patient.Age.length : 0;
+      const len = tempMetaData.patient.age ? tempMetaData.patient.age.length : 0;
       updateBadgeNum((prev) => prev - len);
-      delete tempMetaData.patient.Age;
+      delete tempMetaData.patient.age;
     }
     setMetaData(tempMetaData);
   }
@@ -148,20 +148,53 @@ function useMetaData() {
     }
   }, [filter, tab, loading]);
 
+  function modifyForExport(obj, type) {
+    const tempObj = {};
+    Object.keys(obj).forEach((key) => {
+      if (type === 'patient' && key === 'date') {
+        tempObj.age = tempObj.age || {};
+        tempObj.age.reference_date = obj.date;
+      } else {
+        tempObj[key] = tempObj[key] || {};
+        tempObj[key].features = obj[key];
+      }
+    });
+    return tempObj;
+  }
+
   function loadMetaData(obj) {
-    setMetaData(obj);
+    const tempMetaData = {};
     let num = 0;
     Object.keys(obj).forEach((metaDataKey) => {
-      Object.keys(obj[metaDataKey]).forEach((feature) => {
-        num += obj[metaDataKey][feature].length;
+      tempMetaData[metaDataKey] = {};
+      Object.keys(obj[metaDataKey]).forEach((keyItem) => {
+        if (metaDataKey === 'patient' && keyItem === 'age') {
+          tempMetaData.patient.age = obj.patient.age.features;
+          tempMetaData.patient.date = obj.patient.age.reference_date;
+        } else {
+          tempMetaData[metaDataKey][keyItem] = obj[metaDataKey][keyItem].features;
+          num += obj[metaDataKey][keyItem].features.length;
+        }
       });
     });
+    setMetaData(tempMetaData);
     updateBadgeNum(num);
   }
 
+  function exportMetaData() {
+    const tempMetaData = {
+      patient: modifyForExport(metaData.patient, 'patient'),
+      labs: modifyForExport(metaData.labs),
+      meds: modifyForExport(metaData.meds),
+      vitals: modifyForExport(metaData.vitals),
+    };
+    return tempMetaData;
+  }
+
   return {
+    exportMetaData,
+    loadMetaData,
     metaData,
-    setMetaData,
     updateMetaData,
     initialize,
     initialized,
@@ -174,7 +207,6 @@ function useMetaData() {
     badgeNum,
     patientMetaData,
     updateDate,
-    loadMetaData,
   };
 }
 

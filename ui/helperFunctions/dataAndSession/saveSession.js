@@ -4,11 +4,12 @@ const fs = remote.require('fs');
 
 function saveSession(dirPath, steps, metaData, regex, algo) {
   let saveObj = {};
-  saveObj.directoryPath = dirPath;
-  saveObj.metaData = metaData;
-  saveObj.regex = regex;
+  saveObj.fhir_directory = dirPath;
+  saveObj.structured_data = metaData;
+  saveObj.unstructured_data = regex;
   saveObj.algo = algo;
   saveObj.steps = steps;
+  console.log('saveObj', saveObj);
   saveObj = JSON.stringify(saveObj);
   const path = remote.dialog.showSaveDialogSync({
     defaultPath: 'clark_session',

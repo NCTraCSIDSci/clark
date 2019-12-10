@@ -96,7 +96,6 @@ function useRegex() {
         const { ignore: ign } = regexList[tab][i];
         updateIgnore(ign);
       }
-      updateIgnore(ignore);
       if (tab === 'expressions' && regex.startsWith('#')) {
         // do the search
         const libRegex = regexList.library.find((reg) => reg.name === regex.substring(1));
@@ -139,6 +138,7 @@ function useRegex() {
           tempValidRegex = [{
             regex: activeRegex,
             name: activeName,
+            ignore,
           }];
           tempValidRegex = addRegexColor(tempValidRegex, regexIndex);
         } else {
@@ -167,6 +167,7 @@ function useRegex() {
   }, [
     tab, regexList, activeRegex, showModal,
     regexIndex, activeName, compiled, sectionBreak,
+    ignore, ignoreHeader, ignoreUnnamed,
   ]);
 
   function uploadRegex() {
@@ -189,8 +190,8 @@ function useRegex() {
               const sections = JSON.parse(data);
               updateSectionBreak(sections.section_break);
               updateHeaderIgnore(sections.ignore_header);
-              updateUnnamedIgnore(sections.ignore_unnamed_sections);
-              tempRegexList[tab] = addRegexColor(sections.named_sections);
+              updateUnnamedIgnore(sections.ignore_untagged);
+              tempRegexList[tab] = addRegexColor(sections.tags);
             } else {
               tempRegexList[tab] = addRegexColor(JSON.parse(data));
             }
@@ -218,7 +219,7 @@ function useRegex() {
       const regexFile = makeRegExpFile(
         tab, regexList[tab], sectionBreak, ignoreHeader, ignoreUnnamed,
       );
-      fs.writeFile(filePath, regexFile, (err) => {
+      fs.writeFile(filePath, JSON.stringify(regexFile), (err) => {
         if (err) {
           return console.log('something went wrong');
         }
@@ -228,21 +229,32 @@ function useRegex() {
   }
 
   function loadRegex(obj) {
-    updateRegexList(obj.regex_list);
-    updateSectionBreak(obj.section_break);
-    updateHeaderIgnore(obj.ignore_header);
-    updateUnnamedIgnore(obj.ignore_unnamed);
+    console.log(obj);
+    updateRegexList({
+      library: addRegexColor(obj.regex_library),
+      expressions: addRegexColor(obj.features),
+      sections: addRegexColor(obj.sections.tags),
+    });
+    updateSectionBreak(obj.sections.section_break);
+    updateHeaderIgnore(obj.sections.ignore_header);
+    updateUnnamedIgnore(obj.sections.ignore_untagged);
   }
 
-  const completeRegex = {
-    regex_list: regexList,
-    section_break: sectionBreak,
-    ignore_header: ignoreHeader,
-    ignore_unnamed: ignoreUnnamed,
-  };
+  function exportRegex() {
+    const tempRegex = {
+      regex_library: makeRegExpFile('', regexList.library),
+      features: makeRegExpFile('', regexList.expressions),
+      sections: makeRegExpFile(
+        'sections', regexList.sections,
+        sectionBreak, ignoreHeader,
+        ignoreUnnamed,
+      ),
+    };
+    return tempRegex;
+  }
 
   return {
-    completeRegex,
+    exportRegex,
     loadRegex,
     tabs: Object.keys(initialRegex),
     tab,

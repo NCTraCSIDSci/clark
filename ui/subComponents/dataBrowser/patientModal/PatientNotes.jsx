@@ -8,12 +8,14 @@ import API from '../../../API';
 import highlight from '../../../helperFunctions/highlight';
 import addSections from '../../../helperFunctions/addSections';
 
-function doMarkup(tab, sectionBreak, validRegex, note, setText) {
-  if (tab === 'sections') {
-    const text = addSections(sectionBreak, validRegex, note);
+function doMarkup(
+  note, setText, regex,
+) {
+  if (regex.tab === 'sections') {
+    const text = addSections(note, regex);
     setText(text);
   } else {
-    const text = highlight(validRegex, note);
+    const text = highlight(note, regex.validRegex);
     setText(text);
   }
 }
@@ -42,11 +44,11 @@ function PatientNotes(props) {
   }
 
   useEffect(() => {
-    markup(regex.tab, regex.sectionBreak, regex.validRegex, note.data, setNoteText);
+    markup(note.data, setNoteText, regex);
   }, [regex.sectionBreak, regex.validRegex]);
 
   useEffect(() => {
-    markup(regex.tab, regex.sectionBreak, regex.validRegex, note.data, setNoteText);
+    markup(note.data, setNoteText, regex);
     markup.flush(); // if note or regex tab change, run markup immediately
   }, [note.data, regex.tab]);
 

@@ -13,12 +13,12 @@ function makeRegExpFile(tab, data, sectionBreak, ignoreHeader, ignoreUnnamed) {
     const sections = {
       section_break: sectionBreak,
       ignore_header: ignoreHeader,
-      ignore_unnamed_sections: ignoreUnnamed,
-      named_sections: json,
+      ignore_untagged: ignoreUnnamed,
+      tags: json,
     };
-    return JSON.stringify(sections);
+    return sections;
   }
-  return JSON.stringify(json);
+  return json;
 }
 
 export default makeRegExpFile;

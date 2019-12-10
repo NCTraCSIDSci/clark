@@ -5,7 +5,7 @@ import getDirPath from '../helperFunctions/dataAndSession/getDirPath';
 
 const algoOptions = [
   'Linear SVM', 'Gaussian Naive Bayes',
-  'Decision Tree', 'Random Tree',
+  'Decision Tree', 'Random Forest',
 ];
 
 const evalOptions = [
@@ -47,26 +47,35 @@ function useAlgoSetup() {
   }
 
   function loadAlgo(obj) {
-    updateAlgo(obj.algoType);
-    updateEvalMethod(obj.evalMethod);
-    updateCrossValMethod(obj.crossValMethod);
-    updateNumFolds(obj.numFolds);
-    setDirPath(obj.testDataDirectory);
-    if (obj.testDataDirectory) {
-      loadTestData(obj.testDataDirectory);
+    updateAlgo(obj.algo_type);
+    updateEvalMethod(obj.eval_method.type);
+    if (obj.eval_method.type === 'Evaluation Corpus') {
+      setDirPath(obj.eval_method.test_data_directory);
+      loadTestData(obj.eval_method.test_data_directory);
+    } else {
+      updateCrossValMethod(obj.eval_method.crossval_method);
+      updateNumFolds(obj.eval_method.num_folds);
     }
   }
 
-  const completeAlgo = {
-    algoType: algo,
-    evalMethod,
-    crossValMethod,
-    numFolds,
-    testDataDirectory: dirPath,
-  };
+  function exportAlgo() {
+    const completeAlgo = {
+      algo_type: algo,
+      eval_method: {
+        type: evalMethod,
+      },
+    };
+    if (evalMethod === 'Cross-Validation') {
+      completeAlgo.eval_method.crossval_method = crossValMethod;
+      completeAlgo.eval_method.num_folds = Number(numFolds);
+    } else {
+      completeAlgo.eval_method.test_data_directory = dirPath;
+    }
+    return completeAlgo;
+  }
 
   return {
-    completeAlgo,
+    exportAlgo,
     loadAlgo,
     algo,
     algoOptions,

@@ -59,19 +59,18 @@ function MetaDataTable(props) {
               )}
             </div>
             <div className="metaDataDisplay">
-              {row.display}
+              {prettyString(row.display)}
             </div>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails className="metaDataPanel">
             <div className="aggregationMethodButtons">
-              {row.display === 'Age' ? (
+              {row.display === 'age' ? (
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardDatePicker
                     disableToolbar
                     variant="inline"
-                    // clearable
                     format="MM/dd/yyyy"
-                    value={metaData.metaData.patient.date}
+                    value={metaData.metaData.patient.date || null}
                     onChange={(date) => metaData.updateDate(date)}
                   />
                   <Button
@@ -96,9 +95,9 @@ function MetaDataTable(props) {
               ) : (
                 <Button
                   variant="contained"
-                  className={selectedMetaData.indexOf('use') !== -1 ? 'checkedMetaData' : 'uncheckedMetaData'}
-                  endIcon={selectedMetaData.indexOf('use') !== -1 ? <CheckCircleIcon /> : <CheckCircleOutlineIcon />}
-                  onClick={() => metaData.updateMetaData(row.display, '', 'use')}
+                  className={selectedMetaData.indexOf('one-hot') !== -1 ? 'checkedMetaData' : 'uncheckedMetaData'}
+                  endIcon={selectedMetaData.indexOf('one-hot') !== -1 ? <CheckCircleIcon /> : <CheckCircleOutlineIcon />}
+                  onClick={() => metaData.updateMetaData(row.display, '', 'one-hot')}
                   disabled={!editable}
                 >
                   Use It

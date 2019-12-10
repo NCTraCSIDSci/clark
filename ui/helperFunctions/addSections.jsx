@@ -5,9 +5,9 @@ import isValidRegex from './isValidRegex';
 const headerColor = 'rgb(198, 198, 198)';
 const unnamedColor = 'rgb(99, 190, 255)';
 
-function addSections(sectionBreak, validRegex, text) {
+function addSections(text, regex) {
   if (text) {
-    if (!isValidRegex(sectionBreak)) {
+    if (!isValidRegex(regex.sectionBreak)) {
       return [
         <div key={shortid.generate()}>
           {text}
@@ -15,29 +15,33 @@ function addSections(sectionBreak, validRegex, text) {
       ];
     }
     const highlightedText = [];
-    let reg = new RegExp(sectionBreak, 'gi');
+    let reg = new RegExp(regex.sectionBreak, 'gi');
     let matches = text.matchAll(reg);
     matches = [...matches]; // matches is an interable object, needs to be an array
     if (!matches.length) { // if there are no matches, return text
       return [
         <div
           key={shortid.generate()}
-          style={{ borderLeft: `2px solid ${headerColor}` }}
+          style={{
+            borderLeft: `2px solid ${headerColor}`,
+            color: regex.ignoreHeader ? 'darkgrey' : 'inherit',
+          }}
         >
           {text}
         </div>,
       ];
     }
     const breakPoints = [];
-    const sections = [{ start: 0, color: headerColor }];
+    const sections = [{ start: 0, color: headerColor, ignore: regex.ignoreHeader }];
     matches.forEach((match) => {
       breakPoints.push(match.index); // keep track of where each match starts
-      const section = { start: match.index };
-      validRegex.forEach((regex) => {
-        reg = new RegExp(regex.regex, 'gi');
+      const section = { start: match.index, ignore: regex.ignoreUnnamed };
+      regex.validRegex.forEach((r) => {
+        reg = new RegExp(r.regex, 'gi');
         if (reg.test(match[0])) {
           // TODO: this should probably work with more than one color
-          section.color = regex.color; // if a regex matches, give the section that color
+          section.color = r.color; // if a regex matches, give the section that color
+          section.ignore = r.ignore; // if ignore section, color text grey
         }
       });
       sections.push(section);
@@ -53,6 +57,7 @@ function addSections(sectionBreak, validRegex, text) {
           style={{
             margin: '10px 0px',
             borderLeft: `2px solid ${section.color || unnamedColor}`,
+            color: section.ignore ? 'darkgrey' : 'inherit',
           }}
         >
           {text.slice(section.start, section.stop)}

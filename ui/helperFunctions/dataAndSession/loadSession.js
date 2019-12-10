@@ -1,5 +1,7 @@
 import { remote } from 'electron';
 
+import validateSessionFile from '../validateSessionFile';
+
 const fs = remote.require('fs');
 
 function loadSession(setDir, setSteps, metaData, regex, algo) {
@@ -15,12 +17,16 @@ function loadSession(setDir, setSteps, metaData, regex, algo) {
         console.log('Error loading session:', err);
       } else {
         const setup = JSON.parse(data);
-        console.log('setup', setup);
-        setDir(setup.directoryPath);
-        metaData.loadMetaData(setup.metaData);
-        regex.loadRegex(setup.regex);
-        algo.loadAlgo(setup.algo);
-        setSteps(setup.steps);
+        if (validateSessionFile(setup)) {
+          console.log('setup', setup);
+          setDir(setup.fhir_directory);
+          metaData.loadMetaData(setup.structured_data);
+          regex.loadRegex(setup.unstructured_data);
+          algo.loadAlgo(setup.algo);
+          setSteps(setup.steps);
+        } else {
+          console.log('Bad session file');
+        }
       }
     });
   }

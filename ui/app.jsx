@@ -49,7 +49,7 @@ function App() {
   }
 
   function saveSession() {
-    saveSessionFunction(directory, stepsComplete, metaData.metaData, regex.completeRegex, algo.completeAlgo);
+    saveSessionFunction(directory, stepsComplete, metaData.exportMetaData(), regex.exportRegex(), algo.exportAlgo());
   }
 
   useEffect(() => {

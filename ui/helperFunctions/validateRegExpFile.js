@@ -28,10 +28,10 @@ const sectionSchema = {
     ignore_header: {
       type: 'boolean',
     },
-    ignore_unnamed_sections: {
+    ignore_untagged: {
       type: 'boolean',
     },
-    named_sections: {
+    tags: {
       type: 'array',
       items: {
         type: 'object',
@@ -54,8 +54,8 @@ const sectionSchema = {
   required: [
     'section_break',
     'ignore_header',
-    'ignore_unnamed_sections',
-    'named_sections',
+    'ignore_untagged',
+    'tags',
   ],
   additionalProperties: false,
 };
