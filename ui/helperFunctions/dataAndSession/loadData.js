@@ -21,6 +21,10 @@ function loadData(popup, setLoading, setTab, updateSteps, setDirPath) {
         setTab('data');
         updateSteps('landing');
         setDirPath(dirPath);
+        popup.showSnackbar({
+          text: 'Successfully uploaded data.',
+          type: 'success',
+        });
       })
       .catch((err) => {
         setLoading(false);
