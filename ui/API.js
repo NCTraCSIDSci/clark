@@ -109,6 +109,16 @@ const API = {
         reject(error);
       });
   }),
+  getClassifiers: () => new Promise((resolve, reject) => {
+    axios.get(url('classifiers'))
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        const error = errorHandling(err);
+        reject(error);
+      });
+  }),
 };
 
 export default API;

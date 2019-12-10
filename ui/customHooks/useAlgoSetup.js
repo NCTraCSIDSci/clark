@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import API from '../API';
 
 import getDirPath from '../helperFunctions/dataAndSession/getDirPath';
 
-const algoOptions = [
-  'Linear SVM', 'Gaussian Naive Bayes',
-  'Decision Tree', 'Random Forest',
+const defaultAlgoOptions = [
+  { id: 'LinearSVM', name: 'Linear SVM' },
+  { id: 'GaussianNB', name: 'Gaussian Naive Bayes' },
+  { id: 'DecisionTree', name: 'Decision Tree' },
+  { id: 'RandomForest', name: 'Random Forest' },
 ];
 
 const evalOptions = [
@@ -24,6 +26,17 @@ function useAlgoSetup() {
   const [loading, setLoading] = useState(false);
   const [loadedTestData, setLoadedTestData] = useState(false);
   const [dirPath, setDirPath] = useState('');
+  const [algoOptions, setAlgoOptions] = useState(defaultAlgoOptions);
+
+  useEffect(() => {
+    API.getClassifiers()
+      .then((res) => {
+        setAlgoOptions(res);
+      })
+      .catch((err) => {
+        console.log('Error getting classifiers', err);
+      });
+  }, []);
 
   function loadTestData(path) {
     const filePath = path || getDirPath();

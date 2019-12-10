@@ -48,8 +48,8 @@ function SetupAlgo(props) {
                 inputProps={{ name: 'algo', id: 'algo' }}
               >
                 {algo.algoOptions.map((opt) => (
-                  <option key={shortid.generate()} value={opt}>
-                    {opt}
+                  <option key={shortid.generate()} value={opt.id}>
+                    {opt.name}
                   </option>
                 ))}
               </NativeSelect>
