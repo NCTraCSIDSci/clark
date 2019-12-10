@@ -16,7 +16,7 @@ import usePatientBrowser from '../../customHooks/usePatientBrowser';
 
 function SetupAlgo(props) {
   const {
-    tab, setTab, updateSteps, regex, metaData, algo,
+    tab, regex, metaData, algo, explore,
   } = props;
   const patients = usePatientBrowser();
 
@@ -26,13 +26,6 @@ function SetupAlgo(props) {
       metaData.initialize('test');
     }
   }, [tab, algo.loadedTestData]);
-
-  function explore() {
-    // const data = algo;
-    // API.algoSetup();
-    setTab('explore');
-    updateSteps(tab);
-  }
 
   return (
     <>

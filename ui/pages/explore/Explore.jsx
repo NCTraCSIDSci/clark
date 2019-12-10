@@ -5,14 +5,14 @@ import './explore.css';
 import CrossFilter from './crossFilter/D3ManagedCrossFilter';
 
 function Explore(props) {
-  const { tab } = props;
+  const { tab, result } = props;
 
   return (
     <>
       {tab === 'explore' && (
         <div>
           <CrossFilter
-            data={{}}
+            data={result}
           />
         </div>
       )}

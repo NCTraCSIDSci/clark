@@ -6,6 +6,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import './app.css';
 import 'react-virtualized/styles.css';
 
+import API from './API';
+
 import AppBar from './subComponents/appBar/AppBar';
 import Landing from './pages/landing/Landing';
 import SetupData from './pages/setupData/SetupData';
@@ -22,6 +24,7 @@ import loadDataFunction from './helperFunctions/dataAndSession/loadData';
 import saveSessionFunction from './helperFunctions/dataAndSession/saveSession';
 import loadSessionFunction from './helperFunctions/dataAndSession/loadSession';
 import pingServer from './helperFunctions/pingServer';
+import buildData from './helperFunctions/buildData';
 
 function App() {
   const [tab, setTab] = useState('landing');
@@ -29,6 +32,7 @@ function App() {
   const [stepsComplete, updateSteps] = useState([]);
   const [directory, setDirPath] = useState('');
   const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState({});
   const popup = usePopup();
   const regex = useRegex();
   const metaData = useMetaData();
@@ -45,11 +49,25 @@ function App() {
   }
 
   function loadSession() {
-    loadSessionFunction(setDirPath, updateSteps, metaData, regex, algo);
+    loadSessionFunction(setDirPath, updateSteps, setTab, metaData, regex, algo);
   }
 
   function saveSession() {
     saveSessionFunction(directory, stepsComplete, metaData.exportMetaData(), regex.exportRegex(), algo.exportAlgo());
+  }
+
+  function explore() {
+    const data = buildData(metaData.exportMetaData(), regex.exportRegex(), algo.exportAlgo());
+    // API.go(data)
+    //   .then((res) => {
+    //     setTab('explore');
+    //     updateCompletedSteps('algo');
+    //     setResult(res);
+    //   })
+    //   .catch((err) => {
+    //     // TODO: show the error modal
+    //     console.log('err', err);
+    //   });
   }
 
   useEffect(() => {
@@ -88,14 +106,14 @@ function App() {
               <SetupAlgo
                 tab={tab}
                 popup={popup}
-                setTab={setTab}
-                updateSteps={updateCompletedSteps}
                 regex={regex}
                 metaData={metaData}
                 algo={algo}
+                explore={explore}
               />
               <Explore
                 tab={tab}
+                result={result}
               />
             </>
           ) : (
