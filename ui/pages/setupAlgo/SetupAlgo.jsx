@@ -16,7 +16,7 @@ import usePatientBrowser from '../../customHooks/usePatientBrowser';
 
 function SetupAlgo(props) {
   const {
-    tab, regex, metaData, algo, explore,
+    tab, regex, metaData, algo, explore, popup,
   } = props;
   const patients = usePatientBrowser();
 
@@ -119,6 +119,7 @@ function SetupAlgo(props) {
                       h="600px"
                       regex={regex}
                       type="test"
+                      popup={popup}
                     />
                   </div>
                 ) : (

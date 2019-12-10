@@ -47,7 +47,7 @@ const patientMetaData = [
   },
 ];
 
-function useMetaData() {
+function useMetaData(popup) {
   const [metaData, setMetaData] = useState(initialMetaData);
   const [initialLists, setInitialLists] = useState({});
   const [initialized, setInitialized] = useState(false);
@@ -102,7 +102,11 @@ function useMetaData() {
         setInitialized(true);
       })
       .catch((err) => {
-        console.log('error', err);
+        // TODO: make this better
+        popup.showModal({
+          text: err,
+          type: 'error',
+        });
       });
   }
 

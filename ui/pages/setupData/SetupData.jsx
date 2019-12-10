@@ -3,8 +3,6 @@ import Button from '@material-ui/core/Button';
 
 import './data.css';
 
-// import API from '../../API';
-
 import usePatientBrowser from '../../customHooks/usePatientBrowser';
 
 import DataBrowser from '../../subComponents/dataBrowser/DataBrowser';
@@ -12,7 +10,7 @@ import MetaDataBrowser from '../../subComponents/metaDataBrowser/MetaDataBrowser
 
 function SetupData(props) {
   const {
-    tab, setTab, updateSteps, regex, metaData,
+    tab, setTab, updateSteps, regex, metaData, popup,
   } = props;
   const patients = usePatientBrowser();
 
@@ -22,15 +20,12 @@ function SetupData(props) {
 
   useEffect(() => {
     if (tab === 'data') {
-      console.log('intializing');
       patients.initialize('fhir');
       metaData.initialize('fhir');
     }
   }, [tab]);
 
   function submitFeatures() {
-    // const data = combineAllData(metaData, regex);
-    // API.submitFeatures();
     setTab('algo');
     updateSteps(tab);
   }
@@ -58,6 +53,7 @@ function SetupData(props) {
               ignoreUnnamed: regex.ignoreUnnamed,
             }}
             type="fhir"
+            popup={popup}
           />
           <Button
             onClick={submitFeatures}

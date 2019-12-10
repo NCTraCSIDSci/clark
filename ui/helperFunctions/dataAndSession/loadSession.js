@@ -4,7 +4,10 @@ import validateSessionFile from '../validateSessionFile';
 
 const fs = remote.require('fs');
 
-function loadSession(setDir, setSteps, setTab, metaData, regex, algo) {
+function loadSession(
+  setDir, setSteps, setTab,
+  metaData, regex, algo, popup,
+) {
   const path = remote.dialog.showOpenDialogSync({
     filters: [{
       name: 'JSON',
@@ -14,11 +17,13 @@ function loadSession(setDir, setSteps, setTab, metaData, regex, algo) {
   if (path) {
     fs.readFile(path[0], 'utf-8', (err, data) => {
       if (err) {
-        console.log('Error loading session:', err);
+        popup.showSnackbar({
+          type: 'error',
+          text: 'Failed to read file.',
+        });
       } else {
         const setup = JSON.parse(data);
         if (validateSessionFile(setup)) {
-          console.log('setup', setup);
           setDir(setup.fhir_directory);
           metaData.loadMetaData(setup.structured_data);
           regex.loadRegex(setup.unstructured_data);
@@ -29,8 +34,15 @@ function loadSession(setDir, setSteps, setTab, metaData, regex, algo) {
           } else {
             setTab('data');
           }
+          popup.showSnackbar({
+            type: 'success',
+            text: 'Successfully loaded session.',
+          });
         } else {
-          console.log('Bad session file');
+          popup.showSnackbar({
+            type: 'error',
+            text: 'Invalid session file.',
+          });
         }
       }
     });

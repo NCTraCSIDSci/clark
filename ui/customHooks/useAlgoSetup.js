@@ -18,8 +18,8 @@ const crossValOptions = ['Stratified', 'Random'];
 
 const foldOptions = [2, 3, 5, 10, 25];
 
-function useAlgoSetup() {
-  const [algo, updateAlgo] = useState('Linear SVM');
+function useAlgoSetup(popup) {
+  const [algo, updateAlgo] = useState(defaultAlgoOptions[0].id);
   const [evalMethod, updateEvalMethod] = useState('Cross-Validation');
   const [crossValMethod, updateCrossValMethod] = useState('Stratified');
   const [numFolds, updateNumFolds] = useState(5);
@@ -33,8 +33,11 @@ function useAlgoSetup() {
       .then((res) => {
         setAlgoOptions(res);
       })
-      .catch((err) => {
-        console.log('Error getting classifiers', err);
+      .catch(() => {
+        popup.showSnackbar({
+          text: 'Error getting classifiers.',
+          type: 'error',
+        });
       });
   }, []);
 
@@ -47,10 +50,18 @@ function useAlgoSetup() {
           setLoading(false);
           setLoadedTestData(true);
           setDirPath(filePath);
+          popup.showSnackbar({
+            text: 'Successfully loaded test data.',
+            type: 'success',
+          });
         })
         .catch((err) => {
           setLoading(false);
-          console.log('failed to upload test data', err);
+          // TODO: make this better
+          popup.showModal({
+            text: err,
+            type: 'error',
+          });
         });
     }
   }

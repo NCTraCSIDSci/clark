@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 import API from '../API';
 
-function usePatientDetails(type) {
+function usePatientDetails(type, popup) {
   const [show, toggle] = useState(false);
   const [patient, setPatient] = useState({});
   const [patientId, setPatientId] = useState('');
@@ -21,9 +21,11 @@ function usePatientDetails(type) {
         setPatient(res);
         setLoading(false);
       })
-      .catch((err) => {
-        console.log('unable to get patient:', patientId);
-        console.log('error message:', err);
+      .catch(() => {
+        popup.showSnackbar({
+          text: `Unable to get patient: ${patientId}`,
+          type: 'error',
+        });
         setLoading(false);
       });
   }

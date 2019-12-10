@@ -40,7 +40,7 @@ const columnData = {
   ],
 };
 
-function useRegex() {
+function useRegex(popup) {
   const [regexList, updateRegexList] = useState(initialRegex);
   const [tab, setTab] = useState(Object.keys(initialRegex)[0]);
   const [activeName, updateName] = useState('');
@@ -63,8 +63,10 @@ function useRegex() {
   function save() {
     const tempRegex = cloneDeep(regexList);
     if (regexList[tab].find((row, i) => regexIndex !== i && row.name === activeName)) {
-      // TODO: replace this with modal error
-      window.alert('a row with that name already exists');
+      popup.showSnackbar({
+        text: 'A row with that name already exists.',
+        type: 'error',
+      });
       return;
     }
     let row = {
@@ -181,7 +183,10 @@ function useRegex() {
       // use tab to determine the type of regex to upload
       fs.readFile(filePath[0], 'utf8', (err, data) => { // filepath is an array
         if (err) {
-          console.log('something went wrong');
+          popup.showSnackbar({
+            text: 'Unable to read file.',
+            type: 'error',
+          });
         } else {
           let tempRegexList = cloneDeep(regexList);
           const valid = validateRegExpFile(tab, JSON.parse(data));
@@ -197,8 +202,15 @@ function useRegex() {
             }
             tempRegexList = updateCompiledExpressions(tempRegexList);
             updateRegexList(tempRegexList);
+            popup.showSnackbar({
+              text: 'Successfully uploaded regex.',
+              type: 'success',
+            });
           } else {
-            console.log('the file uploaded is malformed.');
+            popup.showSnackbar({
+              text: 'Invalid regex file.',
+              type: 'error',
+            });
           }
         }
       });
@@ -221,9 +233,15 @@ function useRegex() {
       );
       fs.writeFile(filePath, JSON.stringify(regexFile), (err) => {
         if (err) {
-          return console.log('something went wrong');
+          popup.showSnackbar({
+            text: 'Unable to save regex file.',
+            type: 'error',
+          });
         }
-        return console.log('the file has been saved');
+        popup.showSnackbar({
+          text: 'Regex saved successfully.',
+          type: 'success',
+        });
       });
     }
   }

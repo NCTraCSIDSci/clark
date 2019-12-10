@@ -14,6 +14,7 @@ import SetupData from './pages/setupData/SetupData';
 import SetupAlgo from './pages/setupAlgo/SetupAlgo';
 import Explore from './pages/explore/Explore';
 import DialogPopup from './subComponents/dialogPopup/DialogPopup';
+import SnackbarPopup from './subComponents/snackbarPopup/SnackbarPopup';
 
 import usePopup from './customHooks/usePopup';
 import useRegex from './customHooks/useRegex';
@@ -34,9 +35,9 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState({});
   const popup = usePopup();
-  const regex = useRegex();
-  const metaData = useMetaData();
-  const algo = useAlgoSetup();
+  const regex = useRegex(popup);
+  const metaData = useMetaData(popup);
+  const algo = useAlgoSetup(popup);
 
   function updateCompletedSteps(value) {
     const tempSteps = new Set(stepsComplete);
@@ -49,7 +50,7 @@ function App() {
   }
 
   function loadSession() {
-    loadSessionFunction(setDirPath, updateSteps, setTab, metaData, regex, algo);
+    loadSessionFunction(setDirPath, updateSteps, setTab, metaData, regex, algo, popup);
   }
 
   function saveSession() {
@@ -97,19 +98,19 @@ function App() {
               />
               <SetupData
                 tab={tab}
-                popup={popup}
                 setTab={setTab}
                 updateSteps={updateCompletedSteps}
                 regex={regex}
                 metaData={metaData}
+                popup={popup}
               />
               <SetupAlgo
                 tab={tab}
-                popup={popup}
                 regex={regex}
                 metaData={metaData}
                 algo={algo}
                 explore={explore}
+                popup={popup}
               />
               <Explore
                 tab={tab}
@@ -125,6 +126,7 @@ function App() {
         </div>
       </div>
       <DialogPopup popup={popup} />
+      <SnackbarPopup popup={popup} />
     </StylesProvider>
   );
 }

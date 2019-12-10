@@ -24,7 +24,7 @@ const markup = debounce(doMarkup, 500);
 
 function PatientNotes(props) {
   const {
-    noteIds, patientId, regex, type,
+    noteIds, patientId, regex, type, popup,
   } = props;
   const [note, setNote] = useState({});
   const [noteId, setNoteId] = useState('');
@@ -37,8 +37,11 @@ function PatientNotes(props) {
           setNote(res);
           setNoteId(id);
         })
-        .catch((err) => {
-          console.log('error:', err);
+        .catch(() => {
+          popup.showSnackbar({
+            text: `Unable to get note: ${id}`,
+            type: 'success',
+          });
         });
     }
   }

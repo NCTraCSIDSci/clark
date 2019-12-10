@@ -4,6 +4,7 @@ function usePopup() {
   const [content, setContent] = useState({});
   const [show, toggle] = useState(false);
   const [errors, updateErrors] = useState('');
+  const [showSnack, toggleSnackbar] = useState(false);
 
   /**
    * @param {Object} config - config object for dialog to display
@@ -22,6 +23,11 @@ function usePopup() {
     }
     setContent(config);
     toggle(true);
+  }
+
+  function showSnackbar(config) {
+    setContent(config);
+    toggleSnackbar(true); // will close itself
   }
 
   function showErrors() {
@@ -68,6 +74,9 @@ function usePopup() {
     parseErrors,
     showModal,
     showErrors,
+    showSnackbar,
+    showSnack,
+    toggleSnackbar,
   };
 }
 
