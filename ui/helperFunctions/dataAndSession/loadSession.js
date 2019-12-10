@@ -4,7 +4,7 @@ import validateSessionFile from '../validateSessionFile';
 
 const fs = remote.require('fs');
 
-function loadSession(setDir, setSteps, metaData, regex, algo) {
+function loadSession(setDir, setSteps, setTab, metaData, regex, algo) {
   const path = remote.dialog.showOpenDialogSync({
     filters: [{
       name: 'JSON',
@@ -24,6 +24,11 @@ function loadSession(setDir, setSteps, metaData, regex, algo) {
           regex.loadRegex(setup.unstructured_data);
           algo.loadAlgo(setup.algo);
           setSteps(setup.steps);
+          if (setup.steps.includes('algo')) {
+            setTab('algo');
+          } else {
+            setTab('data');
+          }
         } else {
           console.log('Bad session file');
         }
