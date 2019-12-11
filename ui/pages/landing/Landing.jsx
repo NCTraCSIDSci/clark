@@ -6,7 +6,7 @@ import './landing.css';
 
 function Landing(props) {
   const {
-    tab, loading, loadData, loadSession,
+    tab, dataLoading, sessionLoading, loadData, loadSession,
   } = props;
 
   return (
@@ -21,8 +21,9 @@ function Landing(props) {
               variant="outlined"
               onClick={loadData}
               className="blueButton"
+              disabled={sessionLoading}
             >
-              {!loading ? (
+              {!dataLoading ? (
                 'Load Data'
               ) : (
                 <CircularProgress />
@@ -32,8 +33,13 @@ function Landing(props) {
               variant="outlined"
               onClick={loadSession}
               className="blueButton"
+              disabled={dataLoading}
             >
-              Load Session
+              {!sessionLoading ? (
+                'Load Session'
+              ) : (
+                <CircularProgress />
+              )}
             </Button>
           </div>
         </Paper>

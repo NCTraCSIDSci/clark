@@ -32,7 +32,8 @@ function App() {
   const [serverUp, updateServer] = useState(false);
   const [stepsComplete, updateSteps] = useState([]);
   const [directory, setDirPath] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [dataLoading, setDataLoading] = useState(false);
+  const [sessionLoading, setSessionLoading] = useState(false);
   const [result, setResult] = useState({});
   const popup = usePopup();
   const regex = useRegex(popup);
@@ -46,11 +47,18 @@ function App() {
   }
 
   function loadData() {
-    loadDataFunction(popup, setLoading, setTab, updateCompletedSteps, setDirPath);
+    loadDataFunction(
+      popup, setDataLoading, setTab,
+      updateCompletedSteps, setDirPath,
+    );
   }
 
   function loadSession() {
-    loadSessionFunction(setDirPath, updateSteps, setTab, metaData, regex, algo, popup);
+    loadSessionFunction(
+      setDirPath, updateSteps, setTab,
+      metaData, regex, algo, popup,
+      setSessionLoading,
+    );
   }
 
   function saveSession() {
@@ -92,7 +100,8 @@ function App() {
             <>
               <Landing
                 tab={tab}
-                loading={loading}
+                dataLoading={dataLoading}
+                sessionLoading={sessionLoading}
                 loadData={loadData}
                 loadSession={loadSession}
               />
