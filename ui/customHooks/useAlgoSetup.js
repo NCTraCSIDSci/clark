@@ -18,7 +18,7 @@ const crossValOptions = ['Stratified', 'Random'];
 
 const foldOptions = [2, 3, 5, 10, 25];
 
-function useAlgoSetup(popup) {
+function useAlgoSetup(popup, serverUp) {
   const [algo, updateAlgo] = useState(defaultAlgoOptions[0].id);
   const [evalMethod, updateEvalMethod] = useState('Cross-Validation');
   const [crossValMethod, updateCrossValMethod] = useState('Stratified');
@@ -29,17 +29,19 @@ function useAlgoSetup(popup) {
   const [algoOptions, setAlgoOptions] = useState(defaultAlgoOptions);
 
   useEffect(() => {
-    API.getClassifiers()
-      .then((res) => {
-        setAlgoOptions(res);
-      })
-      .catch(() => {
-        popup.showSnackbar({
-          text: 'Error getting classifiers.',
-          type: 'error',
+    if (serverUp) {
+      API.getClassifiers()
+        .then((res) => {
+          setAlgoOptions(res);
+        })
+        .catch(() => {
+          popup.showSnackbar({
+            text: 'Error getting classifiers.',
+            type: 'error',
+          });
         });
-      });
-  }, []);
+    }
+  }, [serverUp]);
 
   function loadTestData(path) {
     const filePath = path || getDirPath();

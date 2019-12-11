@@ -37,7 +37,7 @@ function App() {
   const popup = usePopup();
   const regex = useRegex(popup);
   const metaData = useMetaData(popup);
-  const algo = useAlgoSetup(popup);
+  const algo = useAlgoSetup(popup, serverUp);
 
   function updateCompletedSteps(value) {
     const tempSteps = new Set(stepsComplete);
