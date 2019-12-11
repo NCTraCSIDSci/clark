@@ -88,7 +88,7 @@ function RegexTable(props) {
             </FormGroup>
           </div>
         )}
-        <Table stickyHeader id="regexTable" size="small">
+        <Table stickyHeader size="small">
           <TableHead>
             <TableRow>
               {editable && (

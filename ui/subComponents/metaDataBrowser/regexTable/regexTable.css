@@ -4,9 +4,6 @@
     flex-direction: column;
     padding: 15px;
 }
-/* #regexTable {
-    height: calc(100% - 62px);
-} */
 #addRegexButton {
     height: 78px;
     display: flex;
