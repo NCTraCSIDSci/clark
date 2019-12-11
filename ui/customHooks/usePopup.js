@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import parseErrors from '../helperFunctions/parseErrors';
 
 function usePopup() {
   const [content, setContent] = useState({});
   const [show, toggle] = useState(false);
   const [errors, updateErrors] = useState('');
   const [showSnack, toggleSnackbar] = useState(false);
+  const [snackbarContent, setSnackbarContent] = useState({});
 
   /**
    * @param {Object} config - config object for dialog to display
@@ -26,8 +28,12 @@ function usePopup() {
   }
 
   function showSnackbar(config) {
-    setContent(config);
+    setSnackbarContent(config);
     toggleSnackbar(true); // will close itself
+  }
+
+  function receiveErrors(errs) {
+    updateErrors(parseErrors(errs, showSnackbar, toggle));
   }
 
   function showErrors() {
@@ -48,35 +54,18 @@ function usePopup() {
     toggle(true);
   }
 
-  function parseErrors(errorObj) {
-    const { files, general, linking } = errorObj;
-    const linkErrs = linking.join('\n');
-    const genErrs = general.join('\n');
-    const fileErrs = Object.keys(files).map((file) => {
-      let errStr = '';
-      if (files[file].length) {
-        errStr += `${file}\n`;
-        files[file].forEach((err) => {
-          errStr += `${err}\n`;
-        });
-      }
-      return errStr;
-    }).join('\n');
-    const parsedErrors = `${fileErrs}\n\n${genErrs}\n\n${linkErrs}`;
-    updateErrors(parsedErrors);
-  }
-
   return {
     show,
     toggle,
     content,
     errors,
-    parseErrors,
+    receiveErrors,
     showModal,
     showErrors,
     showSnackbar,
     showSnack,
     toggleSnackbar,
+    snackbarContent,
   };
 }
 

@@ -28,7 +28,11 @@ const DialogPopup = (props) => {
         <DialogContentText
           id={popup.content.error ? 'errorMessage' : ''}
         >
-          {popup.content.text}
+          {Array.isArray(popup.content.text) ? (
+            popup.content.text.map((item) => item)
+          ) : (
+            popup.content.text
+          )}
         </DialogContentText>
       </DialogContent>
       <DialogActions id="dialogActions">

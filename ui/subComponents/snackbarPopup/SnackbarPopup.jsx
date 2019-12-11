@@ -14,8 +14,8 @@ const SnackbarPopup = (props) => {
       onClose={() => popup.toggleSnackbar(false)}
     >
       <SnackbarContent
-        className={`${popup.content.type}Snackbar`}
-        message={popup.content.text}
+        className={`${popup.snackbarContent.type}Snackbar`}
+        message={popup.snackbarContent.text}
       />
     </Snackbar>
   );

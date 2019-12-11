@@ -17,7 +17,7 @@ function loadData(popup, setLoading, setTab, updateSteps, setDirPath) {
     API.load([dirPath], 'fhir')
       .then((result) => {
         setLoading(false);
-        popup.parseErrors(result.messages);
+        popup.receiveErrors(result.messages);
         setTab('data');
         updateSteps('landing');
         setDirPath(dirPath);
