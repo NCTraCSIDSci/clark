@@ -74,7 +74,7 @@ function MenuBar(props) {
             button
             onClick={() => setTab('data')}
             className={tab === 'data' ? 'activePage' : ''}
-            // disabled={stepsComplete.indexOf('load') < 0}
+            // disabled={stepsComplete.indexOf('landing') < 0}
           >
             <Badge
               badgeContent={stepsComplete.indexOf('data') > -1 ? <CheckCircleIcon className="stepCompleted" /> : ''}
@@ -87,7 +87,7 @@ function MenuBar(props) {
             button
             onClick={() => setTab('algo')}
             className={tab === 'algo' ? 'activePage' : ''}
-            // disabled={stepsComplete.indexOf('setupData') < 0}
+            // disabled={stepsComplete.indexOf('data') < 0}
           >
             <Badge
               badgeContent={stepsComplete.indexOf('algo') > -1 ? <CheckCircleIcon className="stepCompleted" /> : ''}

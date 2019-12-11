@@ -107,7 +107,7 @@ function highlight(text, expressions) {
     });
     return highlightedText;
   }
-  return ['Please select a note to view.'];
+  return [];
 }
 
 export default highlight;

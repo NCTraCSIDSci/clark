@@ -55,6 +55,12 @@ function PatientNotes(props) {
     markup.flush(); // if note or regex tab change, run markup immediately
   }, [note.data, regex.tab]);
 
+  useEffect(() => {
+    if (noteIds.length) {
+      getNote(noteIds[0]);
+    }
+  }, []);
+
   return (
     <div id="patientNotes">
       <div id="noteIds">
@@ -74,7 +80,11 @@ function PatientNotes(props) {
       <div id="patientNote">
         <p>{note.indexed && `Date: ${note.indexed}`}</p>
         <div id="patientNoteText">
-          {noteText.map((section) => section)}
+          {noteText.length ? (
+            noteText.map((section) => section)
+          ) : (
+            'This patient has no notes.'
+          )}
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Zoom from '@material-ui/core/Zoom';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -6,15 +6,12 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import Drawer from '@material-ui/core/Drawer';
-import Divider from '@material-ui/core/Divider';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import shortid from 'shortid';
 
 import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 import './patientModal.css';
 
@@ -33,9 +30,15 @@ const PatientDetails = (props) => {
   const {
     birthDate, gender, id, maritalStatus,
   } = patientDetails.patient;
-  const [open, setOpen] = useState('');
-  const [drawerOpen, toggleDrawer] = useState(true);
   const patientKeys = Object.keys(patientDetails.patient).filter((key) => blacklist.indexOf(key) < 0);
+  const [open, setOpen] = useState('');
+  const [menuAnchor, setMenuAnchor] = useState(null);
+
+  useEffect(() => {
+    if (!open) {
+      setOpen(patientKeys[0]);
+    }
+  }, [patientDetails.patient]);
 
   return (
     <Dialog
@@ -59,18 +62,33 @@ const PatientDetails = (props) => {
             <p>
               {`Birth Date: ${birthDate}, Gender: ${gender}, Marital Status: ${maritalStatus}`}
             </p>
+            <h3>
+              {prettyString(open)}
+            </h3>
             <IconButton
               size="small"
-              onClick={() => toggleDrawer(true)}
-              className={drawerOpen ? 'hide' : ''}
+              onClick={(e) => setMenuAnchor(e.currentTarget)}
               id="drawerOpenButton"
             >
               <MenuIcon />
             </IconButton>
+            <Menu
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={() => setMenuAnchor(null)}
+            >
+              {patientKeys.map((key) => (
+                <MenuItem
+                  key={shortid.generate()}
+                  onClick={() => { setOpen(key); setMenuAnchor(null); }}
+                >
+                  {prettyString(key)}
+                </MenuItem>
+              ))}
+            </Menu>
           </DialogTitle>
           <DialogContent
             id="patientDetails"
-            style={{ overflow: drawerOpen ? 'hidden' : '' }}
           >
             {open && (
               <>
@@ -91,37 +109,6 @@ const PatientDetails = (props) => {
                 )}
               </>
             )}
-            <Drawer
-              variant="persistent"
-              open={drawerOpen}
-              ModalProps={{
-                style: { position: 'absolute' },
-                container: document.getElementById('patientDetails'),
-              }}
-              BackdropProps={{ style: { position: 'absolute' } }}
-              PaperProps={{ style: { position: 'absolute' } }}
-            >
-              <div id="drawerCloseButton">
-                <IconButton
-                  onClick={() => toggleDrawer(false)}
-                  size="small"
-                >
-                  <ChevronLeftIcon />
-                </IconButton>
-              </div>
-              <Divider />
-              <List>
-                {patientKeys.map((key) => (
-                  <ListItem
-                    key={shortid.generate()}
-                    button
-                    onClick={() => { setOpen(key); toggleDrawer(false); }}
-                  >
-                    {prettyString(key)}
-                  </ListItem>
-                ))}
-              </List>
-            </Drawer>
           </DialogContent>
           <DialogActions id="dialogActions">
             <Button

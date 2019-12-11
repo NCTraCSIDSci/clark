@@ -65,7 +65,7 @@ function addSections(text, regex) {
     });
     return highlightedText;
   }
-  return ['Please select a note to view.'];
+  return [];
 }
 
 export default addSections;
