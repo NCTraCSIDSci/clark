@@ -1,0 +1,64 @@
+#setupDataContainer {
+    display: flex;
+    width: 98%;
+    height: 95%;
+}
+#tabsContainer {
+    width: 49%;
+    margin-right: 1%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+.setupDataTab {
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+}
+.setupDataTab > .MuiAvatar-circle {
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    background-color: #97bedb;
+    color: #183042;
+    font-size: 16px;
+}
+#setupDataLeftTable {
+    height: 100%;
+    border-radius: 0px 0px 15px 15px;
+    display: flex;
+}
+#setupDataLeftTab {
+    width: 115px;
+    border-right: 3px solid #e0e0e0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+#setupDataLeftContainer {
+    width: calc(100% - 115px);
+    height: 100%;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    max-height: 600px;
+}
+#setupDataSortBar {
+    height: 60px;
+    margin: 0;
+    display: flex;
+    justify-content: space-around;
+    background-color: #e6edf2;
+    flex-wrap: wrap;
+}
+#setupDataList {
+    height: calc(100% - 60px);
+}
+.topRightButton {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 2000;
+}
+/* TODO: fix the regex table height overflow */

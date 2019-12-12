@@ -1,0 +1,9 @@
+repos:
+-   repo: local
+    hooks:
+    -   id: fhir-data-grep
+        name: Detect FHIR data files
+        description: The hook attempts to identify FHIR data files that are being inadvertently committed.
+        language: pygrep
+        entry: \"resourceType\"
+        files: \.json$

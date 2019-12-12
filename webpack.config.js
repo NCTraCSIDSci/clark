@@ -1,24 +1,14 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const config = {
-  entry: ['./ui/index.jsx'],
-  target: 'electron-renderer',
-  mode: 'development',
-  devtool: 'cheap-module-eval-source-map',
-  output: {
-    path: path.join(__dirname, 'build_ui'),
-    publicPath: './',
-    filename: 'bundle.js',
-    libraryTarget: 'umd',
-  },
   resolve: {
-    extensions: ['.mjs', '.js', '.jsx', '.json'],
+    extensions: ['.js', '.jsx', '.json'],
     modules: [
       path.join(__dirname, '.'),
       'node_modules',
     ],
   },
+  target: 'electron-renderer',
   module: {
     rules: [
       {
@@ -60,11 +50,6 @@ const config = {
       },
     ],
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: './ui/index.html',
-    }),
-  ],
 };
 
 module.exports = config;

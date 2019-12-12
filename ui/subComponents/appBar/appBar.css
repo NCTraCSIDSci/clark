@@ -1,0 +1,74 @@
+.appToolbar {
+    padding: 0;
+}
+#appTitle {
+    margin-left: 20px;
+}
+.drawerOpen {
+    width: 186px;
+    overflow-x: hidden;
+    transition: width 200ms linear !important;
+}
+.drawerClosed {
+    width: 55px;
+    overflow-x: hidden;
+    transition: width 200ms linear !important;
+}
+#menuButton {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 8px 10px;
+    height: 64px;
+}
+.hide {
+    display: none !important;
+}
+.show {
+    margin-right: 20px !important;
+    color: #FFFFFF;
+    margin-left: 3px;
+}
+.appBar {
+    z-index: 1201 !important;
+    background-color: #414248 !important;
+    transition: margin 200ms linear, width 200ms linear !important;
+}
+.appBarShift {
+    margin-left: 186px !important;
+    width: calc(100% - 186px) !important;
+    background-color: #414248 !important;
+    transition: margin 200ms linear, width 200ms linear !important;
+}
+.activePage {
+    background-color: lightgrey;
+}
+.MuiListItemText-root {
+    white-space: nowrap;
+}
+.MuiListItemText-primary {
+    font-size: 14px;
+}
+.MuiListItemIcon-root {
+    min-width: 40px;
+}
+#drawerList {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 64px);
+}
+.bottomDrawerButtons {
+    margin-top: auto;
+}
+.stepCompleted {
+    color: green;
+    font-size: 18px;
+    position: absolute;
+    right: 16px;
+}
+#errorsPresent {
+    color: red;
+    font-size: 18px;
+    position: absolute;
+    right: 16px;
+}
