@@ -1,0 +1,23 @@
+import React from 'react';
+
+import './explore.css';
+
+import CrossFilter from './crossFilter/D3ManagedCrossFilter';
+
+function Explore(props) {
+  const { tab, result } = props;
+
+  return (
+    <>
+      {tab === 'explore' && (
+        <div>
+          <CrossFilter
+            data={result}
+          />
+        </div>
+      )}
+    </>
+  );
+}
+
+export default Explore;

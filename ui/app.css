@@ -1,0 +1,22 @@
+* {
+    font-family: 'Roboto', sans-serif;
+}
+#mainContainer {
+    display: flex;
+    min-height: 100vh;
+    background-color: #F0F4F5;
+}
+#content {
+    width: 100%;
+    margin-top: 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.hide {
+    display: none;
+}
+.MuiPaper-rounded {
+    border-radius: 15px;
+}

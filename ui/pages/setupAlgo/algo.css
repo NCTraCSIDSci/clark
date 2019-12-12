@@ -1,0 +1,45 @@
+#algoSetupContainer {
+    width: 95%;
+    /* height: 90%; */
+    min-height: 400px;
+    padding: 20px 10px;
+}
+#algoClassifier {
+    width: 100%;
+    padding: 10px 20px;
+    text-align: center;
+    height: 132px;
+}
+#algoTrainTest {
+    width: 100%;
+    /* height: calc(100% - 132px); */
+    padding: 10px 20px;
+    text-align: center;
+    margin-top: 20px;
+    position: relative;
+}
+#loadTestDataButton {
+    width: 300px;
+    height: 100px;
+    font-size: 20px;
+}
+#testCorpusData {
+    min-height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+.algoSelect {
+    width: 20%;
+    margin: 20px;
+}
+#resetTestDataButton {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+#testDataBrowser {
+    width: 100%;
+    display: flex;
+}
