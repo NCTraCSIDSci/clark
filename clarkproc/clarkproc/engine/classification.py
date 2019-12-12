@@ -258,8 +258,17 @@ def get_classifiers():
                    {"name":"Random Forest", "id":"RandomForest"}]
     return classifiers
 
+
+classifier_map = {
+    "Linear SVM": "LinearSVM",
+    "Gaussian Naive Bayes": "GaussianNB",
+    "Decision Tree": "DecisionTree",
+    "Random Forest": "RandomForest"
+}
+
+
 def build_classifier(name):
     module = importlib.import_module("engine.classification")
-    clazz = getattr(module, name)
+    clazz = getattr(module, classifier_map[name])
     instance = clazz()
     return instance

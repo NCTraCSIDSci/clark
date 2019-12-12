@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from base64 import b64decode
+import datetime
 
 from .containers import ObservationContainer, MedicationContainer
 from .errors import *
@@ -181,6 +182,20 @@ class Patient(Resource):
         })
 
         return d
+
+    def get_age_in_days(self, reference_date=None):
+        """Get patient age relative to a reference date (now)."""
+        if reference_date is None:
+            reference_date = datetime.datetime.now()
+        return (reference_date - self.birthDate).total_seconds() / 60 / 60 / 24
+
+    def get_age_in_years(self, reference_date=None):
+        """Get patient age relative to a reference date (now)."""
+        if reference_date is None:
+            reference_date = datetime.datetime.now()
+        return reference_date.year - self.birthDate.year - (
+            (reference_date.month, reference_date.day) < (self.birthDate.month, self.birthDate.day)
+        )
 
 
 _observation_registry = {}
