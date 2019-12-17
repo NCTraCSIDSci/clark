@@ -179,6 +179,73 @@ def fhir_to_dataframe(patients, plan):
     return df
 
 
+@bp_ml.route('/coverage', methods=['POST'])
+def compute_coverage():
+    """
+    Apply regular expressions on the loaded training data and return the results.
+    ---
+    tags: ["Machine Learning"]
+    requestBody:
+        description: "Experiment Setup"
+        content:
+            application/json:
+                schema:
+                    type: object
+                    properties:
+                        sections:
+                            type: object
+                            properties:
+                                tags:
+                                    type: array
+                                    items:
+                                        type: object
+                                        properties:
+                                            regex:
+                                                type: string
+                                            ignore:
+                                                type: boolean
+                                section_break:
+                                    type: string
+                                ignore_header:
+                                    type: boolean
+                                ignore_untagged:
+                                    type: boolean
+                        features:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    regex:
+                                        type: string
+    responses:
+        200:
+            description: "Feature extraction successful, results returned"
+            content:
+                application/json:
+                    schema:
+                        type: object
+        428:
+            description: "No corpus loaded"
+            content:
+                text/plain:
+                    schema:
+                        type: string
+    """
+    if not state.train.patients:
+        return 'No data loaded.', 428
+
+    occurrences = defaultdict(int)
+    for patient_id in state.train.patients:
+        patient = state.train.patients.get(patient_id)
+
+        # "notes" features
+        notes = [note.data for note_id, note in patient.notes.items()]
+        new_features = notes_to_features(notes, request.json)
+        for feature in request.json['features']:
+            occurrences[feature['regex']] += 1 if new_features[feature['regex']] else 0
+    return
+
+
 @bp_ml.route('/go', methods=['POST'])
 def apply_ml():
     """
