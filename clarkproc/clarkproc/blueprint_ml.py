@@ -243,7 +243,7 @@ def compute_coverage():
         new_features = notes_to_features(notes, request.json)
         for feature in request.json['features']:
             occurrences[feature['regex']] += 1 if new_features[feature['regex']] else 0
-    return
+    return occurrences
 
 
 @bp_ml.route('/go', methods=['POST'])
