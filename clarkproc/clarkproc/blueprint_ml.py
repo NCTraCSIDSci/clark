@@ -364,7 +364,6 @@ def apply_ml():
                               - algo_type
                               - eval_method
                     required:
-                      - fhir_directory
                       - structured_data
                       - unstructured_data
                       - algo
