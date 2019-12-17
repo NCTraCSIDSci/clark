@@ -122,7 +122,7 @@ def fhir_to_dataframe(patients, plan):
         patient = patients.get(patient_id)
         patient_features = {
             'id': patient.id,
-            'label': int(patient.id) % 2,
+            'label': patient.label,
         }
 
         # "notes" features

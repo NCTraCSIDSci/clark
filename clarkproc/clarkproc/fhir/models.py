@@ -109,6 +109,8 @@ class Patient(Resource):
     def __init__(self, fhir_patient, msg_list=None):
         super().__init__(fhir_patient)
 
+        self.label = None
+
         # id isn't required in the FHIR spec, but we are going to require it for
         # our purposes.
         if not isinstance(fhir_patient.id, str):
@@ -163,7 +165,8 @@ class Patient(Resource):
             'labs': self.labs.to_dict(),
             'vitals': self.vitals.to_dict(),
             'medications': self.medications.to_dict(),
-            'note_ids': list(self.notes.keys())
+            'note_ids': list(self.notes.keys()),
+            'label': self.label,
         })
 
         return d
