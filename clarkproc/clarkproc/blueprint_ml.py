@@ -176,9 +176,6 @@ def fhir_to_dataframe(patients, plan):
     # logger.error(features)
     df = pd.DataFrame(features)
     df = df.set_index('id')
-
-    # handle missing data
-    df = df.replace(np.nan, 0)
     return df
 
 

@@ -9,6 +9,8 @@ import sklearn.svm
 import sklearn.tree
 import sklearn.ensemble
 import sklearn.naive_bayes
+import sklearn.pipeline
+import sklearn.impute
 import importlib
 import copy
 
@@ -182,7 +184,10 @@ class DecisionTree(Classifier):
         self.classifier = []
 
     def _train(self, data_train):
-        clf = sklearn.tree.DecisionTreeClassifier(**self.parameters)
+        clf = sklearn.pipeline.Pipeline([
+            ('imputation', sklearn.impute.SimpleImputer(missing_values=np.nan, strategy='mean')),
+            ('decision_tree', sklearn.tree.DecisionTreeClassifier(**self.parameters)),
+        ])
         clf.fit(data_train.data, data_train.y)
         self.classifier = clf
         return
@@ -201,7 +206,10 @@ class RandomForest(Classifier):
         self.classifier = []
 
     def _train(self, data_train):
-        clf = sklearn.ensemble.RandomForestClassifier(**self.parameters)
+        clf = sklearn.pipeline.Pipeline([
+            ('imputation', sklearn.impute.SimpleImputer(missing_values=np.nan, strategy='mean')),
+            ('random_forest', sklearn.ensemble.RandomForestClassifier(**self.parameters)),
+        ])
         clf.fit(data_train.data, data_train.y)
         self.classifier = clf
         return
@@ -220,7 +228,10 @@ class GaussianNB(Classifier):
         self.classifier = []
 
     def _train(self, data_train):
-        clf = sklearn.naive_bayes.GaussianNB(**self.parameters)
+        clf = sklearn.pipeline.Pipeline([
+            ('imputation', sklearn.impute.SimpleImputer(missing_values=np.nan, strategy='mean')),
+            ('naive_bayes', sklearn.naive_bayes.GaussianNB(**self.parameters)),
+        ])
         clf.fit(data_train.data, data_train.y)
         self.classifier = clf
         return
@@ -239,7 +250,10 @@ class LinearSVM(Classifier):
         self.classifier = []
 
     def _train(self, data_train):
-        clf = sklearn.svm.SVC(**self.parameters)
+        clf = sklearn.pipeline.Pipeline([
+            ('imputation', sklearn.impute.SimpleImputer(missing_values=np.nan, strategy='mean')),
+            ('svm', sklearn.svm.SVC(**self.parameters)),
+        ])
         clf.fit(data_train.data, data_train.y)
         self.classifier = clf
         return
