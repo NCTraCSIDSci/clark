@@ -564,7 +564,7 @@ def apply_ml():
                         },
                     },
                 }
-                for patient_id, pair in zip(state.train.patients, confs.tolist())
+                for patient_id, pair in zip(state.test.patients, confs.tolist())
             ],
         }
 
