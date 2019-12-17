@@ -503,9 +503,23 @@ def apply_ml():
         [max_label, max_conf] = zip(*result)
 
         output = {
-            'labels': class_names, 'confs': confs.tolist(), 'true_label': ds.targets, 'true_conf': true_conf,
-            'max_label': max_label, 'max_conf': max_conf, 'scores': scores.tolist(), 'mean': scores.mean(),
-            'std': scores.std(), 'obs_info': ds.obs_info, 'method': "crossValidate"
+            'resourceType': 'Bundle',
+            'type': 'collection',
+            'entry': [
+                {
+                    'resourceType': 'ClarkDecision',
+                    'subject': {
+                        'reference': f'Patient/{patient_id}',
+                    },
+                    'decision': {
+                        'confidences': {
+                            class_names[i]: pair[i]
+                            for i in range(len(class_names))
+                        },
+                    },
+                }
+                for patient_id, pair in zip(state.train.patients, confs.tolist())
+            ],
         }
 
     elif request.json['algo']['eval_method']['type'] == 'Evaluation Corpus':
@@ -535,9 +549,23 @@ def apply_ml():
         [max_label, max_conf] = zip(*result)
 
         output = {
-            'labels': class_names, 'confs': confs.tolist(),
-            'max_label': max_label, 'max_conf': max_conf,
-            'obs_info': ds_test.obs_info, 'method': "test"
+            'resourceType': 'Bundle',
+            'type': 'collection',
+            'entry': [
+                {
+                    'resourceType': 'ClarkDecision',
+                    'subject': {
+                        'reference': f'Patient/{patient_id}',
+                    },
+                    'decision': {
+                        'confidences': {
+                            class_names[i]: pair[i]
+                            for i in range(len(class_names))
+                        },
+                    },
+                }
+                for patient_id, pair in zip(state.train.patients, confs.tolist())
+            ],
         }
 
     state.last_result = output
