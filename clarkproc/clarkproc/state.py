@@ -18,7 +18,6 @@ class AttributeDict(dict):
 corpus = None
 test_corpus = None
 last_result = None
-proc = engine.text.ProcessingBlock()
 classifier = None
 
 train = AttributeDict(patients=None, labs=None, vitals=None, medications=None)
@@ -26,12 +25,11 @@ test = AttributeDict(patients=None, labs=None, vitals=None, medications=None)
 
 
 def reset():
-    global corpus, test_corpus, last_result, proc, classifier, train, test
+    global corpus, test_corpus, last_result, classifier, train, test
 
     corpus = None
     test_corpus = None
     last_result = None
-    proc = engine.text.ProcessingBlock()
     classifier = None
 
     train.patients = None

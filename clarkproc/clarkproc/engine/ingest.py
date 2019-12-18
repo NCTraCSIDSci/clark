@@ -1,4 +1,5 @@
 import json
+import logging
 import re
 from glob import glob
 
@@ -12,6 +13,8 @@ from clarkproc.fhir.models import (DocumentReference,
                                    MedicationRequest,
                                    Resource,
                                    VitalSigns)
+
+logger = logging.getLogger(__name__)
 
 
 def ingest_fhir(paths):
@@ -39,6 +42,7 @@ def ingest_fhir(paths):
     patients = {}
 
     lab_list = []
+    label_list = []
     vital_list = []
     medication_list = []
     note_list = []
@@ -62,6 +66,9 @@ def ingest_fhir(paths):
             msg_list.append('ERROR: resourceType missing in JSON data.')
             continue
 
+        if json_results['resourceType'] == 'Bundle' and json_results['entry'][0].get('resourceType', None) == 'ClarkLabel':
+            label_list = json_results['entry']
+            continue
         # Try to reconstitute JSON data into FHIR resources.
         try:
             element = FHIRElementFactory.instantiate(
@@ -138,6 +145,17 @@ def ingest_fhir(paths):
         if patient_id is not None:
             patients[patient_id].labs.add(lab)
             msg_list += labs.add(lab.code, patient_id, lab.unit)
+
+    # Iterate through labels, adding them to the associated patient
+    for label in label_list:
+        patient_id = re.split('/', label['subject']['reference'])[-1]
+        if patient_id not in patients:
+            msg_list.append('WARN: Discarding label due to no patient with '
+                            'id {}.'.format(patient_id))
+            patient_id = None
+
+        if patient_id is not None:
+            patients[patient_id].label = label['label']['value']
 
     # Iterate through vitals, adding them to the associated patient and storing
     # in the vital LUT.
