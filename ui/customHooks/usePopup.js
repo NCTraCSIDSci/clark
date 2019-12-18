@@ -4,7 +4,7 @@ import parseErrors from '../helperFunctions/parseErrors';
 function usePopup() {
   const [content, setContent] = useState({});
   const [show, toggle] = useState(false);
-  const [errors, updateErrors] = useState('');
+  const [errors, updateErrors] = useState([]);
   const [showSnack, toggleSnackbar] = useState(false);
   const [snackbarContent, setSnackbarContent] = useState({});
 

@@ -60,7 +60,6 @@ const initialFilter = {
 };
 
 function usePatientBrowser() {
-  const [initialized, setInitialized] = useState(false);
   const [patientList, setPatientList] = useState([]);
   const [sortedPatients, updateSortedPatients] = useState([]);
   const [filter, setFilter] = useState(initialFilter);
@@ -84,7 +83,6 @@ function usePatientBrowser() {
         setPatientList(list);
         updateSortedPatients(list);
         initializeFilter();
-        setInitialized(true);
       })
       .catch(() => {
         setPatientList([]);
@@ -118,25 +116,26 @@ function usePatientBrowser() {
   }
 
   useEffect(() => {
-    let sortedList = cloneDeep(patientList);
-    Object.keys(filter.text).forEach((key) => {
-      sortedList = sortedList.filter((patient) => patient[key].toLowerCase().includes(filter.text[key].toLowerCase()));
-    });
-    Object.keys(filter.sort).forEach((key) => {
-      if (filter.sort[key] && sortedBy) {
-        if (sortedDir === 'ASC') {
-          sortedList = sortedList.sort((a, b) => a[sortedBy] - b[sortedBy]);
-        } else if (sortedDir === 'DESC') {
-          sortedList = sortedList.sort((a, b) => b[sortedBy] - a[sortedBy]);
+    if (Object.keys(patientList).length) {
+      let sortedList = cloneDeep(patientList);
+      Object.keys(filter.text).forEach((key) => {
+        sortedList = sortedList.filter((patient) => patient[key].toLowerCase().includes(filter.text[key].toLowerCase()));
+      });
+      Object.keys(filter.sort).forEach((key) => {
+        if (filter.sort[key] && sortedBy) {
+          if (sortedDir === 'ASC') {
+            sortedList = sortedList.sort((a, b) => a[sortedBy] - b[sortedBy]);
+          } else if (sortedDir === 'DESC') {
+            sortedList = sortedList.sort((a, b) => b[sortedBy] - a[sortedBy]);
+          }
         }
-      }
-    });
-    updateSortedPatients(sortedList);
+      });
+      updateSortedPatients(sortedList);
+    }
   }, [filter]);
 
   return {
     initialize,
-    initialized,
     sortedPatients,
     numPatients: patientList.length,
     filter,

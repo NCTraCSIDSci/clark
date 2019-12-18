@@ -26,7 +26,7 @@ function saveSession(dirPath, steps, metaData, regex, algo, popup) {
         });
       } else {
         popup.showSnackbar({
-          text: 'Session saved successfully',
+          text: 'Session saved successfully.',
           type: 'success',
         });
       }

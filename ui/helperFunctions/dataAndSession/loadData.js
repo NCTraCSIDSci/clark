@@ -10,7 +10,10 @@ import getDirPath from './getDirPath';
  * @param {function} updateSteps adds data to completed steps if successful
  * @param {function} setDirPath sets the directory path to state for save
  */
-function loadData(popup, setLoading, setTab, updateSteps, setDirPath) {
+function loadData(
+  popup, setLoading, setTab,
+  updateSession,
+) {
   const dirPath = getDirPath();
   if (dirPath) {
     setLoading(true);
@@ -19,8 +22,13 @@ function loadData(popup, setLoading, setTab, updateSteps, setDirPath) {
         setLoading(false);
         popup.receiveErrors(result.messages);
         setTab('data');
-        updateSteps('landing');
-        setDirPath(dirPath);
+        updateSession({
+          fhir_directory: dirPath,
+          structured_data: {},
+          unstructured_data: {},
+          algo: {},
+          steps: ['landing'],
+        });
         popup.showSnackbar({
           text: 'Successfully uploaded data.',
           type: 'success',
@@ -28,6 +36,8 @@ function loadData(popup, setLoading, setTab, updateSteps, setDirPath) {
       })
       .catch((err) => {
         setLoading(false);
+        // updateSteps('');
+        popup.receiveErrors({});
         popup.showModal({
           disableBackdrop: false,
           error: true,
@@ -41,7 +51,7 @@ function loadData(popup, setLoading, setTab, updateSteps, setDirPath) {
             },
           ],
         });
-        setDirPath('');
+        // setDirPath('');
       });
   }
 }

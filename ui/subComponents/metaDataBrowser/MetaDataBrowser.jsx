@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -9,10 +9,15 @@ import RegexTable from './regexTable/RegexTable';
 
 function MetaDataBrowser(props) {
   const {
-    metaData, regex, type, numPatients, height,
+    type, numPatients, height, regex, metaData,
   } = props;
   const [tabIndex, setTabIndex] = useState(0);
+
   const editable = type !== 'test';
+
+  useEffect(() => {
+    metaData.initialize(type);
+  }, [type]);
 
   return (
     <Paper id="tabsContainer" style={{ height }}>

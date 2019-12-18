@@ -40,7 +40,7 @@ function addSections(text, regex) {
         reg = new RegExp(r.regex, 'gi');
         if (reg.test(match[0])) {
           section.color = r.color; // if a regex matches, give the section that color
-          section.ignore = section.ignore || r.ignore; // if ignore section, color text grey
+          section.ignore = r.ignore; // if ignore section, color text grey
         }
       });
       sections.push(section);

@@ -102,6 +102,7 @@ function useMetaData(popup) {
         setInitialized(true);
       })
       .catch((err) => {
+        setLoading(false);
         popup.showModal({
           disableBackdrop: false,
           error: true,
@@ -116,16 +117,16 @@ function useMetaData(popup) {
       });
   }
 
-  function updateMetaData(system, code, value) {
-    const key = `(${system}${code ? `, ${code}` : ''}`;
-    if (metaData[tab][key]) {
-      const aggregationArray = metaData[tab][key];
+  function updateMetaData(key, value) {
+    const tempMetaData = cloneDeep(metaData);
+    if (tempMetaData[tab][key]) {
+      const aggregationArray = tempMetaData[tab][key];
       const index = aggregationArray.indexOf(value);
       if (index !== -1) {
         updateBadgeNum((prev) => prev - 1);
         aggregationArray.splice(index, 1);
         if (!aggregationArray.length) {
-          delete metaData[tab][key];
+          delete tempMetaData[tab][key];
         }
       } else {
         updateBadgeNum((prev) => prev + 1);
@@ -133,9 +134,9 @@ function useMetaData(popup) {
       }
     } else {
       updateBadgeNum((prev) => prev + 1);
-      metaData[tab][key] = [value];
+      tempMetaData[tab][key] = [value];
     }
-    setMetaData({ ...metaData });
+    setMetaData(tempMetaData);
   }
 
   function updateFilter(key, value) {
@@ -201,6 +202,12 @@ function useMetaData(popup) {
     return tempMetaData;
   }
 
+  function resetMetaData() {
+    setMetaData(initialMetaData);
+    setFilter(initialFilter);
+    updateBadgeNum(0);
+  }
+
   return {
     exportMetaData,
     loadMetaData,
@@ -217,6 +224,7 @@ function useMetaData(popup) {
     badgeNum,
     patientMetaData,
     updateDate,
+    resetMetaData,
   };
 }
 
