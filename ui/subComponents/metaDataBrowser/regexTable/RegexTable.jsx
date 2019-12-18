@@ -117,7 +117,6 @@ function RegexTable(props) {
           </TableHead>
           <TableBody>
             {regex.rows.map((row, i) => {
-              // TODO: this is getting run on every render
               const backgroundColor = getCombinedColor([row.color]);
               return (
                 <TableRow

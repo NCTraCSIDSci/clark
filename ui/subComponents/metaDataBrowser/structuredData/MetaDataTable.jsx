@@ -10,7 +10,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
 import { Virtuoso } from 'react-virtuoso';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import shortid from 'shortid';
@@ -23,6 +23,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import './metaData.css';
 
 import prettyString from '../../../helperFunctions/prettyString';
+
 
 function MetaDataTable(props) {
   const { metaData, numPatients, editable } = props;
@@ -66,18 +67,18 @@ function MetaDataTable(props) {
             <div className="aggregationMethodButtons">
               {row.display === 'age' ? (
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <KeyboardDatePicker
-                    disableToolbar
-                    variant="inline"
+                  <DatePicker
+                    clearable
                     format="MM/dd/yyyy"
                     value={metaData.metaData.patient.date || null}
                     onChange={(date) => metaData.updateDate(date)}
+                    placeholder="01/01/2020"
                   />
                   <Button
                     variant="contained"
                     className={selectedMetaData.indexOf('numeric') !== -1 ? 'checkedMetaData' : 'uncheckedMetaData'}
                     endIcon={selectedMetaData.indexOf('numeric') !== -1 ? <CheckCircleIcon /> : <CheckCircleOutlineIcon />}
-                    onClick={() => metaData.updateMetaData(row.display, '', 'numeric')}
+                    onClick={() => metaData.updateMetaData(row.display, 'numeric')}
                     disabled={!editable || !metaData.metaData.patient.date}
                   >
                     Numeric
@@ -86,7 +87,7 @@ function MetaDataTable(props) {
                     variant="contained"
                     className={selectedMetaData.indexOf('binned') !== -1 ? 'checkedMetaData' : 'uncheckedMetaData'}
                     endIcon={selectedMetaData.indexOf('binned') !== -1 ? <CheckCircleIcon /> : <CheckCircleOutlineIcon />}
-                    onClick={() => metaData.updateMetaData(row.display, '', 'binned')}
+                    onClick={() => metaData.updateMetaData(row.display, 'binned')}
                     disabled={!editable || !metaData.metaData.patient.date}
                   >
                     Binned
@@ -97,10 +98,10 @@ function MetaDataTable(props) {
                   variant="contained"
                   className={selectedMetaData.indexOf('one-hot') !== -1 ? 'checkedMetaData' : 'uncheckedMetaData'}
                   endIcon={selectedMetaData.indexOf('one-hot') !== -1 ? <CheckCircleIcon /> : <CheckCircleOutlineIcon />}
-                  onClick={() => metaData.updateMetaData(row.display, '', 'one-hot')}
+                  onClick={() => metaData.updateMetaData(row.display, 'one-hot')}
                   disabled={!editable}
                 >
-                  Use It
+                  Use
                 </Button>
               )}
             </div>
@@ -112,9 +113,6 @@ function MetaDataTable(props) {
   }
 
   function generateItem(index) {
-    if (metaData.tab === 'patient') { // patient tab is special
-      return patientMetaDataList();
-    }
     const item = metaData.filteredList[index];
     const selectedMetaData = metaData.metaData[metaData.tab][`(${item.system}, ${item.code})`] || [];
     return (
@@ -149,7 +147,7 @@ function MetaDataTable(props) {
                 variant="contained"
                 className={selectedMetaData.indexOf(feature) !== -1 ? 'checkedMetaData' : 'uncheckedMetaData'}
                 endIcon={selectedMetaData.indexOf(feature) !== -1 ? <CheckCircleIcon /> : <CheckCircleOutlineIcon />}
-                onClick={() => metaData.updateMetaData(item.system, item.code, feature)}
+                onClick={() => metaData.updateMetaData(`(${item.system}, ${item.code})`, feature)}
                 disabled={!editable}
               >
                 {prettyString(feature)}
@@ -172,7 +170,9 @@ function MetaDataTable(props) {
               onClick={() => {
                 metaData.setTab(filterKey);
                 setExpanded(-1);
-                scrollPosition.current.scrollToIndex({ index: 0 });
+                if (filterKey !== 'patient' && metaData.tab !== 'patient') {
+                  scrollPosition.current.scrollToIndex({ index: 0 });
+                }
               }}
               className={metaData.tab === filterKey ? 'activeMetaDataTab' : ''}
             >
@@ -208,13 +208,24 @@ function MetaDataTable(props) {
           <div id="setupDataList">
             <AutoSizer>
               {({ width, height }) => (
-                <Virtuoso
-                  totalCount={metaData.filteredList.length || 1}
-                  overscan={50}
-                  style={{ height, width }}
-                  item={metaData.filteredList.length ? generateItem : noData}
-                  ref={scrollPosition}
-                />
+                <>
+                  {metaData.tab !== 'patient' ? (
+                    <Virtuoso
+                      totalCount={metaData.filteredList.length || 1}
+                      overscan={50}
+                      style={{ height, width }}
+                      item={metaData.filteredList.length ? generateItem : noData}
+                      ref={scrollPosition}
+                    />
+                  ) : (
+                    <div
+                      style={{ height, width }}
+                      ref={scrollPosition}
+                    >
+                      {patientMetaDataList()}
+                    </div>
+                  )}
+                </>
               )}
             </AutoSizer>
           </div>

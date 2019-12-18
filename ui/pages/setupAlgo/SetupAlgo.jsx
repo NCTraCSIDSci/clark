@@ -6,6 +6,7 @@ import NativeSelect from '@material-ui/core/NativeSelect';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import shortid from 'shortid';
+import { cloneDeep } from 'lodash';
 
 import './algo.css';
 
@@ -13,19 +14,43 @@ import DataBrowser from '../../subComponents/dataBrowser/DataBrowser';
 import MetaDataBrowser from '../../subComponents/metaDataBrowser/MetaDataBrowser';
 
 import usePatientBrowser from '../../customHooks/usePatientBrowser';
+import useAlgoSetup from '../../customHooks/useAlgoSetup';
+import useRegex from '../../customHooks/useRegex';
+import useMetaData from '../../customHooks/useMetaData';
+import updateSessionSteps from '../../helperFunctions/updateSessionSteps';
 
 function SetupAlgo(props) {
   const {
-    tab, regex, metaData, algo, explore, popup,
+    tab, explore, popup, session, updateSession, serverUp,
   } = props;
   const patients = usePatientBrowser();
+  const algo = useAlgoSetup(popup, serverUp);
+  const regex = useRegex(popup);
+  const metaData = useMetaData(popup);
 
   useEffect(() => {
     if (tab === 'algo' && algo.loadedTestData) {
       patients.initialize('test');
       metaData.initialize('test');
+      regex.loadRegex(session.unstructured_data);
+      metaData.loadMetaData(session.structured_data);
     }
   }, [tab, algo.loadedTestData]);
+
+  useEffect(() => {
+    if (Object.keys(session.algo).length) {
+      algo.loadAlgo(session.algo);
+    }
+  }, [session]);
+
+  function submit() {
+    const tempSession = cloneDeep(session);
+    const steps = updateSessionSteps(session, 'algo');
+    tempSession.steps = steps;
+    tempSession.algo = algo.exportAlgo();
+    updateSession(tempSession);
+    explore(tempSession);
+  }
 
   return (
     <>
@@ -142,7 +167,7 @@ function SetupAlgo(props) {
           <Button
             className="topRightButton"
             variant="contained"
-            onClick={explore}
+            onClick={submit}
             disabled={!algo.loadedTestData && algo.evalMethod === 'Evaluation Corpus'}
           >
             Explore

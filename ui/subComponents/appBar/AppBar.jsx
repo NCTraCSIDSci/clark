@@ -25,11 +25,13 @@ import './appBar.css';
 
 function MenuBar(props) {
   const {
-    tab, setTab, popup, stepsComplete, saveSession, disableSave,
+    tab, setTab, popup, session, saveSession,
   } = props;
   const [drawerOpen, toggleDrawer] = useState(false);
 
   const drawerClass = drawerOpen ? 'drawerOpen' : 'drawerClosed';
+
+  const stepsComplete = session.steps;
 
   return (
     <>
@@ -106,15 +108,15 @@ function MenuBar(props) {
             <ListItemText primary="Explore" />
           </ListItem>
           <div className="bottomDrawerButtons">
-            <ListItem button onClick={popup.showErrors} disabled={!popup.errors}>
+            <ListItem button onClick={popup.showErrors} disabled={!popup.errors.length}>
               <Badge
-                badgeContent={popup.errors ? <ErrorIcon id="errorsPresent" /> : ''}
+                badgeContent={popup.errors.length ? <ErrorIcon id="errorsPresent" /> : ''}
               >
                 <ListItemIcon><WarningIcon /></ListItemIcon>
               </Badge>
               <ListItemText primary="Data Errors" />
             </ListItem>
-            <ListItem button onClick={saveSession} disabled={disableSave}>
+            <ListItem button onClick={saveSession} disabled={!session.fhir_directory}>
               <ListItemIcon><SaveIcon /></ListItemIcon>
               <ListItemText primary="Save" />
             </ListItem>

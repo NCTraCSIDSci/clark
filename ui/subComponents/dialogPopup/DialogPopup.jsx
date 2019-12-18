@@ -25,9 +25,7 @@ const DialogPopup = (props) => {
         {popup.content.header}
       </DialogTitle>
       <DialogContent id="dialogContent">
-        <DialogContentText
-          id={popup.content.error ? 'errorMessage' : ''}
-        >
+        <DialogContentText id="dialogContentText">
           {Array.isArray(popup.content.text) ? (
             popup.content.text.map((item) => item)
           ) : (

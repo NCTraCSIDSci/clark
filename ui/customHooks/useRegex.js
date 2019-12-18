@@ -40,9 +40,11 @@ const columnData = {
   ],
 };
 
+const tabs = Object.keys(initialRegex);
+
 function useRegex(popup) {
   const [regexList, updateRegexList] = useState(initialRegex);
-  const [tab, setTab] = useState(Object.keys(initialRegex)[0]);
+  const [tab, setTab] = useState(Object.keys(initialRegex)[1]);
   const [activeName, updateName] = useState('');
   const [activeRegex, updateActiveRegex] = useState('');
   const [compiled, updateCompiled] = useState('');
@@ -106,10 +108,20 @@ function useRegex(popup) {
         } else {
           updateCompiled('');
         }
+      } else {
+        updateCompiled('');
       }
       setRegexIndex(i);
     }
     toggleModal(true);
+  }
+
+  function closeModal() {
+    updateName('');
+    updateActiveRegex('');
+    updateCompiled('');
+    updateIgnore(false);
+    toggleModal(false);
   }
 
   function updateRegex(value) {
@@ -126,50 +138,68 @@ function useRegex(popup) {
   }
 
   useEffect(() => {
-    if (tab !== 'sections' && !showModal) {
+    if (tab !== 'sections' && !showModal && regexList.expressions.length) {
       const tempRegexList = updateCompiledExpressions(regexList);
       updateRegexList(tempRegexList);
     }
   }, [tab, showModal]);
 
   useEffect(() => {
-    let tempValidRegex = [];
-    if (tab === 'sections') {
-      if (sectionBreak) {
-        if (showModal && isValidRegex(activeRegex)) {
-          tempValidRegex = [{
-            regex: activeRegex,
-            name: activeName,
-            ignore,
-          }];
-          tempValidRegex = addRegexColor(tempValidRegex, regexIndex);
+    const debounced = setTimeout(() => {
+      if (tab === 'library' && regexList.expressions.length) {
+        const tempRegexList = updateCompiledExpressions(regexList);
+        updateRegexList(tempRegexList);
+      }
+    }, 200);
+    return () => clearTimeout(debounced);
+  }, [activeName]);
+
+  /**
+   * This use effect watches everything and updates the valid regex that's passed to the patient browser
+   */
+  useEffect(() => {
+    const debounced = setTimeout(() => {
+      let tempValidRegex = [];
+      if (tab === 'sections') {
+        if (sectionBreak) {
+          if (showModal) {
+            if (isValidRegex(activeRegex)) {
+              tempValidRegex = [{
+                regex: activeRegex,
+                name: activeName,
+                ignore,
+              }];
+              tempValidRegex = addRegexColor(tempValidRegex, regexIndex);
+            }
+          } else {
+            tempValidRegex = regexList.sections.filter((regex) => {
+              if (!regex.name || !isValidRegex(regex.regex)) return false;
+              return true;
+            });
+            tempValidRegex = addRegexColor(tempValidRegex);
+          }
+        }
+      } else if (tab === 'expressions' || tab === 'library') {
+        if (showModal) {
+          if (isValidRegex(compiled || activeRegex)) {
+            tempValidRegex = [{
+              regex: compiled || activeRegex,
+              name: activeName,
+            }];
+            tempValidRegex = addRegexColor(tempValidRegex, regexIndex);
+          }
         } else {
-          tempValidRegex = regexList.sections.filter((regex) => {
+          tempValidRegex = regexList.expressions.filter((regex) => {
             if (!regex.name || !isValidRegex(regex.regex)) return false;
             return true;
           });
         }
       }
-    } else if (showModal) {
-      const regex = compiled || activeRegex;
-      if (isValidRegex(regex)) {
-        tempValidRegex = [{
-          regex,
-          name: activeName,
-        }];
-        tempValidRegex = addRegexColor(tempValidRegex, regexIndex);
-      }
-    } else if (tab === 'expressions') {
-      tempValidRegex = regexList.expressions.filter((regex) => {
-        if (!regex.name || !isValidRegex(regex.regex)) return false;
-        return true;
-      });
-    }
-    updateValidRegex(tempValidRegex);
+      updateValidRegex(tempValidRegex);
+    }, 400);
+    return () => clearTimeout(debounced);
   }, [
-    tab, regexList, activeRegex, showModal,
-    regexIndex, activeName, compiled, sectionBreak,
-    ignore, ignoreHeader, ignoreUnnamed,
+    tab, regexList, showModal, sectionBreak, activeRegex, ignore,
   ]);
 
   function uploadRegex() {
@@ -270,10 +300,19 @@ function useRegex(popup) {
     return tempRegex;
   }
 
+  function resetRegex() {
+    updateRegexList(initialRegex);
+    updateSectionBreak('');
+    updateHeaderIgnore(false);
+    updateUnnamedIgnore(false);
+    toggleModal(false);
+    updateValidRegex([]);
+  }
+
   return {
     exportRegex,
     loadRegex,
-    tabs: Object.keys(initialRegex),
+    tabs,
     tab,
     setTab,
     columns: columnData[tab],
@@ -297,9 +336,11 @@ function useRegex(popup) {
     showModal,
     toggleModal,
     openModal,
+    closeModal,
     badgeNum: regexList.expressions.length + regexList.sections.length,
     uploadRegex,
     saveRegex,
+    resetRegex,
   };
 }
 

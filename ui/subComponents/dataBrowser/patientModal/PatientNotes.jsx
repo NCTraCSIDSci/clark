@@ -2,25 +2,11 @@ import React, { useState, useEffect } from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import shortid from 'shortid';
-import { debounce } from 'lodash';
 
 import API from '../../../API';
 import highlight from '../../../helperFunctions/highlight';
 import addSections from '../../../helperFunctions/addSections';
-
-function doMarkup(
-  note, setText, regex,
-) {
-  if (regex.tab === 'sections') {
-    const text = addSections(note, regex);
-    setText(text);
-  } else {
-    const text = highlight(note, regex.validRegex);
-    setText(text);
-  }
-}
-
-const markup = debounce(doMarkup, 500);
+import useDebounce from '../../../customHooks/useDebounce';
 
 function PatientNotes(props) {
   const {
@@ -29,6 +15,8 @@ function PatientNotes(props) {
   const [note, setNote] = useState({});
   const [noteId, setNoteId] = useState('');
   const [noteText, setNoteText] = useState(['Loading...']);
+
+  const debouncedRegex = useDebounce(regex, 300);
 
   function getNote(id) {
     if (id !== noteId) {
@@ -47,13 +35,24 @@ function PatientNotes(props) {
   }
 
   useEffect(() => {
-    markup(note.data, setNoteText, regex);
-  }, [regex.sectionBreak, regex.validRegex]);
+    if (regex.tab === 'sections') {
+      const text = addSections(note.data, regex);
+      setNoteText(text);
+    } else {
+      const text = highlight(note.data, regex.validRegex);
+      setNoteText(text);
+    }
+  }, [debouncedRegex]);
 
   useEffect(() => {
-    markup(note.data, setNoteText, regex);
-    markup.flush(); // if note or regex tab change, run markup immediately
-  }, [note.data, regex.tab]);
+    if (regex.tab === 'sections') {
+      const text = addSections(note.data, regex);
+      setNoteText(text);
+    } else {
+      const text = highlight(note.data, regex.validRegex);
+      setNoteText(text);
+    }
+  }, [note.data]);
 
   useEffect(() => {
     if (noteIds.length) {
