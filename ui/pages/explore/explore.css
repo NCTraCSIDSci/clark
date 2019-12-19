@@ -1,0 +1,133 @@
+#resultsExplorer {
+    width: 90%;
+    margin: 20px;
+    padding: 30px;
+}
+#tooltip {
+    position:absolute;
+    height:auto;
+    visibility:hidden;
+    border: 2px solid #3d3d3d;
+    background: rgba(61, 61, 61, 0.94);
+    color: #F0F0F0;
+    border-radius: 3px;
+    padding: 0.4em;
+    z-index: 9999;
+    /*-webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);*/
+}
+#tooltip:after, #tooltip:before {
+    top: 100%;
+    left: 50%;
+    /*border: solid transparent;*/
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 12px solid #3d3d3d;
+    margin-left: -5px;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+#tooltip span{
+    font-size: 0.8em;
+    font-weight: bold;
+    color: #fff;
+}
+.d3Button {
+    color: rgba(0, 0, 0, 0.87);
+    box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
+    background-color: #e0e0e0;
+    padding: 6px 16px;
+    font-size: 0.875rem;
+    min-width: 64px;
+    box-sizing: border-box;
+    transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 500;
+    line-height: 1.75;
+    border-radius: 4px;
+    letter-spacing: 0.02857em;
+    text-transform: uppercase;
+    border: 0;
+    cursor: pointer;
+    margin: 0;
+    display: inline-flex;
+    outline: 0;
+    align-items: center;
+    user-select: none;
+    vertical-align: middle;
+    justify-content: center;
+    text-decoration: none;
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+}
+/* DC css */
+.dc-chart .box text,.dc-chart g.axis text{-webkit-touch-callout:none;-khtml-user-select:none;pointer-events:none}.dc-chart path.dc-symbol,.dc-legend g.dc-legend-item.fadeout{fill-opacity:.5;stroke-opacity:.5}div.dc-chart{float:left}.dc-chart rect.bar{stroke:none;cursor:pointer}.dc-chart rect.bar:hover{fill-opacity:.5}.dc-chart rect.deselected{stroke:none;fill:#ccc}.dc-chart .pie-slice{fill:#fff;font-size:12px;cursor:pointer}.dc-chart .pie-slice.external{fill:#000}.dc-chart .pie-slice :hover,.dc-chart .pie-slice.highlight{fill-opacity:.8}.dc-chart .pie-path{fill:none;stroke-width:2px;stroke:#000;opacity:.4}.dc-chart .selected circle,.dc-chart .selected path{stroke-width:3;stroke:#ccc;fill-opacity:1}.dc-chart .deselected circle,.dc-chart .deselected path{stroke:none;fill-opacity:.5;fill:#ccc}.dc-chart .axis line,.dc-chart .axis path{fill:none;stroke:#000;shape-rendering:crispEdges}.dc-chart .axis text{font:10px sans-serif}.dc-chart .axis .grid-line,.dc-chart .axis .grid-line line,.dc-chart .grid-line,.dc-chart .grid-line line{fill:none;stroke:#ccc;opacity:.5;shape-rendering:crispEdges}.dc-chart .brush rect.background{z-index:-999}.dc-chart .brush rect.extent{fill:#4682b4;fill-opacity:.125}.dc-chart .brush .resize path{fill:#eee;stroke:#666}.dc-chart path.line{fill:none;stroke-width:1.5px}.dc-chart path.area{fill-opacity:.3;stroke:none}.dc-chart path.highlight{stroke-width:3;fill-opacity:1;stroke-opacity:1}.dc-chart g.state{cursor:pointer}.dc-chart g.state :hover{fill-opacity:.8}.dc-chart g.state path{stroke:#fff}.dc-chart g.deselected path{fill:grey}.dc-chart g.deselected text{display:none}.dc-chart g.row rect{fill-opacity:.8;cursor:pointer}.dc-chart g.row rect:hover{fill-opacity:.6}.dc-chart g.row text{fill:#fff;font-size:12px;cursor:pointer}.dc-chart g.dc-tooltip path{fill:none;stroke:grey;stroke-opacity:.8}.dc-chart g.county path{stroke:#fff;fill:none}.dc-chart g.debug rect{fill:#00f;fill-opacity:.2}.dc-chart g.axis text{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.dc-chart .node{font-size:.7em;cursor:pointer}.dc-chart .node :hover{fill-opacity:.8}.dc-chart .bubble{stroke:none;fill-opacity:.6}.dc-chart .highlight{fill-opacity:1;stroke-opacity:1}.dc-chart .fadeout{fill-opacity:.2;stroke-opacity:.2}.dc-chart .box text{font:10px sans-serif;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.dc-chart .box circle,.dc-chart .box line{fill:#fff}.dc-chart .box circle,.dc-chart .box line,.dc-chart .box rect{stroke:#000;stroke-width:1.5px}.dc-chart .box .center{stroke-dasharray:3,3}.dc-chart .box .outlier{fill:none;stroke:#ccc}.dc-chart .symbol,.dc-chart circle.dot{stroke:none}.dc-chart .box.deselected{opacity:.5}.dc-chart .box.deselected .box{fill:#ccc}.dc-chart .heatmap .box-group.deselected rect{stroke:none;fill-opacity:.5;fill:#ccc}.dc-chart .heatmap g.axis text{pointer-events:all;cursor:pointer}.dc-chart .empty-chart .pie-slice{cursor:default}.dc-chart .empty-chart .pie-slice path{fill:#fee;cursor:default}.dc-data-count{float:right;margin-top:15px;margin-right:15px}.dc-data-count .filter-count,.dc-data-count .total-count{color:#3182bd;font-weight:700}.dc-legend{font-size:11px}.dc-legend .dc-legend-item{cursor:pointer}.dc-hard .number-display{float:none}
+
+.row {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+#paging {
+    text-align: right;
+    padding-top: 20px;
+}
+#dc-table-graph {
+    width: 100%;
+}
+
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+  padding: 8px 12px;
+  line-height: auto;
+  vertical-align: middle;
+  border-top: none;
+}
+.table > thead > tr > th {
+  vertical-align: middle;
+  border: none;
+}
+
+
+table th {
+    text-transform: uppercase;
+    color: #26a0f4;
+    font-size: 14px;
+    text-align: center;
+    border-bottom: 1px solid #d2d2d2;
+}
+table td {
+    text-align: center;
+    /* color: #fff; */
+    letter-spacing: .5px;
+    font-size: 13px;
+    font-weight: 300;
+}
+/* table td:first-child {border-right: 1px solid #d2d2d2; width: 50%;} */
+table.table > tbody > td {
+    border-top: 0 !important;
+}
+.table-bordered th, .table-bordered td {
+    border: 1px solid rgba(120, 120, 120, 0.15) !important;
+}
+.table-bordered th, .table-bordered {
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+}
+.table-hover > tbody > tr:hover {
+    background-color: lightgrey;
+}
+.table-bordered th.info {
+    background: gold !important;
+    color: #333;
+    font-weight: 400;
+}

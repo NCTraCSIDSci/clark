@@ -66,7 +66,7 @@ function SetupAlgo(props) {
                 inputProps={{ name: 'algo', id: 'algo' }}
               >
                 {algo.algoOptions.map((opt) => (
-                  <option key={shortid.generate()} value={opt.id}>
+                  <option key={shortid.generate()} value={opt.name}>
                     {opt.name}
                   </option>
                 ))}
