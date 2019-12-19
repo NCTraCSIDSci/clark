@@ -8,7 +8,7 @@ import shortid from 'shortid';
 
 function PatientTable(props) {
   const { tableData } = props;
-  const blacklist = ['code', 'system'];
+  const blacklist = ['code', 'system', 'boolean'];
   const [header, updateHeader] = useState([]);
 
   function cleanAndSort() {

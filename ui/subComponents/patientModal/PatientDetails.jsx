@@ -20,7 +20,7 @@ import prettyString from '../../helperFunctions/prettyString';
 import PatientTable from './PatientTable';
 import PatientNotes from './PatientNotes';
 
-const blacklist = ['birthDate', 'gender', 'id', 'maritalStatus'];
+const blacklist = ['birthDate', 'gender', 'id', 'maritalStatus', 'label'];
 const Transition = React.forwardRef((props, ref) => <Zoom ref={ref} {...props} />); // eslint-disable-line react/jsx-props-no-spreading
 
 const PatientDetails = (props) => {
