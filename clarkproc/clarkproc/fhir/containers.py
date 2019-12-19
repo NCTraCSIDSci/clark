@@ -25,7 +25,10 @@ class ResourceAggregator(ABC):
         :return:
         :rtype: dict
         """
-        return {'count': self.count}
+        return {
+            'count': self.count,
+            'boolean': True,
+        }
 
 
 class MedicationAggregator(ResourceAggregator):
@@ -39,7 +42,7 @@ class MedicationAggregator(ResourceAggregator):
 class ObservationAggregator(ResourceAggregator):
     """
     Data structure for holding a collection of like observations and keeping
-    track of min, max, recent, and oldest values in the collection.
+    track of min, max, newest, and oldest values in the collection.
     """
 
     def __init__(self):
@@ -47,7 +50,7 @@ class ObservationAggregator(ResourceAggregator):
 
         self.minVal = float('inf')
         self.maxVal = -float('inf')
-        self.recent = (datetime.min.replace(tzinfo=timezone.utc), None)
+        self.newest = (datetime.min.replace(tzinfo=timezone.utc), None)
         self.oldest = (datetime.max.replace(tzinfo=timezone.utc), None)
 
     def add(self, obs):
@@ -59,8 +62,8 @@ class ObservationAggregator(ResourceAggregator):
         self.minVal = min(self.minVal, val)
         self.maxVal = max(self.maxVal, val)
 
-        if date > self.recent[0]:
-            self.recent = (date, val)
+        if date > self.newest[0]:
+            self.newest = (date, val)
 
         if date < self.oldest[0]:
             self.oldest = (date, val)
@@ -70,7 +73,7 @@ class ObservationAggregator(ResourceAggregator):
         d.update({
             'min': self.minVal,
             'max': self.maxVal,
-            'recent': self.recent[1],
+            'newest': self.newest[1],
             'oldest': self.oldest[1],
         })
 
@@ -83,6 +86,14 @@ class ResourceContainer(ABC):
     def __init__(self):
         self.data = defaultdict(self.aggregator_cls)
         self.total_count = 0
+
+    def __iter__(self):
+        """Return iterator over data."""
+        return iter(self.data.items())
+
+    def __getitem__(self, key):
+        """Get item."""
+        return self.data.get(key)
 
     def add(self, resource):
         self.data[resource.code].add(resource)

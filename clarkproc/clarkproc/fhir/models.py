@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from base64 import b64decode
+import datetime
 
 from .containers import ObservationContainer, MedicationContainer
 from .errors import *
@@ -108,6 +109,8 @@ class Patient(Resource):
     def __init__(self, fhir_patient, msg_list=None):
         super().__init__(fhir_patient)
 
+        self.label = None
+
         # id isn't required in the FHIR spec, but we are going to require it for
         # our purposes.
         if not isinstance(fhir_patient.id, str):
@@ -162,7 +165,8 @@ class Patient(Resource):
             'labs': self.labs.to_dict(),
             'vitals': self.vitals.to_dict(),
             'medications': self.medications.to_dict(),
-            'note_ids': list(self.notes.keys())
+            'note_ids': list(self.notes.keys()),
+            'label': self.label,
         })
 
         return d
@@ -181,6 +185,20 @@ class Patient(Resource):
         })
 
         return d
+
+    def get_age_in_days(self, reference_date=None):
+        """Get patient age relative to a reference date (now)."""
+        if reference_date is None:
+            reference_date = datetime.datetime.now()
+        return (reference_date - self.birthDate).total_seconds() / 60 / 60 / 24
+
+    def get_age_in_years(self, reference_date=None):
+        """Get patient age relative to a reference date (now)."""
+        if reference_date is None:
+            reference_date = datetime.datetime.now()
+        return reference_date.year - self.birthDate.year - (
+            (reference_date.month, reference_date.day) < (self.birthDate.month, self.birthDate.day)
+        )
 
 
 _observation_registry = {}
