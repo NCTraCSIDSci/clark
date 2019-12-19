@@ -106,6 +106,12 @@ function useAlgoSetup(popup, serverUp) {
     return completeAlgo;
   }
 
+  function resetAlgo() {
+    setLoadedTestData(false);
+    setDirPath('');
+    updateEvalMethod('Cross-Validation');
+  }
+
   return {
     exportAlgo,
     loadAlgo,
@@ -125,6 +131,8 @@ function useAlgoSetup(popup, serverUp) {
     loading,
     loadedTestData,
     resetTestData,
+    resetAlgo,
+    dirPath,
   };
 }
 

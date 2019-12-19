@@ -119,6 +119,20 @@ const API = {
         reject(error);
       });
   }),
+  go: (data) => new Promise((resolve, reject) => {
+    axios.request({
+      method: 'POST',
+      url: url('go'),
+      data,
+    })
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        const error = errorHandling(err);
+        reject(error);
+      });
+  }),
 };
 
 export default API;

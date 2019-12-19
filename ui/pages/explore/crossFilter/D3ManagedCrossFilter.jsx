@@ -14,34 +14,27 @@ import CrossFilterController from './crossFilterController';
    I would avoid those as that is overly complex and detailed.
 */
 function D3ManagedCrossFilter(props) {
-  const { data } = props;
-  const [nextProps, updateNextProps] = useState({});
+  const {
+    data, patientDetails,
+  } = props;
+
   function removeChart() {
     CrossFilterController.doRemove();
   }
 
   function renderChart(newProps) {
-    CrossFilterController.doRender(newProps);
+    CrossFilterController.doRender(newProps, patientDetails);
   }
 
   useEffect(() => {
-    if (nextProps.data === undefined || nextProps.data.confs === undefined) {
+    if (!Object.keys(data).length || data.confs === undefined) {
       // our results array is empty, usually from successive calls to initializeState
       // just remove the chart, but don't render
-      return;
+      removeChart();
+    } else {
+      renderChart(data);
     }
-    if ((!data.confs && nextProps.data.confs) || (data.confs !== nextProps.data.confs)) {
-      if (data.confs && (data.confs !== nextProps.data.confs)) {
-        removeChart();
-      } else if (
-        (data.true_conf && nextProps.data.true_conf === undefined) ||
-        (data.true_conf === undefined && nextProps.data.true_conf)) {
-        // duplicate calls to remove chart mostly for clarity of if expressions
-        removeChart();
-      }
-      renderChart(nextProps);
-    }
-  }, [nextProps]);
+  }, [data]);
 
   return (
     <div id="D3CrossFilterContainer" />

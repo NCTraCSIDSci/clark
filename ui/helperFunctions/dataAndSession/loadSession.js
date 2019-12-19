@@ -7,9 +7,7 @@ import validateSessionFile from '../validateSessionFile';
 const fs = remote.require('fs');
 
 function loadSession(
-  setDir, setSteps, setTab,
-  metaData, regex, algo, popup,
-  setLoading,
+  setTab, popup, setLoading, updateSession,
 ) {
   const path = remote.dialog.showOpenDialogSync({
     filters: [{
@@ -31,12 +29,8 @@ function loadSession(
           API.load([setup.fhir_directory], 'fhir')
             .then((res) => {
               setLoading(false);
-              setDir(setup.fhir_directory);
+              updateSession(setup);
               popup.receiveErrors(res.messages);
-              metaData.loadMetaData(setup.structured_data);
-              regex.loadRegex(setup.unstructured_data);
-              algo.loadAlgo(setup.algo);
-              setSteps(setup.steps);
               if (setup.steps.includes('algo')) {
                 setTab('algo');
               } else {

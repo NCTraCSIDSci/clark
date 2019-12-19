@@ -2,6 +2,8 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import { remote } from 'electron';
 
+import prettyString from './prettyString';
+
 const fs = remote.require('fs');
 
 function downloadErrors(pathname, errs, snackbar) {
@@ -33,29 +35,32 @@ function downloadErrors(pathname, errs, snackbar) {
 }
 
 function parseErrors(errorObj, snackbar) {
-  const { files, general, linking } = errorObj;
   const errs = [];
-  if (general.length) {
-    errs.push(
-      <Button key="generalErrors" onClick={() => downloadErrors('general', general, snackbar)}>
-        Download General Errors
-      </Button>,
-    );
-  }
-  if (linking.length) {
-    errs.push(
-      <Button key="linkingErrors" onClick={() => downloadErrors('linking', linking, snackbar)}>
-        Download Linking Errors
-      </Button>,
-    );
-  }
-  if (Object.keys(files).length) {
-    errs.push(
-      <Button key="filesErrors" onClick={() => downloadErrors('files', files, snackbar)}>
-        Download Files Errors
-      </Button>,
-    );
-  }
+  Object.keys(errorObj).forEach((key) => {
+    if (Array.isArray(errorObj[key])) {
+      if (errorObj[key].length) {
+        errs.push(
+          <Button
+            key={`${key}Errors`}
+            onClick={() => downloadErrors(key, errorObj[key], snackbar)}
+            variant="contained"
+          >
+            {`Download ${prettyString(key)} Errors`}
+          </Button>,
+        );
+      }
+    } else if (Object.keys(errorObj[key]).length) {
+      errs.push(
+        <Button
+          key={`${key}Errors`}
+          onClick={() => downloadErrors(key, errorObj[key], snackbar)}
+          variant="contained"
+        >
+          {`Download ${prettyString(key)} Errors`}
+        </Button>,
+      );
+    }
+  });
   return errs;
   // const fileErrs = Object.keys(files).map((file) => {
   //   let errStr = '';

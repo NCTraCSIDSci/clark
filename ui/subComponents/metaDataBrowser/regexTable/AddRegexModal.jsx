@@ -17,7 +17,7 @@ function AddRegexModal(props) {
   return (
     <Dialog
       open={regex.showModal}
-      onClose={() => regex.toggleModal(false)}
+      onClose={regex.closeModal}
       TransitionComponent={Transition}
       maxWidth="xl"
       fullWidth
@@ -27,7 +27,7 @@ function AddRegexModal(props) {
       PaperProps={{ style: { height: '100%' } }}
     >
       <DialogTitle>
-        Test
+        Regex Editor
       </DialogTitle>
       <DialogContent id="regexModalContent">
         <TextField
@@ -67,7 +67,7 @@ function AddRegexModal(props) {
       </DialogContent>
       <DialogActions id="dialogActions">
         <Button
-          onClick={() => regex.toggleModal(false)}
+          onClick={regex.closeModal}
           className="popupButton"
         >
           Close
