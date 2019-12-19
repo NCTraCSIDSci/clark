@@ -65,18 +65,19 @@ function App() {
     saveSessionFunction(directory, stepsComplete, metaData.exportMetaData(), regex.exportRegex(), algo.exportAlgo());
   }
 
-  function explore() {
-    const data = buildData(metaData.exportMetaData(), regex.exportRegex(), algo.exportAlgo());
-    // API.go(data)
-    //   .then((res) => {
-    //     setTab('explore');
-    //     updateCompletedSteps('algo');
-    //     setResult(res);
-    //   })
-    //   .catch((err) => {
-    //     // TODO: show the error modal
-    //     console.log('err', err);
-    //   });
+  function explore(completeSession) {
+    const data = buildData(completeSession);
+    API.go(data)
+      .then((res) => {
+        console.log('go result', res);
+        setTab('explore');
+        setResult(res);
+      })
+      .catch((err) => {
+        // TODO: show the error modal
+        console.log('err', err);
+        setResult({});
+      });
   }
 
   useEffect(() => {
