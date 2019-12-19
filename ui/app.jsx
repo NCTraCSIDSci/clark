@@ -6,7 +6,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import './app.css';
 import 'react-virtualized/styles.css';
 
-// import API from './API';
+import API from './API';
 
 import AppBar from './subComponents/appBar/AppBar';
 import Landing from './pages/landing/Landing';
@@ -64,19 +64,18 @@ function App() {
 
   function explore(completeSession) {
     const data = buildData(completeSession);
-    // console.log(data);
-    // API.go(data)
-    //   .then((res) => {
-    //     setTab('explore');
-    //     updateCompletedSteps('algo');
-    //     setResult(res);
-    //   })
-    //   .catch((err) => {
-    //     // TODO: show the error modal
-    //     console.log('err', err);
-    //   });
-    setTab('explore');
-    setResult({});
+    console.log(data);
+    API.go(data)
+      .then((res) => {
+        console.log('go result', res);
+        setTab('explore');
+        setResult(res);
+      })
+      .catch((err) => {
+        // TODO: show the error modal
+        console.log('err', err);
+        setResult({});
+      });
   }
 
   useEffect(() => {
@@ -124,6 +123,7 @@ function App() {
                 result={result}
                 explore={explore}
                 session={session}
+                popup={popup}
               />
             </>
           ) : (

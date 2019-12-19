@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import './dataBrowser.css';
 
 import usePatientDetails from '../../customHooks/usePatientDetails';
-import PatientDetails from './patientModal/PatientDetails';
+import PatientDetails from '../patientModal/PatientDetails';
 
 function DataBrowser(props) {
   const {

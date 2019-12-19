@@ -15,7 +15,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 import './patientModal.css';
 
-import prettyString from '../../../helperFunctions/prettyString';
+import prettyString from '../../helperFunctions/prettyString';
 
 import PatientTable from './PatientTable';
 import PatientNotes from './PatientNotes';

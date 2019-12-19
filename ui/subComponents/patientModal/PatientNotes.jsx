@@ -3,10 +3,10 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import shortid from 'shortid';
 
-import API from '../../../API';
-import highlight from '../../../helperFunctions/highlight';
-import addSections from '../../../helperFunctions/addSections';
-import useDebounce from '../../../customHooks/useDebounce';
+import API from '../../API';
+import highlight from '../../helperFunctions/highlight';
+import addSections from '../../helperFunctions/addSections';
+import useDebounce from '../../customHooks/useDebounce';
 
 function PatientNotes(props) {
   const {
