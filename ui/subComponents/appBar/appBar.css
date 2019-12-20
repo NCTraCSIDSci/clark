@@ -30,7 +30,7 @@
     margin-left: 3px;
 }
 .appBar {
-    z-index: 1201 !important;
+    z-index: 3000 !important;
     background-color: #414248 !important;
     transition: margin 200ms linear, width 200ms linear !important;
 }

@@ -2,6 +2,9 @@ import * as d3 from 'd3';
 import dc from 'dc';
 import crossfilter from 'crossfilter2';
 
+import restructureJson from './restructureJson';
+import getScreenBBox from './getScreenBBox';
+
 dc.config.defaultColors(d3.schemePaired);
 
 // Object for holding methods to hold and manage the d3 code
@@ -47,7 +50,7 @@ const CrossFilterController = {
       .append('div')
       .attr('id', 'DCChartData');
 
-    let noTruth = props.true_label === undefined;
+    const noTruth = props.true_label === undefined;
     if (!noTruth) {
       // Top row of charts (trueLabel row chart, Classifier Label row chart & pie chart)
       panelBodyContainer.append('div').classed('row', true).html(`
@@ -194,9 +197,9 @@ const CrossFilterController = {
     const dim = {}; // Stores all crossfilter dimensions
     const groups = {}; // Stores all crossfilter groups
     let cf = {};
-    const colorMapColors = ['#80b1d3', '#fdb462', '#b3de69',
-      '#fb8072', '#bebada', '#ffed6f', '#8dd3c7', '#fccde5',
-      '#bc80bd', '#ccebc5', '#d9d9d9', '#ffffb3'];
+    // const colorMapColors = ['#80b1d3', '#fdb462', '#b3de69',
+    //   '#fb8072', '#bebada', '#ffed6f', '#8dd3c7', '#fccde5',
+    //   '#bc80bd', '#ccebc5', '#d9d9d9', '#ffffb3'];
     // var colorMapColors = ['#1f78b4', '#ff7f00', '#33a02c', '#e31a1c', '#cab2d6',
     //                       '#ffff99', '#a6cee3', '#fb9a99', '#6a3d9a', '#fdbf6f',
     //                       '#b2df8a', '#b15928'];
@@ -247,82 +250,11 @@ const CrossFilterController = {
 
     // stackedBarChart = dc.barChart('#dc-stacked-barchart'),
 
-    const restructureJson = (jsonObj) => {
-      // Convert JSON format to one that is conducive to crossfiltering/DOM binding
-      const outputJson = [];
-
-      // Test if true_label field exists
-      noTruth = jsonObj.true_label === undefined;
-      for (let i = 0; i < jsonObj.confs.length; i += 1) {
-        const jsonElement = {
-          confs: jsonObj.confs[i],
-          max_label: jsonObj.max_label[i],
-          max_conf: jsonObj.max_conf[i],
-          labels: jsonObj.labels, // Redundant: Store externally ideally
-          // pt_id: jsonObj.obs_info[i].pt_id,
-          // name: jsonObj.obs_info[i].name,
-        };
-        if (!noTruth) { // Don't set these up if no Truth provided
-          jsonElement.true_conf = jsonObj.true_conf[i];
-          jsonElement.true_label = jsonObj.true_label[i];
-          jsonElement.misclassified = jsonObj.max_label[i] !== jsonObj.true_label[i] ? 'Misclassified' : 'Correct';
-        }
-        outputJson.push(jsonElement);
-      }
-      return outputJson;
-    };
-
-    // COPIED from d3-tip
-    // Returns an Object {n, s, e, w, nw, sw, ne, se}
-    function getScreenBBox(targetel) {
-      while (targetel.getScreenCTM == null && targetel.parentNode == null) {
-        targetel = targetel.parentNode;
-      }
-
-      function getSVGNode(el) {
-        const svgNode = el;
-        if (!svgNode) return null;
-        if (svgNode.tagName.toLowerCase() === 'svg') return svgNode;
-        return svgNode.ownerSVGElement;
-      }
-
-      const bbox = {};
-      const matrix = targetel.getScreenCTM();
-      const tbbox = targetel.getBBox();
-      const {
-        width, height, x, y,
-      } = tbbox;
-      const svg = getSVGNode(targetel);
-      const point = svg.createSVGPoint();
-
-      point.x = x;
-      point.y = y;
-      bbox.nw = point.matrixTransform(matrix);
-      point.x += width;
-      bbox.ne = point.matrixTransform(matrix);
-      point.y += height;
-      bbox.se = point.matrixTransform(matrix);
-      point.x -= width;
-      bbox.sw = point.matrixTransform(matrix);
-      point.y -= height / 2;
-      bbox.w = point.matrixTransform(matrix);
-      point.x += width;
-      bbox.e = point.matrixTransform(matrix);
-      point.x -= width / 2;
-      point.y -= height / 2;
-      bbox.n = point.matrixTransform(matrix);
-      point.y += height;
-      bbox.s = point.matrixTransform(matrix);
-
-      return bbox;
-    }
-
     // d3.json('output.json', function(error, oldData) {
     const d3Render = (data) => {
-      const { labels } = data; // Array of labels (same order as confs)
-
       // Clean up and restructure JSON data
-      const json = restructureJson(data);
+      const json = restructureJson(data, noTruth);
+      const { labels } = json[0];
 
       // Setup truth_label based chart objects if truth provided
       if (!noTruth) {
@@ -337,7 +269,7 @@ const CrossFilterController = {
       if (!noTruth) {
         tableHeader = tableHeader.data([
           { label: 'Pt Id', field_name: 'pt_id', sort_state: 'ascending' },
-          { label: 'Name', field_name: 'name', sort_state: 'ascending' },
+          // { label: 'Name', field_name: 'name', sort_state: 'ascending' },
           { label: 'Misclassified', field_name: 'misclassified', sort_state: 'ascending' },
           { label: 'True Label', field_name: 'true_label', sort_state: 'ascending' },
           { label: 'Classifier Label', field_name: 'max_label', sort_state: 'ascending' },
@@ -347,7 +279,7 @@ const CrossFilterController = {
       } else {
         tableHeader = tableHeader.data([
           { label: 'Pt Id', field_name: 'pt_id', sort_state: 'ascending' },
-          { label: 'Name', field_name: 'name', sort_state: 'ascending' },
+          // { label: 'Name', field_name: 'name', sort_state: 'ascending' },
           { label: 'Classifier Label', field_name: 'max_label', sort_state: 'ascending' },
           { label: 'Max Conf', field_name: 'max_conf', sort_state: 'descending' }, // Note Max Conf row starts off as descending
         ].concat(labels.map((el, i) => ({ label: el, field_name: i, sort_state: 'ascending' }))));
@@ -384,14 +316,14 @@ const CrossFilterController = {
               },
             );
           // Reset glyph icon for all other headers and update this headers icon
-          const $activeSpan = $(activeSpan[0]); // WARNING: Ugliness to convert d3 selection to jQuery
-          $activeSpan.removeClass(); // Remove all glyphicon classes
+          activeSpan.attr('class', null);
 
           // Toggle glyphicon based on ascending/descending sort_state
-          activeSpan.classed(
-            isAscendingOrder ? 'glyphicon glyphicon-sort-by-attributes' : 'glyphicon glyphicon-sort-by-attributes-alt',
-            true,
-          );
+          activeSpan
+            .classed('material-icons', true)
+            .text(
+              isAscendingOrder ? 'arrow_upward' : 'arrow_downward',
+            );
 
           updateTable();
         });
@@ -400,14 +332,12 @@ const CrossFilterController = {
       tableHeader.filter((d) => d.label === 'Max Conf')
         .classed('info', true);
 
-      const tableSpans = tableHeader
-        .append('span') // Glyphicon for Download button on table headers
-        // .style('float', 'right')
-        // .style('font-size', '0.8em')
-        // .style('color', '#0080bf')
-        // .style('line-height', '1.42857143') // Center vertically
-        .classed('glyphicon glyphicon-sort-by-attributes-alt', true)
-        // .style('display', 'inline-block')
+      tableHeader
+        .append('span') // add arrows on table headers
+        .style('display', 'flex')
+        .style('justify-content', 'center')
+        .classed('material-icons', true)
+        .text('arrow_downward')
         .style('visibility', 'hidden')
         .filter((d) => d.label === 'Max Conf')
         .style('visibility', 'visible');
@@ -541,7 +471,7 @@ const CrossFilterController = {
       // Create generating functions for each columns
       const columnFunctions = [
         (d) => d.pt_id,
-        (d) => d.name,
+        // (d) => d.name,
         (d) => d.max_label,
         (d) => d.max_conf,
       ];
@@ -649,7 +579,7 @@ const CrossFilterController = {
       // Callback function to reassign table row callbacks for modalView display
       const tableRowClickCallback = () => { // Add callbacks for rows in table to show ModalView
         d3.selectAll('.dc-table-row')
-          .on('click', (d) => patientDetails.setId(d));
+          .on('click', (d) => patientDetails.exploreId(d.pt_id));
       };
       dataTable.on('postRedraw', tableRowClickCallback); // Needs to be rebound on each redraw of table
       tableRowClickCallback(); // Needs to be bound initially upon 1st draw

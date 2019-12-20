@@ -62,30 +62,34 @@ function PatientNotes(props) {
 
   return (
     <div id="patientNotes">
-      <div id="noteIds">
-        <List>
-          {noteIds.map((id) => (
-            <ListItem
-              key={shortid.generate()}
-              button
-              onClick={() => getNote(id)}
-              className={id === noteId ? 'activePage' : ''}
-            >
-              {id}
-            </ListItem>
-          ))}
-        </List>
-      </div>
-      <div id="patientNote">
-        <p>{note.indexed && `Date: ${note.indexed}`}</p>
-        <div id="patientNoteText">
-          {noteText.length ? (
-            noteText.map((section) => section)
-          ) : (
-            'This patient has no notes.'
-          )}
-        </div>
-      </div>
+      {noteText.length ? (
+        <>
+          <div id="noteIds">
+            <List>
+              {noteIds.map((id) => (
+                <ListItem
+                  key={shortid.generate()}
+                  button
+                  onClick={() => getNote(id)}
+                  className={id === noteId ? 'activePage' : ''}
+                >
+                  {id}
+                </ListItem>
+              ))}
+            </List>
+          </div>
+          <div id="patientNote">
+            <p>{note.indexed && `Date: ${note.indexed}`}</p>
+            <div id="patientNoteText">
+              {noteText.map((section) => section)}
+            </div>
+          </div>
+        </>
+      ) : (
+        <p id="noNotes">
+          This patient has no notes.
+        </p>
+      )}
     </div>
   );
 }

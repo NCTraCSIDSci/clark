@@ -2,6 +2,19 @@
     width: 90%;
     margin: 20px;
     padding: 30px;
+    min-height: 400px;
+}
+#algoRunning {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#FilteredRecords {
+    position: relative;
 }
 #tooltip {
     position:absolute;
@@ -127,7 +140,7 @@ table.table > tbody > td {
     background-color: lightgrey;
 }
 .table-bordered th.info {
-    background: gold !important;
+    background: #97bedb !important;
     color: #333;
     font-weight: 400;
 }

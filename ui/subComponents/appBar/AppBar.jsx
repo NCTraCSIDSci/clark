@@ -25,7 +25,7 @@ import './appBar.css';
 
 function MenuBar(props) {
   const {
-    tab, setTab, popup, session, saveSession,
+    tab, setTab, popup, session, saveSession, algoRunning,
   } = props;
   const [drawerOpen, toggleDrawer] = useState(false);
 
@@ -64,7 +64,12 @@ function MenuBar(props) {
           </IconButton>
         </div>
         <List id="drawerList">
-          <ListItem button onClick={() => setTab('landing')} className={tab === 'landing' ? 'activePage' : ''}>
+          <ListItem
+            button
+            onClick={() => setTab('landing')}
+            className={tab === 'landing' ? 'activePage' : ''}
+            disabled={algoRunning}
+          >
             <Badge
               badgeContent={stepsComplete.indexOf('landing') > -1 ? <CheckCircleIcon className="stepCompleted" /> : ''}
             >
@@ -76,7 +81,7 @@ function MenuBar(props) {
             button
             onClick={() => setTab('data')}
             className={tab === 'data' ? 'activePage' : ''}
-            disabled={stepsComplete.indexOf('landing') < 0}
+            disabled={stepsComplete.indexOf('landing') < 0 || algoRunning}
           >
             <Badge
               badgeContent={stepsComplete.indexOf('data') > -1 ? <CheckCircleIcon className="stepCompleted" /> : ''}
@@ -89,7 +94,7 @@ function MenuBar(props) {
             button
             onClick={() => setTab('algo')}
             className={tab === 'algo' ? 'activePage' : ''}
-            disabled={stepsComplete.indexOf('data') < 0}
+            disabled={stepsComplete.indexOf('data') < 0 || algoRunning}
           >
             <Badge
               badgeContent={stepsComplete.indexOf('algo') > -1 ? <CheckCircleIcon className="stepCompleted" /> : ''}
@@ -102,13 +107,17 @@ function MenuBar(props) {
             button
             onClick={() => setTab('explore')}
             className={tab === 'explore' ? 'activePage' : ''}
-            disabled={stepsComplete.indexOf('algo') < 0}
+            disabled={stepsComplete.indexOf('algo') < 0 || algoRunning}
           >
             <ListItemIcon><SearchIcon /></ListItemIcon>
             <ListItemText primary="Explore" />
           </ListItem>
           <div className="bottomDrawerButtons">
-            <ListItem button onClick={popup.showErrors} disabled={!popup.errors.length}>
+            <ListItem
+              button
+              onClick={popup.showErrors}
+              disabled={!popup.errors.length || algoRunning}
+            >
               <Badge
                 badgeContent={popup.errors.length ? <ErrorIcon id="errorsPresent" /> : ''}
               >
@@ -116,7 +125,11 @@ function MenuBar(props) {
               </Badge>
               <ListItemText primary="Data Errors" />
             </ListItem>
-            <ListItem button onClick={saveSession} disabled={!session.fhir_directory}>
+            <ListItem
+              button
+              onClick={saveSession}
+              disabled={!session.fhir_directory || algoRunning}
+            >
               <ListItemIcon><SaveIcon /></ListItemIcon>
               <ListItemText primary="Save" />
             </ListItem>

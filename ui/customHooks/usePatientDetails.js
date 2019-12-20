@@ -14,6 +14,11 @@ function usePatientDetails(type, popup) {
     toggle(true);
   }
 
+  function exploreId(id) {
+    setPatientId(id);
+    toggle(true);
+  }
+
   function getPatientInfo() {
     setLoading(true);
     API.getPatientDetails(patientId, type)
@@ -38,6 +43,7 @@ function usePatientDetails(type, popup) {
 
   return {
     setId,
+    exploreId,
     patient,
     show,
     toggle,
