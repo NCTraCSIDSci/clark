@@ -10,7 +10,7 @@ const SnackbarPopup = (props) => {
     <Snackbar
       anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       open={popup.showSnack}
-      autoHideDuration={4000}
+      autoHideDuration={3000}
       onClose={() => popup.toggleSnackbar(false)}
     >
       <SnackbarContent

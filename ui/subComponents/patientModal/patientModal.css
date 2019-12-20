@@ -44,6 +44,11 @@
 #patientNoteText {
     margin: 25px;
 }
+#noNotes {
+    margin: 10px;
+    text-align: center;
+    width: 100%;
+}
 [data-md-tooltip] {
     position: relative;
 }

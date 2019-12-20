@@ -38,6 +38,7 @@ function App() {
   const [serverUp, updateServer] = useState(false);
   const [dataLoading, setDataLoading] = useState(false);
   const [sessionLoading, setSessionLoading] = useState(false);
+  const [algoRunning, setAlgoRunning] = useState(false);
   const [result, setResult] = useState({});
   const [session, updateSession] = useState(initialSession);
   const popup = usePopup();
@@ -63,18 +64,29 @@ function App() {
   }
 
   function explore(completeSession) {
+    setAlgoRunning(true);
+    setTab('explore');
     const data = buildData(completeSession);
-    console.log(data);
     API.go(data)
       .then((res) => {
-        console.log('go result', res);
-        setTab('explore');
         setResult(res);
+        setAlgoRunning(false);
       })
       .catch((err) => {
-        // TODO: show the error modal
-        console.log('err', err);
+        popup.showModal({
+          disableBackdrop: true,
+          error: true,
+          header: 'Error',
+          text: err,
+          actions: [{
+            text: 'Close',
+            autoFocus: false,
+            click: () => popup.toggle(false),
+          }],
+        });
+        setTab('algo');
         setResult({});
+        setAlgoRunning(false);
       });
   }
 
@@ -92,6 +104,7 @@ function App() {
           popup={popup}
           session={session}
           saveSession={saveSession}
+          algoRunning={algoRunning}
         />
         <div id="content">
           {serverUp ? (
@@ -120,6 +133,7 @@ function App() {
               />
               <Explore
                 tab={tab}
+                algoRunning={algoRunning}
                 result={result}
                 explore={explore}
                 session={session}

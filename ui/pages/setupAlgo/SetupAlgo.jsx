@@ -38,10 +38,13 @@ function SetupAlgo(props) {
   }, [tab, algo.loadedTestData]);
 
   useEffect(() => {
-    if (Object.keys(session.algo).length) {
+    if (
+      tab === 'algo' &&
+      Object.keys(session.algo).length
+    ) {
       algo.loadAlgo(session.algo);
     }
-  }, [session]);
+  }, [session, tab]);
 
   function submit() {
     const tempSession = cloneDeep(session);

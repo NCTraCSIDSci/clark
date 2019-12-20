@@ -277,11 +277,13 @@ function useRegex(popup) {
   }
 
   function loadRegex(obj) {
-    updateRegexList({
+    let tempRegexList = {
       library: addRegexColor(obj.regex_library),
       expressions: addRegexColor(obj.features),
       sections: addRegexColor(obj.sections.tags),
-    });
+    };
+    tempRegexList = updateCompiledExpressions(tempRegexList);
+    updateRegexList(tempRegexList);
     updateSectionBreak(obj.sections.section_break);
     updateHeaderIgnore(obj.sections.ignore_header);
     updateUnnamedIgnore(obj.sections.ignore_untagged);
