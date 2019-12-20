@@ -118,8 +118,9 @@ def fhir_to_dataframe(patients, plan):
     requested_meds = plan['structured_data'].get('meds', [])
 
     # prepare reference date for age calculation
-    reference_date_string = plan['structured_data']['patient']['age']['reference_date']
-    reference_date = datetime.date.fromisoformat(reference_date_string.split('T')[0])
+    if 'age' in patient_plan:
+        reference_date_string = patient_plan['age']['reference_date']
+        reference_date = datetime.date.fromisoformat(reference_date_string.split('T')[0])
 
     features = []
     for patient_id in patients:
