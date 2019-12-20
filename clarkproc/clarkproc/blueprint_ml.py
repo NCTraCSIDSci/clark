@@ -113,6 +113,10 @@ def notes_to_features(notes, plan):
 
 def fhir_to_dataframe(patients, plan):
     """Convert FHIR data to Pandas DataFrame according to features specified."""
+    patient_plan = plan['structured_data'].get('patient', {})
+    requested_labs = plan['structured_data'].get('labs', [])
+    requested_meds = plan['structured_data'].get('meds', [])
+
     # prepare reference date for age calculation
     reference_date_string = plan['structured_data']['patient']['age']['reference_date']
     reference_date = datetime.date.fromisoformat(reference_date_string.split('T')[0])
@@ -131,7 +135,6 @@ def fhir_to_dataframe(patients, plan):
         patient_features.update(new_features)
 
         # "patient" features
-        patient_plan = plan['structured_data'].get('patient', {})
         if 'numeric' in patient_plan.get('age', {}).get('features', []):
             patient_features['age_in_days'] = patient.get_age_in_days(reference_date)
         if 'binned' in patient_plan.get('age', {}).get('features', []):
@@ -147,7 +150,6 @@ def fhir_to_dataframe(patients, plan):
             patient_features['gender'] = patient.gender
 
         # "labs" features
-        requested_labs = plan['structured_data'].get('labs', [])
         patient_labs = defaultdict(default_lab)
         patient_labs.update({
             f'({k.system}, {k.code})': v.to_dict()
@@ -160,7 +162,6 @@ def fhir_to_dataframe(patients, plan):
         })
 
         # "meds" features
-        requested_meds = plan['structured_data'].get('meds', [])
         patient_meds = defaultdict(default_medication)
         patient_meds.update({
             f'({k.system}, {k.code})': v.to_dict()
