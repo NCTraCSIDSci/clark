@@ -44,7 +44,7 @@ function loadSession(
             .catch(() => {
               setLoading(false);
               popup.showSnackbar({
-                text: 'Failed to load fhir data.',
+                text: 'Failed to load session.',
                 type: 'error',
               });
             });
