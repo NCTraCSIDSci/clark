@@ -1,0 +1,31 @@
+appId: "clark"
+productName: "Clark"
+mac:
+    category: "public.app-category.medical"
+    identity: null
+win:
+    target: "nsis"
+directories:
+    buildResources: "./build_resources/"
+    output: "pack"
+files: [
+    "build_resources/*",
+    "build_ui/*",
+    "main.js",
+    "config.json"
+]
+extraFiles: [
+    {
+        from: "clarkproc/dist/clark_server",
+        to: "server/clark_server"
+    },
+    {
+        from: "config.json",
+        to: "server/config.json"
+    },
+    {
+        from: "config.json",
+        to: "Resources/app/config.json"
+    }
+]
+asar: false
