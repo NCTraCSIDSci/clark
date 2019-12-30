@@ -15,7 +15,22 @@ logger = logging.getLogger(__name__)
 
 bp_ml = Blueprint('ml', __name__)
 
-age_bins = (0, 18, 30, 40, 50, 60, 200)
+age_bins = {
+    '0-9': (0, 9),
+    '10-17': (10, 17),
+    '18-34': (18, 34),
+    '35-44': (35, 44),
+    '45-54': (45, 54),
+    '55-64': (55, 64),
+    '65-74': (65, 74),
+    '75-84': (75, 84),
+    '85+': (85, None),
+}
+other_age_categories = {
+    # '>=65': (65, None),
+    # '>=18': (18, None),
+    # '<18': (0, 18),
+}
 
 @bp_ml.route('/classifiers')
 def get_classifiers():
@@ -141,10 +156,18 @@ def fhir_to_dataframe(patients, plan):
         if 'binned' in patient_plan.get('age', {}).get('features', []):
             age_in_years = patient.get_age_in_years(reference_date)
             patient_features['age_bin'] = next(
-                f'{age_bins[i]}-{age_bins[i + 1]}'
-                for i in range(len(age_bins) - 1)
-                if age_in_years < age_bins[i + 1]
+                name
+                for name, bounds in age_bins.items()
+                if (
+                    (bounds[0] is None or bounds[0] <= age_in_years) and
+                    (bounds[1] is None or age_in_years <= bounds[1])
+                )
             )
+            for name, bounds in other_age_categories.items():
+                patient_features[name] = 1 if (
+                    (bounds[0] is None or bounds[0] <= age_in_years) and
+                    (bounds[1] is None or age_in_years <= bounds[1])
+                ) else 0
         if 'one-hot' in patient_plan.get('marital_status', {}).get('features', []):
             patient_features['marital_status'] = patient.maritalStatus.code
         if 'one-hot' in patient_plan.get('gender', {}).get('features', []):
