@@ -63,47 +63,11 @@
     "request-promise": "^4.2.5",
     "shortid": "^2.2.15"
   },
-  "build": {
-    "appId": "clark",
-    "mac": {
-      "category": "public.app-category.medical"
-    },
-    "win": {
-      "target": "nsis"
-    },
-    "directories": {
-      "buildResources": "./build_resources/",
-      "output": "./build_app"
-    },
-    "files": [
-      "build_resources/*",
-      "build_ui/*",
-      "main.js",
-      "config.json"
-    ],
-    "extraFiles": [
-      {
-        "from": "build_server/dist/clark_server",
-        "to": "server"
-      },
-      {
-        "from": "config.json",
-        "to": "server/config.json"
-      },
-      {
-        "from": "config.json",
-        "to": "Resources/app/config.json"
-      }
-    ],
-    "asar": false,
-    "compression": "normal",
-    "extends": null
-  },
   "scripts": {
     "watch": "webpack-dev-server --config webpack.dev.js",
     "start": "electron ./main.js -d",
     "build_ui": "webpack --config webpack.prod.js",
-    "build_server": "cd ./server/installer && pyinstaller --clean --noconfirm --distpath=../../build_server/dist --workpath=../../build_server/work server.spec",
+    "build_server": "cd ./clarkproc && pyinstaller server.spec",
     "build_standalone": "electron-builder --dir",
     "build_installer": "electron-builder",
     "precommit-msg": "echo 'Checking for FHIR data files...' && exit 0",

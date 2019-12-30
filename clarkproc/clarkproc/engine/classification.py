@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Nov 29 16:27:08 2016
+Created on Tue Nov 29 16:27:08 2016.
 
 @author: miles
 """
+import importlib
+import copy
 import numpy as np
 import sklearn.svm
 import sklearn.tree
@@ -11,17 +13,17 @@ import sklearn.ensemble
 import sklearn.naive_bayes
 import sklearn.pipeline
 import sklearn.impute
-import importlib
-import copy
+
 
 class DataSet():
-    '''Object for keeping track of data with labels, information about its
+    """
+    Object for keeping track of data with labels, information about its
     observations (obs), and information about its features (feats).
-    '''
+    """
 
     def __init__(self, *args, **kwargs):
         # initialize the empty dataSet
-        self.data = np.zeros((0,0))
+        self.data = np.zeros((0, 0))
         self.obs_info = []
         self.feat_info = []
         self.targets = []
@@ -89,11 +91,11 @@ class DataSet():
 
         assert isinstance(ds, DataSet), 'Concatenation is only allowed with other dataSets.'
         assert self.n_feats == ds.n_feats, 'Number of features must match.'
-        self.data = np.concatenate((self.data, ds.data),0)
+        self.data = np.concatenate((self.data, ds.data), 0)
         self.targets += ds.targets
         self.obs_info += ds.obs_info
         return self
-        
+
     def cat_feats(self, ds):
         if self.isempty():
             self = ds
@@ -103,31 +105,32 @@ class DataSet():
 
         assert isinstance(ds, DataSet), 'Concatenation is only allowed with other dataSets.'
         assert self.n_obs == ds.n_obs, 'Number of observations must match.'
-        self.data = np.concatenate((self.data, ds.data),1)
+        self.data = np.concatenate((self.data, ds.data), 1)
         self.feat_info += ds.feat_info
         return self
 
     def get_obs(self, keep):
-        assert isinstance(keep,list), 'expecting input of type list.'
-        if len(self.targets)==0:
-            self.targets = [[]]*self.n_obs
+        assert isinstance(keep, list), 'expecting input of type list.'
+        if len(self.targets) == 0:
+            self.targets = [[]] * self.n_obs
 
-        if len(self.obs_info)==0:
-            self.obs_info = [{}]*self.n_obs
+        if len(self.obs_info) == 0:
+            self.obs_info = [{}] * self.n_obs
 
         kept = [(x, y, z) for x, y, z in
                 zip(keep, self.targets, self.obs_info) if x]
 
-        if len(kept)==0:
+        if len(kept) == 0:
             ds = DataSet()
             return ds
 
         k, tgs, obs = zip(*kept)
 
-        ds = DataSet(self.data[np.array(keep),:].copy(),
-                               list(tgs).copy(), obs_info=list(obs).copy(),
-                                feat_info=copy.deepcopy(self.feat_info))
+        ds = DataSet(self.data[np.array(keep), :].copy(),
+                     list(tgs).copy(), obs_info=list(obs).copy(),
+                     feat_info=copy.deepcopy(self.feat_info))
         return ds
+
 
 class Classifier():
     def __init__(self):
@@ -135,7 +138,7 @@ class Classifier():
 
     def train(self, data_train):
         self._train(data_train)
-        self.class_names = data_train.class_names;
+        self.class_names = data_train.class_names
         self.trained = True
 
     def test(self, data_test):
@@ -173,9 +176,10 @@ class Classifier():
             self.train(ds_train)
 
             tested = self.test(ds_test)
-            confs[np.array(test),:] = tested
+            confs[np.array(test), :] = tested
 
         return confs
+
 
 class DecisionTree(Classifier):
     def __init__(self):
@@ -199,6 +203,7 @@ class DecisionTree(Classifier):
     def _reset(self):
         self.classifier = []
 
+
 class RandomForest(Classifier):
     def __init__(self):
         super().__init__()
@@ -220,6 +225,7 @@ class RandomForest(Classifier):
 
     def _reset(self):
         self.classifier = []
+
 
 class GaussianNB(Classifier):
     def __init__(self):
@@ -243,6 +249,7 @@ class GaussianNB(Classifier):
     def _reset(self):
         self.classifier = []
 
+
 class LinearSVM(Classifier):
     def __init__(self):
         super().__init__()
@@ -265,11 +272,13 @@ class LinearSVM(Classifier):
     def _reset(self):
         self.classifier = []
 
+
 def get_classifiers():
-    classifiers = [{"name":"Linear SVM", "id":"LinearSVM"},
-                   {"name":"Gaussian Naive Bayes", "id":"GaussianNB"},
-                   {"name":"Decision Tree", "id":"DecisionTree"},
-                   {"name":"Random Forest", "id":"RandomForest"}]
+    """Convert the name from the front end to what the backend needs."""
+    classifiers = [{"name": "Linear SVM", "id": "LinearSVM"},
+                   {"name": "Gaussian Naive Bayes", "id": "GaussianNB"},
+                   {"name": "Decision Tree", "id": "DecisionTree"},
+                   {"name": "Random Forest", "id": "RandomForest"}]
     return classifiers
 
 
@@ -282,7 +291,7 @@ classifier_map = {
 
 
 def build_classifier(name):
-    module = importlib.import_module("engine.classification")
+    module = importlib.import_module("clarkproc.engine.classification")
     clazz = getattr(module, classifier_map[name])
     instance = clazz()
     return instance

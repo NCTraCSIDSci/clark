@@ -8,8 +8,8 @@ import numpy as np
 import pandas as pd
 import sklearn
 
-from . import engine
-from . import state
+import clarkproc.engine as engine
+import clarkproc.state as state
 
 logger = logging.getLogger(__name__)
 

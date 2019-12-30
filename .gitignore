@@ -2,6 +2,7 @@ node_modules
 build_ui/
 build_server/
 build_app/
+pack/
 
 *.log
 .vscode
