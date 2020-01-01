@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 import sklearn
 
-import clarkproc.engine as engine
+from clarkproc.engine import classification, onehot
 import clarkproc.state as state
 
 logger = logging.getLogger(__name__)
@@ -49,7 +49,7 @@ def get_classifiers():
                             type: object
     """
 
-    classifiers = engine.classification.get_classifiers()
+    classifiers = classification.get_classifiers()
     return jsonify(classifiers)
 
 
@@ -479,7 +479,7 @@ def apply_ml():
     classifier_name = request.json['algo']['algo_type']
 
     # set_feature_expressions()
-    clf = engine.classification.build_classifier(classifier_name)
+    clf = classification.build_classifier(classifier_name)
 
     df_train = fhir_to_dataframe(state.train.patients, request.json)
 
@@ -491,8 +491,8 @@ def apply_ml():
         crossvalidation_name = request.json['algo']['eval_method']['crossval_method']
         n_folds = int(request.json['algo']['eval_method']['num_folds'])
 
-        df_train = engine.onehot.FhirOneHotEncoder().train(df_train).apply(df_train)
-        ds = engine.classification.DataSet(df_train.to_numpy().astype(float), list(y_train))
+        df_train = onehot.FhirOneHotEncoder().train(df_train).apply(df_train)
+        ds = classification.DataSet(df_train.to_numpy().astype(float), list(y_train))
 
         # retain only observations from classes with >= n_folds instances
         target_counts = [[t, ds.targets.count(t)] for t in set(ds.targets)]
@@ -550,15 +550,15 @@ def apply_ml():
     elif request.json['algo']['eval_method']['type'] == 'Evaluation Corpus':
         if not state.test.patients:
             return 'No testing data loaded.', 428
-        encoder = engine.onehot.FhirOneHotEncoder().train(df_train)
+        encoder = onehot.FhirOneHotEncoder().train(df_train)
         df_train = encoder.apply(df_train)
-        ds_train = engine.classification.DataSet(df_train.to_numpy().astype(float), list(y_train))
+        ds_train = classification.DataSet(df_train.to_numpy().astype(float), list(y_train))
 
         df_test = fhir_to_dataframe(state.test.patients, request.json)
         y_test = df_test['label']
         df_test = df_test.drop(columns='label')
         df_test = encoder.apply(df_test)
-        ds_test = engine.classification.DataSet(df_test.to_numpy().astype(float), list(y_test))
+        ds_test = classification.DataSet(df_test.to_numpy().astype(float), list(y_test))
 
         # train
         clf.train(ds_train)

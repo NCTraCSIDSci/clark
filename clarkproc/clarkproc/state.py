@@ -6,7 +6,7 @@ application.  These session variables hold application state across the REST
 interfaces
 """
 
-from . import engine
+from clarkproc import engine
 
 
 # Reference: https://stackoverflow.com/a/5021467

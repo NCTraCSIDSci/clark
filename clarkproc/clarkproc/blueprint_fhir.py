@@ -4,9 +4,9 @@ from functools import wraps
 
 from flask import Blueprint, jsonify, request
 
-from . import engine
-from . import state as s
-from .fhir.models import CodeValue
+from clarkproc.engine import ingest
+import clarkproc.state as s
+from clarkproc.fhir.models import CodeValue
 
 bp_fhir = Blueprint('fhir', __name__)
 
@@ -71,7 +71,7 @@ def load_fhir(**kwargs):
     paths = request.json.get('paths')
 
     messages, state.patients, state.labs, state.vitals, state.medications = \
-        engine.ingest.ingest_fhir(paths)
+        ingest.ingest_fhir(paths)
 
     if state.patients is None:
         patient_ids = []

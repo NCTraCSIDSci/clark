@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 from base64 import b64decode
 import datetime
 
-from .containers import ObservationContainer, MedicationContainer
-from .errors import *
+from clarkproc.fhir.containers import ObservationContainer, MedicationContainer
+from clarkproc.fhir.errors import *
 
 
 class CodeValue:

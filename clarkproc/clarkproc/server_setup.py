@@ -2,8 +2,8 @@ from flask import Flask
 from flasgger import Swagger
 # from flask_cors import CORS
 
-from .blueprint_fhir import TEST_DATA_INDICATOR, bp_fhir
-from .blueprint_ml import bp_ml
+from clarkproc.blueprint_fhir import TEST_DATA_INDICATOR, bp_fhir
+from clarkproc.blueprint_ml import bp_ml
 
 app = Flask("clark_server")
 app.register_blueprint(bp_fhir, url_prefix='/fhir')
