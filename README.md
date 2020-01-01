@@ -22,25 +22,34 @@ Python setup requires a python3 and several dependencies found in `./server/requ
 
 ### User Interface
 Building the user interface requires [NPM](https://www.npmjs.com). Dependencies can be installed by calling
-
 ```
 npm install
 ```
 
-The user interface is transpiled and bundled using webpack
-```
-npm run build_ui
-```
-
 ### Run the application:
-From a command line with the activated python environment the application can be started using
+From a command line with the activated python environment the application can be started using:
+#### Hot Reloading
+Open two terminals, in one run:
+```
+npm run watch
+```
+and in the other, activate the python environment and run:
 ```
 npm start
+```
+- If you don't want hot reloading, in one terminal run: (note: this will require you to run these commands again to see your changes)
+```
+npm run build_ui
+npm run electron
 ```
 
 ### Packaging
 Packaging is handled using [PyInstaller](http://www.pyinstaller.org) to bundle the Python engine and [Electron Builder](http://electron.build) to package everything together and build standalone applications and/or installers. Execution of each of these commands can be done using npm scripts.
 
+- Bundles the javascript
+  ```
+  npm run build_ui
+  ```
 - Bundles python libraries into standalone binary
   ```
   npm run build_server
