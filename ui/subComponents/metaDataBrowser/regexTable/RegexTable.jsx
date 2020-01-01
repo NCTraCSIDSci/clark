@@ -20,6 +20,7 @@ import AddIcon from '@material-ui/icons/Add';
 import CheckIcon from '@material-ui/icons/Check';
 import PublishIcon from '@material-ui/icons/Publish';
 import SaveIcon from '@material-ui/icons/Save';
+import SearchIcon from '@material-ui/icons/Search';
 
 import './regexTable.css';
 
@@ -28,7 +29,7 @@ import getCombinedColor from '../../../helperFunctions/getCombinedColor';
 import AddRegexModal from './AddRegexModal';
 
 function RegexTable(props) {
-  const { regex, editable } = props;
+  const { regex, editable, numPatients } = props;
 
   return (
     <div id="setupDataLeftTable">
@@ -141,6 +142,17 @@ function RegexTable(props) {
                     <TableCell>
                       {row.ignore && (
                         <CheckIcon />
+                      )}
+                    </TableCell>
+                  )}
+                  {regex.tab === 'expressions' && (
+                    <TableCell>
+                      {row.hasOwnProperty('coverage') ? (
+                        row.coverage / numPatients
+                      ) : (
+                        <IconButton onClick={() => regex.getCoverage(i, row.regex)}>
+                          <SearchIcon />
+                        </IconButton>
                       )}
                     </TableCell>
                   )}

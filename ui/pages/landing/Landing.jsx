@@ -9,6 +9,8 @@ function Landing(props) {
     tab, dataLoading, sessionLoading, loadData, loadSession,
   } = props;
 
+  const disabled = dataLoading || sessionLoading;
+
   return (
     <>
       {tab === 'landing' && (
@@ -21,7 +23,7 @@ function Landing(props) {
               variant="outlined"
               onClick={loadData}
               className="blueButton"
-              disabled={sessionLoading}
+              disabled={disabled}
             >
               {!dataLoading ? (
                 'Load Data'
@@ -33,7 +35,7 @@ function Landing(props) {
               variant="outlined"
               onClick={loadSession}
               className="blueButton"
-              disabled={dataLoading}
+              disabled={disabled}
             >
               {!sessionLoading ? (
                 'Load Session'
