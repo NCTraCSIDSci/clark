@@ -174,17 +174,18 @@ function useMetaData(popup) {
   }
 
   function loadMetaData(obj) {
+    const session = cloneDeep(obj);
     const tempMetaData = {};
     let num = 0;
-    Object.keys(obj).forEach((metaDataKey) => {
+    Object.keys(session).forEach((metaDataKey) => {
       tempMetaData[metaDataKey] = {};
-      Object.keys(obj[metaDataKey]).forEach((keyItem) => {
+      Object.keys(session[metaDataKey]).forEach((keyItem) => {
         if (metaDataKey === 'patient' && keyItem === 'age') {
-          tempMetaData.patient.age = obj.patient.age.features;
-          tempMetaData.patient.date = obj.patient.age.reference_date;
+          tempMetaData.patient.age = session.patient.age.features;
+          tempMetaData.patient.date = session.patient.age.reference_date;
         } else {
-          tempMetaData[metaDataKey][keyItem] = obj[metaDataKey][keyItem].features;
-          num += obj[metaDataKey][keyItem].features.length;
+          tempMetaData[metaDataKey][keyItem] = session[metaDataKey][keyItem].features;
+          num += session[metaDataKey][keyItem].features.length;
         }
       });
     });

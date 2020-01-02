@@ -19,7 +19,7 @@ const crossValOptions = ['Stratified', 'Random'];
 const foldOptions = [2, 3, 5, 10, 25];
 
 function useAlgoSetup(popup, serverUp) {
-  const [algo, updateAlgo] = useState(defaultAlgoOptions[0].id);
+  const [algo, updateAlgo] = useState(defaultAlgoOptions[0].name);
   const [evalMethod, updateEvalMethod] = useState('Cross-Validation');
   const [crossValMethod, updateCrossValMethod] = useState('Stratified');
   const [numFolds, updateNumFolds] = useState(5);

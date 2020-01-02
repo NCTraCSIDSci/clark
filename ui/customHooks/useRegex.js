@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { cloneDeep } from 'lodash';
 import { remote } from 'electron';
 
+import API from '../API';
+
 import isValidRegex from '../helperFunctions/isValidRegex';
 import makeRegExpFile from '../helperFunctions/makeRegExpFile';
 import addRegexColor from '../helperFunctions/addRegexColor';
@@ -32,6 +34,7 @@ const columnData = {
   expressions: [
     { id: 'name', label: 'Name' },
     { id: 'rawRegex', label: 'Reg. Exp' },
+    { id: 'coverage', label: 'Coverage' },
   ],
   sections: [
     { id: 'name', label: 'Name' },
@@ -79,6 +82,17 @@ function useRegex(popup) {
     row = addRegexColor(row, regexIndex);
     if (tab === 'sections') {
       row.ignore = ignore;
+    }
+    if (tab === 'library') {
+      const exp = tempRegex.expressions.find((expression) => (
+        expression.regex.startsWith('#') &&
+        (
+          expression.regex.substring(1) === tempRegex.library[regexIndex].name ||
+          expression.regex.substring(1) === activeName
+        )
+      ));
+      console.log('exp', exp);
+      if (exp) delete exp.coverage;
     }
     tempRegex[tab][regexIndex] = row;
     updateRegexList(tempRegex);
@@ -202,6 +216,38 @@ function useRegex(popup) {
     tab, regexList, showModal, sectionBreak, activeRegex, ignore,
   ]);
 
+  useEffect(() => {
+    if (tab === 'sections') {
+      regexList.expressions.forEach((exp) => {
+        delete exp.coverage;
+      });
+    }
+  }, [sectionBreak, ignoreHeader, ignoreUnnamed, regexList]);
+
+  function getCoverage(i, exp) {
+    const data = {
+      features: [
+        { regex: exp },
+      ],
+      sections: {
+        ignore_header: ignoreHeader,
+        ignore_untagged: ignoreUnnamed,
+        section_break: sectionBreak,
+        tags: regexList.sections,
+      },
+    };
+    API.coverage(data)
+      .then((res) => {
+        console.log(exp, res);
+        const tempRegex = cloneDeep(regexList);
+        tempRegex.expressions[i].coverage = Object.values(res)[0];
+        updateRegexList(tempRegex);
+      })
+      .catch((err) => {
+        console.log('Something went wrong', err);
+      });
+  }
+
   function uploadRegex() {
     const filePath = remote.dialog.showOpenDialogSync({
       filters: [{
@@ -277,16 +323,17 @@ function useRegex(popup) {
   }
 
   function loadRegex(obj) {
+    const session = cloneDeep(obj);
     let tempRegexList = {
-      library: addRegexColor(obj.regex_library),
-      expressions: addRegexColor(obj.features),
-      sections: addRegexColor(obj.sections.tags),
+      library: addRegexColor(session.regex_library),
+      expressions: addRegexColor(session.features),
+      sections: addRegexColor(session.sections.tags),
     };
     tempRegexList = updateCompiledExpressions(tempRegexList);
     updateRegexList(tempRegexList);
-    updateSectionBreak(obj.sections.section_break);
-    updateHeaderIgnore(obj.sections.ignore_header);
-    updateUnnamedIgnore(obj.sections.ignore_untagged);
+    updateSectionBreak(session.sections.section_break);
+    updateHeaderIgnore(session.sections.ignore_header);
+    updateUnnamedIgnore(session.sections.ignore_untagged);
   }
 
   function exportRegex() {
@@ -326,6 +373,7 @@ function useRegex(popup) {
     updateRegex,
     save,
     remove,
+    getCoverage,
     validRegex,
     sectionBreak,
     updateSectionBreak,

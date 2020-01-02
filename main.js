@@ -50,34 +50,53 @@ function createWindow() {
   fs.stat('./clarkproc/clarkproc/server_app.py', (err, stats) => {
     // If this errors, we can't find the server python function - We must be deployed
     if (err) {
-      let appPath = app.getAppPath();
-      if (appPath.includes('app.asar')) {
-        [appPath] = appPath.split('resources'); // Remove the app.asar part
-      }
       // the path will look something like this.../build_app/mac/clark.app/Contents/Resources/app
-      // We need to spawn .../build_app/mac/clark.app/Contents/server/clarkserver{ending}
-      const serverBinary = path.join(appPath, '..', '..', 'server', `clark_server${binaryEnding}`); // This path and file name must agree with pyinstaller and electron_builder config
+      // We need to spawn .../build_app/mac/clark.app/Contents/server/clark_server{binaryEnding}
+      let serverExe = app.getAppPath();
+      // the path is different on windows and mac
+      if (type === 'Windows_NT') {
+        [serverExe] = serverExe.split('resources');
+        serverExe = `${serverExe}server/clark_server${binaryEnding}`;
+      } else {
+        [serverExe] = serverExe.split('Resources');
+        serverExe = `${serverExe}server/clark_server${binaryEnding}`;
+      }
 
-      console.log('ELECTRON: Starting deployment python server.');
       // Note these console.log()'s likely show up in a hidden window started by the installed application
       // On OSX if you build without ASAR you can see these logs by exploring the APP contents and runing the exclosed binary
-      console.log(serverBinary);
-      subpy = spawn(serverBinary, { cwd: appPath });
+
+      // Try to find the binary file
+      fs.stat(serverExe, (error, stat) => { // eslint-disable-line
+        if (error) {
+          console.log('Can\'t find binary file.');
+          throw error;
+        } else {
+          subpy = spawn(serverExe, [config.protocol, config.host, config.port]);
+          console.log('ELECTRON: Starting deployment python server.');
+          // Map console logging of the spawned processes into the active command line
+          subpy.stdout.on('data', (data) => {
+            console.log(`PYTHON: ${data}`);
+          });
+
+          subpy.stderr.on('data', (data) => {
+            console.log(`PYTHON: ${data}`);
+          });
+        }
+      });
     } else {
       // We can find the server python script, assume we are running from a terminal
       // with the correct python environment, and just start the script
       console.log('ELECTRON: Starting development python server.');
-      subpy = spawn('python', ['./clarkproc/clarkproc/server_app.py']);
+      subpy = spawn('python', ['./clarkproc/clarkproc/server_app.py', config.protocol, config.host, config.port]);
+      // Map console logging of the spawned processes into the active command line
+      subpy.stdout.on('data', (data) => {
+        console.log(`PYTHON: ${data}`);
+      });
+
+      subpy.stderr.on('data', (data) => {
+        console.log(`PYTHON: ${data}`);
+      });
     }
-
-    // Map console logging of the spawned processes into the active command line
-    subpy.stdout.on('data', (data) => {
-      console.log(`PYTHON: ${data}`);
-    });
-
-    subpy.stderr.on('data', (data) => {
-      console.log(`PYTHON: ${data}`);
-    });
   });
 
   const openWindow = () => {
@@ -96,9 +115,13 @@ function createWindow() {
 
     process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true;
 
+    let html = './build_ui/index.html';
+    if (developmentMode) {
+      html = './ui/index.html';
+    }
     // and load the index.html of the app.
     mainWindow.loadURL(url.format({
-      pathname: path.join(__dirname, './build_ui/index.html'),
+      pathname: path.join(__dirname, html),
       protocol: 'file:',
       slashes: true,
     }), { extraHeaders: 'pragma: no-cache\n' });
@@ -120,7 +143,6 @@ function createWindow() {
       console.log('starting the shutdown', `${serverUrl}shutdown`);
       rq(`${serverUrl}shutdown`)
         .then((res) => {
-          console.log('server shut down');
           console.log('ELECTRON: Server shutdown', res);
         })
         .catch((err) => {

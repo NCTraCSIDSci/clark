@@ -62,6 +62,7 @@ function MetaDataBrowser(props) {
         <RegexTable
           regex={regex}
           editable={editable}
+          numPatients={numPatients}
         />
       )}
     </Paper>

@@ -20,6 +20,7 @@ import AddIcon from '@material-ui/icons/Add';
 import CheckIcon from '@material-ui/icons/Check';
 import PublishIcon from '@material-ui/icons/Publish';
 import SaveIcon from '@material-ui/icons/Save';
+import SearchIcon from '@material-ui/icons/Search';
 
 import './regexTable.css';
 
@@ -28,7 +29,7 @@ import getCombinedColor from '../../../helperFunctions/getCombinedColor';
 import AddRegexModal from './AddRegexModal';
 
 function RegexTable(props) {
-  const { regex, editable } = props;
+  const { regex, editable, numPatients } = props;
 
   return (
     <div id="setupDataLeftTable">
@@ -88,79 +89,92 @@ function RegexTable(props) {
             </FormGroup>
           </div>
         )}
-        <Table stickyHeader size="small">
-          <TableHead>
-            <TableRow>
-              {editable && (
-                <TableCell className="regexIconCell">
-                  Edit
-                </TableCell>
-              )}
-              {regex.columns.map((column) => (
-                <TableCell
-                  key={shortid.generate()}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-              {regex.tab !== 'library' && (
-                <TableCell className="regexIconCell">
-                  Color
-                </TableCell>
-              )}
-              {editable && (
-                <TableCell className="regexIconCell">
-                  Delete
-                </TableCell>
-              )}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {regex.rows.map((row, i) => {
-              const backgroundColor = getCombinedColor([row.color]);
-              return (
-                <TableRow
-                  key={shortid.generate()}
-                  className="regexTableRow"
-                  hover
-                >
-                  {editable && (
-                    <TableCell>
-                      <IconButton onClick={() => regex.openModal(i)}>
-                        <EditIcon />
-                      </IconButton>
-                    </TableCell>
-                  )}
-                  <TableCell>
-                    {row.name}
+        <div id="regexTable">
+          <Table stickyHeader size="small">
+            <TableHead>
+              <TableRow>
+                {editable && (
+                  <TableCell className="regexIconCell">
+                    Edit
                   </TableCell>
-                  <TableCell>
-                    {row.regex}
+                )}
+                {regex.columns.map((column) => (
+                  <TableCell
+                    key={shortid.generate()}
+                  >
+                    {column.label}
                   </TableCell>
-                  {regex.tab === 'sections' && (
+                ))}
+                {regex.tab !== 'library' && (
+                  <TableCell className="regexIconCell">
+                    Color
+                  </TableCell>
+                )}
+                {editable && (
+                  <TableCell className="regexIconCell">
+                    Delete
+                  </TableCell>
+                )}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {regex.rows.map((row, i) => {
+                const backgroundColor = getCombinedColor([row.color]);
+                return (
+                  <TableRow
+                    key={shortid.generate()}
+                    className="regexTableRow"
+                    hover
+                  >
+                    {editable && (
+                      <TableCell>
+                        <IconButton onClick={() => regex.openModal(i)}>
+                          <EditIcon />
+                        </IconButton>
+                      </TableCell>
+                    )}
                     <TableCell>
-                      {row.ignore && (
-                        <CheckIcon />
-                      )}
+                      {row.name}
                     </TableCell>
-                  )}
-                  {regex.tab !== 'library' && (
                     <TableCell>
-                      <div className="regexColor" style={{ backgroundColor }} />
+                      {row.regex}
                     </TableCell>
-                  )}
-                  {editable && (
-                    <TableCell>
-                      <IconButton onClick={() => regex.remove(i)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </TableCell>
-                  )}
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
+                    {regex.tab === 'sections' && (
+                      <TableCell>
+                        {row.ignore && (
+                          <CheckIcon />
+                        )}
+                      </TableCell>
+                    )}
+                    {regex.tab === 'expressions' && (
+                      <TableCell>
+                        {row.hasOwnProperty('coverage') ? (
+                          row.coverage / numPatients
+                        ) : (
+                          <IconButton onClick={() => regex.getCoverage(i, row.compiled || row.regex)}>
+                            <SearchIcon />
+                          </IconButton>
+                        )}
+                      </TableCell>
+                    )}
+                    {regex.tab !== 'library' && (
+                      <TableCell>
+                        <div className="regexColor" style={{ backgroundColor }} />
+                      </TableCell>
+                    )}
+                    {editable && (
+                      <TableCell>
+                        <IconButton onClick={() => regex.remove(i)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
+                    )}
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </div>
         {editable && (
           <>
             <div id="addRegexButton">

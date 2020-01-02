@@ -1,5 +1,5 @@
-import os
-import json
+"""Entry file for python server."""
+import sys
 from flask import request
 
 from clarkproc import state
@@ -8,11 +8,13 @@ from clarkproc.server_setup import app
 
 @app.route('/ping')
 def startup_ping():
+    """Tells the UI that the server is running."""
     return 'PONG', 200
 
 
 @app.route('/reset')
 def reset():
+    """Reset state held in server."""
     try:
         state.reset()
         return {"reset": True}, 200
@@ -35,24 +37,10 @@ def shutdown():
 
 
 if __name__ == '__main__':
-    current_dir = os.getcwd()
-    this_file_path = os.path.dirname(os.path.abspath(__file__))
-    config_file = 'config.json'
+    config = sys.argv[1:]
 
-    config_full_file = os.path.join(current_dir, config_file)
-    if os.path.isfile(config_full_file):
-        with open(config_full_file) as f:
-            config = json.load(f)
-    else:
-        config_full_file = os.path.join(this_file_path, config_file)
-        if os.path.isfile(config_full_file):
-            with open(config_full_file) as f:
-                config = json.load(f)
-        else:
-            raise Exception("Couldn't find config.json")
-
-    server_host = config['host']
-    server_port = int(config['port'])
+    server_host = config[1]
+    server_port = int(config[2])
 
     app.run(
         host=server_host,
