@@ -37,22 +37,6 @@ def shutdown():
 
 
 if __name__ == '__main__':
-    # current_dir = os.getcwd()
-    # this_file_path = os.path.dirname(os.path.abspath(__file__))
-    # config_file = 'config.json'
-
-    # config_full_file = os.path.join(current_dir, config_file)
-    # if os.path.isfile(config_full_file):
-    #     with open(config_full_file) as f:
-    #         config = json.load(f)
-    # else:
-    #     config_full_file = os.path.join(this_file_path, config_file)
-    #     if os.path.isfile(config_full_file):
-    #         with open(config_full_file) as f:
-    #             config = json.load(f)
-    #     else:
-    #         raise Exception("Couldn't find config.json")
-
     config = sys.argv[1:]
 
     server_host = config[1]
