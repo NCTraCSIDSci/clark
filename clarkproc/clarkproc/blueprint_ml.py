@@ -96,10 +96,12 @@ def notes_to_features(notes, plan):
         breaks = [match.span() for match in re.finditer(plan['sections']['section_break'], note)]
         if breaks:
             header = note[:breaks[0][0]]
-            sections = {
-                note[breaks[i][0]:breaks[i][1]]: note[breaks[i][0]:breaks[i + 1][0]]
-                for i in range(len(breaks) - 1)
-            }
+            sections = dict(
+                (note[breaks[i][0]:breaks[i][1]], note[breaks[i][0]:breaks[i + 1][0]])
+                if i < len(breaks) - 1
+                else (note[breaks[i][0]:breaks[i][1]], note[breaks[i][0]:])
+                for i in range(len(breaks))
+            )
         else:
             header = note
             sections = dict()

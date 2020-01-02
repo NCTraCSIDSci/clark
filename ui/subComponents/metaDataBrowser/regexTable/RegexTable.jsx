@@ -151,7 +151,7 @@ function RegexTable(props) {
                         {row.hasOwnProperty('coverage') ? (
                           row.coverage / numPatients
                         ) : (
-                          <IconButton onClick={() => regex.getCoverage(i, row.regex)}>
+                          <IconButton onClick={() => regex.getCoverage(i, row.compiled || row.regex)}>
                             <SearchIcon />
                           </IconButton>
                         )}
