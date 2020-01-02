@@ -3,7 +3,8 @@
 }
 #mainContainer {
     display: flex;
-    min-height: 100vh;
+    height: 100vh;
+    min-width: 1400px;
     background-color: #F0F4F5;
 }
 #content {

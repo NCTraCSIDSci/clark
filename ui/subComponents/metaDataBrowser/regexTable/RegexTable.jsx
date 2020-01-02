@@ -89,90 +89,92 @@ function RegexTable(props) {
             </FormGroup>
           </div>
         )}
-        <Table stickyHeader size="small">
-          <TableHead>
-            <TableRow>
-              {editable && (
-                <TableCell className="regexIconCell">
-                  Edit
-                </TableCell>
-              )}
-              {regex.columns.map((column) => (
-                <TableCell
-                  key={shortid.generate()}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-              {regex.tab !== 'library' && (
-                <TableCell className="regexIconCell">
-                  Color
-                </TableCell>
-              )}
-              {editable && (
-                <TableCell className="regexIconCell">
-                  Delete
-                </TableCell>
-              )}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {regex.rows.map((row, i) => {
-              const backgroundColor = getCombinedColor([row.color]);
-              return (
-                <TableRow
-                  key={shortid.generate()}
-                  className="regexTableRow"
-                  hover
-                >
-                  {editable && (
-                    <TableCell>
-                      <IconButton onClick={() => regex.openModal(i)}>
-                        <EditIcon />
-                      </IconButton>
-                    </TableCell>
-                  )}
-                  <TableCell>
-                    {row.name}
+        <div id="regexTable">
+          <Table stickyHeader size="small">
+            <TableHead>
+              <TableRow>
+                {editable && (
+                  <TableCell className="regexIconCell">
+                    Edit
                   </TableCell>
-                  <TableCell>
-                    {row.regex}
+                )}
+                {regex.columns.map((column) => (
+                  <TableCell
+                    key={shortid.generate()}
+                  >
+                    {column.label}
                   </TableCell>
-                  {regex.tab === 'sections' && (
-                    <TableCell>
-                      {row.ignore && (
-                        <CheckIcon />
-                      )}
-                    </TableCell>
-                  )}
-                  {regex.tab === 'expressions' && (
-                    <TableCell>
-                      {row.hasOwnProperty('coverage') ? (
-                        row.coverage / numPatients
-                      ) : (
-                        <IconButton onClick={() => regex.getCoverage(i, row.regex)}>
-                          <SearchIcon />
+                ))}
+                {regex.tab !== 'library' && (
+                  <TableCell className="regexIconCell">
+                    Color
+                  </TableCell>
+                )}
+                {editable && (
+                  <TableCell className="regexIconCell">
+                    Delete
+                  </TableCell>
+                )}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {regex.rows.map((row, i) => {
+                const backgroundColor = getCombinedColor([row.color]);
+                return (
+                  <TableRow
+                    key={shortid.generate()}
+                    className="regexTableRow"
+                    hover
+                  >
+                    {editable && (
+                      <TableCell>
+                        <IconButton onClick={() => regex.openModal(i)}>
+                          <EditIcon />
                         </IconButton>
-                      )}
-                    </TableCell>
-                  )}
-                  {regex.tab !== 'library' && (
+                      </TableCell>
+                    )}
                     <TableCell>
-                      <div className="regexColor" style={{ backgroundColor }} />
+                      {row.name}
                     </TableCell>
-                  )}
-                  {editable && (
                     <TableCell>
-                      <IconButton onClick={() => regex.remove(i)}>
-                        <DeleteIcon />
-                      </IconButton>
+                      {row.regex}
                     </TableCell>
-                  )}
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
+                    {regex.tab === 'sections' && (
+                      <TableCell>
+                        {row.ignore && (
+                          <CheckIcon />
+                        )}
+                      </TableCell>
+                    )}
+                    {regex.tab === 'expressions' && (
+                      <TableCell>
+                        {row.hasOwnProperty('coverage') ? (
+                          row.coverage / numPatients
+                        ) : (
+                          <IconButton onClick={() => regex.getCoverage(i, row.regex)}>
+                            <SearchIcon />
+                          </IconButton>
+                        )}
+                      </TableCell>
+                    )}
+                    {regex.tab !== 'library' && (
+                      <TableCell>
+                        <div className="regexColor" style={{ backgroundColor }} />
+                      </TableCell>
+                    )}
+                    {editable && (
+                      <TableCell>
+                        <IconButton onClick={() => regex.remove(i)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
+                    )}
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </div>
         {editable && (
           <>
             <div id="addRegexButton">
