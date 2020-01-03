@@ -73,6 +73,7 @@ function MetaDataTable(props) {
                     value={metaData.metaData.patient.date || null}
                     onChange={(date) => metaData.updateDate(date)}
                     placeholder="01/01/2020"
+                    disabled={!editable}
                   />
                   <Button
                     variant="contained"

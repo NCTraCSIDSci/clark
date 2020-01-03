@@ -8,6 +8,8 @@ const fs = remote.require('fs');
 
 function loadSession(
   setTab, popup, setLoading, updateSession,
+  setFhirDirectory, setSteps, loadAlgo, loadMetaData,
+  loadRegex,
 ) {
   const path = remote.dialog.showOpenDialogSync({
     filters: [{
@@ -29,13 +31,18 @@ function loadSession(
           API.load([setup.fhir_directory], 'fhir')
             .then((res) => {
               setLoading(false);
+              setFhirDirectory(setup.fhir_directory);
+              loadMetaData(setup.structured_data);
+              loadRegex(setup.unstructured_data);
+              loadAlgo(setup.algo);
+              setSteps(setup.steps);
               updateSession(setup);
-              popup.receiveErrors(res.messages);
-              if (setup.steps.includes('algo')) {
+              if (setup.steps.includes('data')) {
                 setTab('algo');
               } else {
                 setTab('data');
               }
+              popup.receiveErrors(res.messages);
               popup.showSnackbar({
                 type: 'success',
                 text: 'Successfully loaded session.',

@@ -91,7 +91,6 @@ function useRegex(popup) {
           expression.regex.substring(1) === activeName
         )
       ));
-      console.log('exp', exp);
       if (exp) delete exp.coverage;
     }
     tempRegex[tab][regexIndex] = row;
@@ -238,13 +237,15 @@ function useRegex(popup) {
     };
     API.coverage(data)
       .then((res) => {
-        console.log(exp, res);
         const tempRegex = cloneDeep(regexList);
-        tempRegex.expressions[i].coverage = Object.values(res)[0];
+        [tempRegex.expressions[i].coverage] = Object.values(res);
         updateRegexList(tempRegex);
       })
-      .catch((err) => {
-        console.log('Something went wrong', err);
+      .catch(() => {
+        popup.showSnackbar({
+          text: 'Unable to get coverage.',
+          type: 'error',
+        });
       });
   }
 

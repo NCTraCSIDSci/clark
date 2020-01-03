@@ -110,6 +110,8 @@ function useAlgoSetup(popup, serverUp) {
     setLoadedTestData(false);
     setDirPath('');
     updateEvalMethod('Cross-Validation');
+    updateCrossValMethod('Stratified');
+    updateNumFolds(5);
   }
 
   return {

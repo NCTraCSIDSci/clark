@@ -60,6 +60,7 @@ const initialFilter = {
 };
 
 function usePatientBrowser() {
+  const [fhirDir, setFhirDirectory] = useState('');
   const [patientList, setPatientList] = useState([]);
   const [sortedPatients, updateSortedPatients] = useState([]);
   const [filter, setFilter] = useState(initialFilter);
@@ -135,6 +136,8 @@ function usePatientBrowser() {
   }, [filter]);
 
   return {
+    fhirDir,
+    setFhirDirectory,
     initialize,
     sortedPatients,
     numPatients: patientList.length,

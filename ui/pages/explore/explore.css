@@ -3,6 +3,7 @@
     margin: 20px;
     padding: 30px;
     min-height: 400px;
+    overflow: auto;
 }
 #algoRunning {
     width: 100%;
@@ -11,6 +12,22 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+}
+#recompute {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+#recomputeButton {
+    margin: auto;
+    width: 400px;
+    height: 150px;
+    font-size: 25px;
+    background-color: #4E92C2;
+    color: #183042;
+}
+#recomputeButton:hover {
+    background-color: #247ebf;
 }
 
 #FilteredRecords {

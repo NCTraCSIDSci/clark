@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Button from '@material-ui/core/Button';
+import { isEqual } from 'lodash';
 
 import './explore.css';
 
 import PatientModal from '../../subComponents/patientModal/PatientDetails';
 import usePatientDetails from '../../customHooks/usePatientDetails';
-import useRegex from '../../customHooks/useRegex';
 
 import CrossFilterController from './crossFilter/crossFilterController';
 
@@ -24,29 +25,41 @@ import CrossFilterController from './crossFilter/crossFilterController';
 */
 function Explore(props) {
   const {
-    tab, result, session, popup, algoRunning,
+    tab, result, buildSession, popup, algoRunning,
+    explore, regex, session,
   } = props;
+  const [recompute, setRecompute] = useState(true);
   const patientDetails = usePatientDetails('fhir', popup);
-  const regex = useRegex(popup);
+
+  function drawCharts() {
+    if (!Object.keys(result).length || result.entry === undefined) {
+      // our results array is empty, usually from successive calls to initializeState
+      // just remove the chart, but don't render
+      CrossFilterController.doRemove();
+    } else {
+      CrossFilterController.doRemove();
+      CrossFilterController.doRender(result, patientDetails);
+    }
+  }
+
+  useEffect(() => {
+    if (!recompute) {
+      drawCharts();
+    }
+  }, [recompute]);
 
   useEffect(() => {
     if (tab === 'explore' && !algoRunning) {
-      if (!Object.keys(result).length || result.entry === undefined) {
-        // our results array is empty, usually from successive calls to initializeState
-        // just remove the chart, but don't render
-        CrossFilterController.doRemove();
+      const newSession = buildSession();
+      if (!isEqual(session, newSession)) {
+        setRecompute(true);
+      } else if (recompute) {
+        setRecompute(false);
       } else {
-        CrossFilterController.doRemove();
-        CrossFilterController.doRender(result, patientDetails);
+        drawCharts();
       }
     }
-  }, [result, tab, algoRunning]);
-
-  useEffect(() => {
-    if (Object.keys(session.unstructured_data).length && tab === 'explore') {
-      regex.loadRegex(session.unstructured_data);
-    }
-  }, [tab]);
+  }, [algoRunning, tab, result]);
 
   return (
     <>
@@ -54,14 +67,28 @@ function Explore(props) {
         <Paper id="resultsExplorer">
           {!algoRunning ? (
             <>
-              <div id="D3CrossFilterContainer" />
-              <PatientModal
-                type="fhir"
-                container={document.getElementById('FilteredRecords')}
-                popup={popup}
-                patientDetails={patientDetails}
-                regex={regex}
-              />
+              {!recompute ? (
+                <>
+                  <div id="D3CrossFilterContainer" />
+                  <PatientModal
+                    type="fhir"
+                    container={document.getElementById('FilteredRecords')}
+                    popup={popup}
+                    patientDetails={patientDetails}
+                    regex={regex}
+                  />
+                </>
+              ) : (
+                <div id="recompute">
+                  <Button
+                    onClick={explore}
+                    variant="contained"
+                    id="recomputeButton"
+                  >
+                    Rerun Algorithm
+                  </Button>
+                </div>
+              )}
             </>
           ) : (
             <div id="algoRunning">

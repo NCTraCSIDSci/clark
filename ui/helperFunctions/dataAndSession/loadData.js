@@ -12,7 +12,7 @@ import getDirPath from './getDirPath';
  */
 function loadData(
   popup, setLoading, setTab,
-  updateSession,
+  setFhirDirectory, resetState,
 ) {
   const dirPath = getDirPath();
   if (dirPath) {
@@ -22,13 +22,8 @@ function loadData(
         setLoading(false);
         popup.receiveErrors(result.messages);
         setTab('data');
-        updateSession({
-          fhir_directory: dirPath,
-          structured_data: {},
-          unstructured_data: {},
-          algo: {},
-          steps: ['landing'],
-        });
+        setFhirDirectory(dirPath);
+        resetState();
         popup.showSnackbar({
           text: 'Successfully uploaded data.',
           type: 'success',
