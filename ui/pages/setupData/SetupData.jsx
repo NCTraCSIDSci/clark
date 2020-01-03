@@ -1,49 +1,27 @@
 import React, { useEffect } from 'react';
-import { cloneDeep } from 'lodash';
 import Button from '@material-ui/core/Button';
 
 import './data.css';
-
-import usePatientBrowser from '../../customHooks/usePatientBrowser';
-import useRegex from '../../customHooks/useRegex';
-import useMetaData from '../../customHooks/useMetaData';
-import updateSessionSteps from '../../helperFunctions/updateSessionSteps';
 
 import DataBrowser from '../../subComponents/dataBrowser/DataBrowser';
 import MetaDataBrowser from '../../subComponents/metaDataBrowser/MetaDataBrowser';
 
 function SetupData(props) {
   const {
-    tab, setTab, popup, session, updateSession,
+    tab, setSteps, setTab, popup,
+    patients, regex, metaData,
   } = props;
-  const regex = useRegex(popup);
-  const metaData = useMetaData(popup);
-  const patients = usePatientBrowser();
 
   useEffect(() => {
     if (tab === 'data') {
       patients.initialize('fhir');
+      metaData.initialize('fhir');
     }
   }, [tab]);
 
-  useEffect(() => {
-    if (
-      Object.keys(session.unstructured_data).length &&
-      Object.keys(session.structured_data).length
-    ) {
-      regex.loadRegex(session.unstructured_data);
-      metaData.loadMetaData(session.structured_data);
-    }
-  }, [session]);
-
   function submit() {
-    const tempSession = cloneDeep(session);
-    const steps = updateSessionSteps(session, 'data');
-    tempSession.steps = steps;
-    tempSession.structured_data = metaData.exportMetaData();
-    tempSession.unstructured_data = regex.exportRegex();
     setTab('algo');
-    updateSession(tempSession);
+    setSteps('data');
   }
 
   return (

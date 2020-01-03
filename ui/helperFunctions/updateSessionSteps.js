@@ -1,6 +1,8 @@
-function updateSessionSteps(session, value) {
-  const steps = new Set(session.steps);
-  steps.add(value);
+function updateSessionSteps(sessionSteps, value) {
+  const steps = new Set(sessionSteps);
+  value.forEach((val) => {
+    steps.add(val);
+  });
   return [...steps];
 }
 

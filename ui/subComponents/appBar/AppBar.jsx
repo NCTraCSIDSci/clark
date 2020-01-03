@@ -25,13 +25,12 @@ import './appBar.css';
 
 function MenuBar(props) {
   const {
-    tab, setTab, popup, session, saveSession, algoRunning,
+    tab, setTab, popup, steps, saveSession, algoRunning,
+    fhirDir,
   } = props;
   const [drawerOpen, toggleDrawer] = useState(false);
 
   const drawerClass = drawerOpen ? 'drawerOpen' : 'drawerClosed';
-
-  const stepsComplete = session.steps;
 
   return (
     <>
@@ -71,7 +70,7 @@ function MenuBar(props) {
             disabled={algoRunning}
           >
             <Badge
-              badgeContent={stepsComplete.indexOf('landing') > -1 ? <CheckCircleIcon className="stepCompleted" /> : ''}
+              badgeContent={steps.indexOf('landing') > -1 ? <CheckCircleIcon className="stepCompleted" /> : ''}
             >
               <ListItemIcon><PlaylistAddIcon /></ListItemIcon>
             </Badge>
@@ -81,10 +80,10 @@ function MenuBar(props) {
             button
             onClick={() => setTab('data')}
             className={tab === 'data' ? 'activePage' : ''}
-            disabled={stepsComplete.indexOf('landing') < 0 || algoRunning}
+            disabled={steps.indexOf('landing') < 0 || algoRunning}
           >
             <Badge
-              badgeContent={stepsComplete.indexOf('data') > -1 ? <CheckCircleIcon className="stepCompleted" /> : ''}
+              badgeContent={steps.indexOf('data') > -1 ? <CheckCircleIcon className="stepCompleted" /> : ''}
             >
               <ListItemIcon><TuneIcon /></ListItemIcon>
             </Badge>
@@ -94,10 +93,10 @@ function MenuBar(props) {
             button
             onClick={() => setTab('algo')}
             className={tab === 'algo' ? 'activePage' : ''}
-            disabled={stepsComplete.indexOf('data') < 0 || algoRunning}
+            disabled={steps.indexOf('data') < 0 || algoRunning}
           >
             <Badge
-              badgeContent={stepsComplete.indexOf('algo') > -1 ? <CheckCircleIcon className="stepCompleted" /> : ''}
+              badgeContent={steps.indexOf('algo') > -1 ? <CheckCircleIcon className="stepCompleted" /> : ''}
             >
               <ListItemIcon><NewReleasesIcon /></ListItemIcon>
             </Badge>
@@ -107,7 +106,7 @@ function MenuBar(props) {
             button
             onClick={() => setTab('explore')}
             className={tab === 'explore' ? 'activePage' : ''}
-            disabled={stepsComplete.indexOf('algo') < 0 || algoRunning}
+            disabled={steps.indexOf('algo') < 0 || algoRunning}
           >
             <ListItemIcon><SearchIcon /></ListItemIcon>
             <ListItemText primary="Explore" />
@@ -128,7 +127,7 @@ function MenuBar(props) {
             <ListItem
               button
               onClick={saveSession}
-              disabled={!session.fhir_directory || algoRunning}
+              disabled={!fhirDir || algoRunning}
             >
               <ListItemIcon><SaveIcon /></ListItemIcon>
               <ListItemText primary="Save" />

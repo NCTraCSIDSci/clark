@@ -4,11 +4,12 @@ const restructureJson = (jsonObj, noTruth) => {
 
   for (let i = 0; i < jsonObj.entry.length; i += 1) {
     const entry = jsonObj.entry[i];
+    const { confidences } = entry.decision;
     const jsonElement = {
-      confs: Object.values(entry.decision.confidences),
-      max_label: Math.max(...Object.keys(entry.decision.confidences)),
-      max_conf: Math.max(...Object.values(entry.decision.confidences)),
-      labels: Object.keys(entry.decision.confidences), // Redundant: Store externally ideally
+      confs: Object.values(confidences),
+      max_label: Math.max(...Object.keys(confidences)),
+      max_conf: Math.max(...Object.values(confidences)),
+      labels: Object.keys(confidences), // Redundant: Store externally ideally
       pt_id: entry.subject.reference.split('/')[1],
       // name: entry.subject.reference,
     };

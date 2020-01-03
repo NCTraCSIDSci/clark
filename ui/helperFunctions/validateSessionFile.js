@@ -273,9 +273,6 @@ const sessionSchema = {
   },
   required: [
     'fhir_directory',
-    'structured_data',
-    'unstructured_data',
-    'algo',
     'steps',
   ],
   additionalProperties: false,
