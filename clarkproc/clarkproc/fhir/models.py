@@ -161,7 +161,7 @@ class Patient(Resource):
         d.update({
             'gender': self.gender,
             'birthDate': self.birthDate.isoformat(),
-            'maritalStatus': self.maritalStatus.display,
+            'maritalStatus': self.maritalStatus.display if self.maritalStatus is not None else 'unspecified',
             'labs': self.labs.to_dict(),
             'vitals': self.vitals.to_dict(),
             'medications': self.medications.to_dict(),
@@ -177,7 +177,7 @@ class Patient(Resource):
         d.update({
             'gender': self.gender,
             'birthDate': self.birthDate.isoformat(),
-            'maritalStatus': self.maritalStatus.display,
+            'maritalStatus': self.maritalStatus.display if self.maritalStatus is not None else 'unspecified',
             'num_labs': self.labs.unique_count,
             'num_vitals': self.vitals.unique_count,
             'num_medications': self.medications.unique_count,
