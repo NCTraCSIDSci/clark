@@ -120,7 +120,13 @@ function usePatientBrowser() {
     if (Object.keys(patientList).length) {
       let sortedList = cloneDeep(patientList);
       Object.keys(filter.text).forEach((key) => {
-        sortedList = sortedList.filter((patient) => patient[key].toLowerCase().includes(filter.text[key].toLowerCase()));
+        sortedList = sortedList.filter((patient) => {
+          if (!(key in patient)) {
+            console.log(`Patient without ${key} was excluded`);
+            return false;
+          }
+          return patient[key].toLowerCase().includes(filter.text[key].toLowerCase());
+        });
       });
       Object.keys(filter.sort).forEach((key) => {
         if (filter.sort[key] && sortedBy) {
