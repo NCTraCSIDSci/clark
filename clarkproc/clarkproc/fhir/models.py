@@ -117,10 +117,13 @@ class Patient(Resource):
             raise FHIRMissingField(
                 f'{self.id_str} is required to have an "id" value defined.')
 
-        if fhir_patient.animal is not None:
-            raise FHIRUnsupportedFormat(
-                '{} indicates the patient is known to be an animal.  Non-human '
-                'patients are not supported.'.format(self.id_str))
+        try:
+            if fhir_patient.animal is not None:
+                raise FHIRUnsupportedFormat(
+                    '{} indicates the patient is known to be an animal.  Non-human '
+                    'patients are not supported.'.format(self.id_str))
+        except AttributeError:
+            pass
 
         self.labs = ObservationContainer()
         self.vitals = ObservationContainer()
