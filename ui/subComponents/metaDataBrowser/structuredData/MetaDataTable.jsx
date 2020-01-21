@@ -106,6 +106,9 @@ function MetaDataTable(props) {
                 </Button>
               )}
             </div>
+            {row.display === 'age' && (
+              <p id="binnedAgeRanges">Binned Ages: 0-9, 10-17, 18-34, 35-44, 45-54, 55-64, 65-74, 75-84, 85+</p>
+            )}
           </ExpansionPanelDetails>
         </ExpansionPanel>
       );
