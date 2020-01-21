@@ -34,7 +34,7 @@ const columnData = {
   expressions: [
     { id: 'name', label: 'Name' },
     { id: 'rawRegex', label: 'Reg. Exp' },
-    { id: 'coverage', label: 'Coverage' },
+    // { id: 'coverage', label: 'Coverage' },
   ],
   sections: [
     { id: 'name', label: 'Name' },

@@ -334,8 +334,8 @@ const CrossFilterController = {
 
       tableHeader
         .append('span') // add arrows on table headers
-        .style('display', 'flex')
-        .style('justify-content', 'center')
+        .style('position', 'absolute')
+        .style('right', '5px')
         .classed('material-icons', true)
         .text('arrow_downward')
         .style('visibility', 'hidden')
