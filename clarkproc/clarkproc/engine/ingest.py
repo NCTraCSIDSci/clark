@@ -3,7 +3,7 @@ import logging
 import re
 from glob import glob
 
-from fhir.resources.STU3.fhirelementfactory import FHIRElementFactory
+from fhir.resources.fhirelementfactory import FHIRElementFactory
 
 from clarkproc.fhir.containers import CodedResourceLUT
 from clarkproc.fhir.errors import FHIRError
