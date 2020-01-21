@@ -15,7 +15,7 @@ function Landing(props) {
     <>
       {tab === 'landing' && (
         <Paper id="landingContainer">
-          <h1 id="landingTitle">Welcome to Clark/Tracs</h1>
+          <h1 id="landingTitle">Welcome to CLARK/TraCS</h1>
           <h1 id="landingSubTitle">Medical Record Predictor</h1>
           <h2 id="landingDescription">Please upload FHIR data or a previous session file to get started</h2>
           <div id="landingButtons">

@@ -7,7 +7,7 @@ const restructureJson = (jsonObj, noTruth) => {
     const { confidences } = entry.decision;
     const jsonElement = {
       confs: Object.values(confidences),
-      max_label: Math.max(...Object.keys(confidences)),
+      max_label: Object.keys(confidences).reduce((prev, current) => ((confidences[prev] > confidences[current]) ? prev : current)),
       max_conf: Math.max(...Object.values(confidences)),
       labels: Object.keys(confidences), // Redundant: Store externally ideally
       pt_id: entry.subject.reference.split('/')[1],

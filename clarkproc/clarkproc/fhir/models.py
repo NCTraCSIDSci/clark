@@ -117,10 +117,13 @@ class Patient(Resource):
             raise FHIRMissingField(
                 f'{self.id_str} is required to have an "id" value defined.')
 
-        if fhir_patient.animal is not None:
-            raise FHIRUnsupportedFormat(
-                '{} indicates the patient is known to be an animal.  Non-human '
-                'patients are not supported.'.format(self.id_str))
+        try:
+            if fhir_patient.animal is not None:
+                raise FHIRUnsupportedFormat(
+                    '{} indicates the patient is known to be an animal.  Non-human '
+                    'patients are not supported.'.format(self.id_str))
+        except AttributeError:
+            pass
 
         self.labs = ObservationContainer()
         self.vitals = ObservationContainer()
@@ -161,7 +164,7 @@ class Patient(Resource):
         d.update({
             'gender': self.gender,
             'birthDate': self.birthDate.isoformat(),
-            'maritalStatus': self.maritalStatus.display,
+            'maritalStatus': self.maritalStatus.display if self.maritalStatus is not None else 'unspecified',
             'labs': self.labs.to_dict(),
             'vitals': self.vitals.to_dict(),
             'medications': self.medications.to_dict(),
@@ -177,7 +180,7 @@ class Patient(Resource):
         d.update({
             'gender': self.gender,
             'birthDate': self.birthDate.isoformat(),
-            'maritalStatus': self.maritalStatus.display,
+            'maritalStatus': self.maritalStatus.display if self.maritalStatus is not None else 'unspecified',
             'num_labs': self.labs.unique_count,
             'num_vitals': self.vitals.unique_count,
             'num_medications': self.medications.unique_count,
