@@ -231,7 +231,7 @@ function useRegex(popup) {
       sections: {
         ignore_header: ignoreHeader,
         ignore_untagged: ignoreUnnamed,
-        section_break: sectionBreak,
+        section_break: (sectionBreak === '') ? null : sectionBreak,
         tags: regexList.sections,
       },
     };
