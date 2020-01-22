@@ -54,3 +54,8 @@
 .metaDataSearch {
     width: 140%;
 }
+
+#binnedAgeRanges {
+    text-align: right;
+    margin-bottom: 0;
+}
