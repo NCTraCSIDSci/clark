@@ -185,8 +185,8 @@ function useMetaData(popup) {
           tempMetaData.patient.date = session.patient.age.reference_date;
         } else {
           tempMetaData[metaDataKey][keyItem] = session[metaDataKey][keyItem].features;
-          num += session[metaDataKey][keyItem].features.length;
         }
+        num += session[metaDataKey][keyItem].features.length;
       });
     });
     setMetaData(tempMetaData);

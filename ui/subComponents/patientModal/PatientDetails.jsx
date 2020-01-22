@@ -25,7 +25,7 @@ const Transition = React.forwardRef((props, ref) => <Zoom ref={ref} {...props} /
 
 const PatientDetails = (props) => {
   const {
-    patientDetails, container, regex, type, popup,
+    patientDetails, container, regex, type, popup, explore,
   } = props;
   const {
     birthDate, gender, id, maritalStatus,
@@ -100,6 +100,7 @@ const PatientDetails = (props) => {
                     regex={regex}
                     type={type}
                     popup={popup}
+                    explore={explore}
                   />
                 ) : (
                   <PatientTable

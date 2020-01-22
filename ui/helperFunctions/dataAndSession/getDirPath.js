@@ -10,7 +10,7 @@ export default function getDirPath() {
   });
   if (dirPath) {
     [dirPath] = dirPath;
-    dirPath += '/*.json';
+    dirPath += '/**/*.json';
   }
   return dirPath;
 }

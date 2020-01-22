@@ -160,4 +160,5 @@ table.table > tbody > td {
     background: #97bedb !important;
     color: #333;
     font-weight: 400;
+    position: relative;
 }
