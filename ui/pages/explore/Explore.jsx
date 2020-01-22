@@ -76,6 +76,7 @@ function Explore(props) {
                     popup={popup}
                     patientDetails={patientDetails}
                     regex={regex}
+                    explore
                   />
                 </>
               ) : (

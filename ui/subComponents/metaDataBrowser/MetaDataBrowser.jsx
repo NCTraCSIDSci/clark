@@ -42,7 +42,7 @@ function MetaDataBrowser(props) {
         <Tab
           label={(
             <div className="setupDataTab">
-              Notes
+              Unstructured Data
               {editable && (
                 <Avatar>
                   {`${regex.badgeNum}`}

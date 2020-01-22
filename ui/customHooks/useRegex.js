@@ -34,7 +34,7 @@ const columnData = {
   expressions: [
     { id: 'name', label: 'Name' },
     { id: 'rawRegex', label: 'Reg. Exp' },
-    { id: 'coverage', label: 'Coverage' },
+    // { id: 'coverage', label: 'Coverage' },
   ],
   sections: [
     { id: 'name', label: 'Name' },
@@ -231,7 +231,7 @@ function useRegex(popup) {
       sections: {
         ignore_header: ignoreHeader,
         ignore_untagged: ignoreUnnamed,
-        section_break: sectionBreak,
+        section_break: (sectionBreak === '') ? null : sectionBreak,
         tags: regexList.sections,
       },
     };

@@ -105,6 +105,11 @@ function RegexTable(props) {
                     {column.label}
                   </TableCell>
                 ))}
+                {regex.tab === 'expressions' && editable && (
+                  <TableCell className="regexIconCell">
+                    Coverage
+                  </TableCell>
+                )}
                 {regex.tab !== 'library' && (
                   <TableCell className="regexIconCell">
                     Color
@@ -146,7 +151,7 @@ function RegexTable(props) {
                         )}
                       </TableCell>
                     )}
-                    {regex.tab === 'expressions' && (
+                    {regex.tab === 'expressions' && editable && (
                       <TableCell>
                         {row.hasOwnProperty('coverage') ? (
                           row.coverage / numPatients

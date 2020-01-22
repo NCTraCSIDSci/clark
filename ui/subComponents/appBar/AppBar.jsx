@@ -42,7 +42,7 @@ function MenuBar(props) {
           >
             <Menu />
           </IconButton>
-          <Typography variant="h4" id="appTitle">CLARK/TraCS</Typography>
+          <Typography variant="h4" id="appTitle">CLARK</Typography>
         </Toolbar>
       </AppBar>
       <Drawer

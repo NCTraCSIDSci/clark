@@ -1,11 +1,11 @@
 {
   "name": "clark",
   "version": "1.0.0",
-  "description": "CLARK for UNC by CoVar",
+  "description": "CLARK: CLinical Annotation Research Kit",
   "main": "./main.js",
   "homepage": "https://github.com/NCTraCSIDSci/clark",
   "repository": "https://github.com/NCTraCSIDSci/clark",
-  "author": "Covar",
+  "author": "CoVar Applied Technologies",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.7.2",

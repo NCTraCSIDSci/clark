@@ -27,7 +27,7 @@ def ingest_fhir(paths):
 
     # Iterate over provided paths and glob to expand wildcards.
     for p in paths:
-        files = glob(p)
+        files = glob(p, recursive=True)
 
         if not files:
             messages['general'].append(f'ERROR: No files found in path "{p}".')
@@ -92,7 +92,7 @@ def ingest_fhir(paths):
             try:
                 r = Resource.factory(resource, msg_list)
             except FHIRError as e:
-                msg_list.append(f'ERROR: {e}')
+                msg_list.append(f'WARN: {e}')
                 continue
 
             if r is None:
@@ -102,7 +102,7 @@ def ingest_fhir(paths):
             if isinstance(r, Patient):
                 if r.id in patients:
                     msg_list.append(
-                        f'ERROR: Skipping patient with duplicate id {r.id}.')
+                        f'WARN: Skipping patient with duplicate id {r.id}.')
                 else:
                     patients[r.id] = r
             elif isinstance(r, Lab):

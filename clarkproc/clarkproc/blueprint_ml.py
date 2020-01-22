@@ -3,6 +3,7 @@ from collections import defaultdict
 import datetime
 import logging
 import re
+
 from flask import Blueprint, jsonify, request
 import numpy as np
 import pandas as pd
@@ -88,12 +89,21 @@ def num_matches(pattern, string):
 
 def notes_to_features(notes, plan):
     """Extract regex features from note."""
+    sections_plan = plan.get('sections', {})
+    tags = sections_plan.get('tags', [])
+    section_break = sections_plan.get('section_break', None)
+    ignore_header = sections_plan.get('ignore_header', False)
+    ignore_untagged = sections_plan.get('ignore_untagged', False)
+    features = plan.get('features', [])
     occurrences = {
         feature['regex']: 0
-        for feature in plan['features']
+        for feature in features
     }
     for note in notes:
-        breaks = [match.span() for match in re.finditer(plan['sections']['section_break'], note)]
+        if section_break is not None:
+            breaks = [match.span() for match in re.finditer(section_break, note)]
+        else:
+            breaks = []
         if breaks:
             header = note[:breaks[0][0]]
             sections = dict(
@@ -108,8 +118,8 @@ def notes_to_features(notes, plan):
         # tag sections
         sections = {
             tuple(
-                tag['ignore']
-                for tag in plan['sections']['tags']
+                tag.get('ignore', False)
+                for tag in tags
                 if re.match(tag['regex'], key)
             ): value
             for key, value in sections.items()
@@ -118,12 +128,12 @@ def notes_to_features(notes, plan):
         sections = [
             value
             for key, value in sections.items()
-            if not any(key) and (key or not plan['sections']['ignore_untagged'])
+            if not any(key) and (key or not ignore_untagged)
         ]
-        if not plan['sections']['ignore_header']:
+        if not ignore_header:
             sections.append(header)
         for section in sections:
-            for feature in plan['features']:
+            for feature in features:
                 occurrences[feature['regex']] += len(re.findall(feature['regex'], section))
     return occurrences
 
@@ -154,7 +164,7 @@ def fhir_to_dataframe(patients, plan):
 
         # "patient" features
         if 'numeric' in patient_plan.get('age', {}).get('features', []):
-            patient_features['age_in_days'] = patient.get_age_in_days(reference_date)
+            patient_features['age_in_years'] = patient.get_age_in_years(reference_date)
         if 'binned' in patient_plan.get('age', {}).get('features', []):
             age_in_years = patient.get_age_in_years(reference_date)
             patient_features['age_bin'] = next(
@@ -407,12 +417,17 @@ def apply_ml():
                                                         type: string
                                                     ignore:
                                                         type: boolean
+                                                        default: false
+                                                required:
+                                                  - regex
                                         section_break:
                                             type: string
                                         ignore_header:
                                             type: boolean
+                                            default: false
                                         ignore_untagged:
                                             type: boolean
+                                            default: false
                                 features:
                                     type: array
                                     items:
@@ -420,6 +435,8 @@ def apply_ml():
                                         properties:
                                             regex:
                                                 type: string
+                                        required:
+                                          - regex
                         algo:
                             type: object
                             properties:
@@ -543,8 +560,9 @@ def apply_ml():
                             for i in range(len(class_names))
                         },
                     },
+                    'truth': str(truth),
                 }
-                for patient_id, pair in zip(state.train.patients, confs.tolist())
+                for patient_id, pair, truth in zip(state.train.patients, confs.tolist(), ds.y)
             ],
         }
 
