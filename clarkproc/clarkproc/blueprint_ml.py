@@ -1,7 +1,6 @@
 """Blueprint for machine learning endpoints."""
 from collections import defaultdict
 import datetime
-import math
 import logging
 import re
 
