@@ -3,6 +3,7 @@ from collections import defaultdict
 import datetime
 import logging
 import re
+
 from flask import Blueprint, jsonify, request
 import numpy as np
 import pandas as pd
@@ -154,7 +155,7 @@ def fhir_to_dataframe(patients, plan):
 
         # "patient" features
         if 'numeric' in patient_plan.get('age', {}).get('features', []):
-            patient_features['age_in_days'] = patient.get_age_in_days(reference_date)
+            patient_features['age_in_years'] = patient.get_age_in_years(reference_date)
         if 'binned' in patient_plan.get('age', {}).get('features', []):
             age_in_years = patient.get_age_in_years(reference_date)
             patient_features['age_bin'] = next(
