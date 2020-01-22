@@ -545,8 +545,9 @@ def apply_ml():
                             for i in range(len(class_names))
                         },
                     },
+                    'truth': str(truth),
                 }
-                for patient_id, pair in zip(state.train.patients, confs.tolist())
+                for patient_id, pair, truth in zip(state.train.patients, confs.tolist(), ds.y)
             ],
         }
 
