@@ -50,7 +50,6 @@ const CrossFilterController = {
       .append('div')
       .attr('id', 'DCChartData');
 
-    console.log(props);
     const noTruth = props.entry[0].truth === undefined;
     if (!noTruth) {
       // Top row of charts (trueLabel row chart, Classifier Label row chart & pie chart)
