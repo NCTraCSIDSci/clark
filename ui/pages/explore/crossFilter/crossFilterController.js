@@ -50,6 +50,7 @@ const CrossFilterController = {
       .append('div')
       .attr('id', 'DCChartData');
 
+    console.log(props);
     const noTruth = props.entry[0].truth === undefined;
     if (!noTruth) {
       // Top row of charts (trueLabel row chart, Classifier Label row chart & pie chart)
@@ -476,9 +477,9 @@ const CrossFilterController = {
         (d) => d.max_conf,
       ];
       if (!noTruth) { // Append these table data generators at correct locations if truth provided
-        columnFunctions.splice(2, 0, (d) => (d.misclassified === 'Misclassified' ? 'Yes' : 'No'));
-        columnFunctions.splice(3, 0, (d) => d.true_label);
-        columnFunctions.splice(5, 0, (d) => d.true_conf);
+        columnFunctions.splice(1, 0, (d) => (d.misclassified === 'Misclassified' ? 'Yes' : 'No'));
+        columnFunctions.splice(2, 0, (d) => d.true_label);
+        columnFunctions.splice(4, 0, (d) => d.true_conf);
       }
       // Append data generators for class confidences
       for (let i = 0; i < labels.length; i += 1) { // Note use of `let` to prevent callback `i` always being labels.length
