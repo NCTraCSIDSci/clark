@@ -27,7 +27,7 @@ def ingest_fhir(paths):
 
     # Iterate over provided paths and glob to expand wildcards.
     for p in paths:
-        files = glob(p)
+        files = glob(p, recursive=True)
 
         if not files:
             messages['general'].append(f'ERROR: No files found in path "{p}".')
