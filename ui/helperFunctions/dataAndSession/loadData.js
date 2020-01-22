@@ -11,19 +11,22 @@ function validateParsing(messages, popup) {
       }
     });
   });
-  popup.showModal({
-    disableBackdrop: false,
-    error: true,
-    header: 'Warning: Failed to parse some files',
-    text: errors.join('\n'),
-    actions: [
-      {
-        text: 'Continue',
-        autoFocus: true,
-        click: () => popup.toggle(false),
-      },
-    ],
-  });
+  // Only if there are errors do we show the modal
+  if (errors.length) {
+    popup.showModal({
+      disableBackdrop: false,
+      error: true,
+      header: 'Warning: Failed to parse some files',
+      text: errors.join('\n'),
+      actions: [
+        {
+          text: 'Continue',
+          autoFocus: true,
+          click: () => popup.toggle(false),
+        },
+      ],
+    });
+  }
 }
 
 /**

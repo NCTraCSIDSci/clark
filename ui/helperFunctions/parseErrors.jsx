@@ -50,15 +50,20 @@ function parseErrors(errorObj, snackbar) {
         );
       }
     } else if (Object.keys(errorObj[key]).length) {
-      errs.push(
-        <Button
-          key={`${key}Errors`}
-          onClick={() => downloadErrors(key, errorObj[key], snackbar)}
-          variant="contained"
-        >
-          {`Download ${prettyString(key)} Errors`}
-        </Button>,
-      );
+      // Check if any files have any errors
+      const hasErrors = Object.keys(errorObj[key]).find((file) => errorObj[key][file].length);
+      // Only if there are errors do we show the button
+      if (hasErrors) {
+        errs.push(
+          <Button
+            key={`${key}Errors`}
+            onClick={() => downloadErrors(key, errorObj[key], snackbar)}
+            variant="contained"
+          >
+            {`Download ${prettyString(key)} Errors`}
+          </Button>,
+        );
+      }
     }
   });
   return errs;
