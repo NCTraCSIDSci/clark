@@ -14,9 +14,9 @@ const restructureJson = (jsonObj, noTruth) => {
       // name: entry.subject.reference,
     };
     if (!noTruth) { // Don't set these up if no Truth provided
-      jsonElement.true_conf = jsonObj.true_conf[i];
-      jsonElement.true_label = jsonObj.true_label[i];
-      jsonElement.misclassified = jsonObj.max_label[i] !== jsonObj.true_label[i] ? 'Misclassified' : 'Correct';
+      jsonElement.true_label = entry.truth;
+      jsonElement.true_conf = confidences[entry.truth];
+      jsonElement.misclassified = jsonElement.max_label !== entry.truth ? 'Misclassified' : 'Correct';
     }
     outputJson.push(jsonElement);
   }
