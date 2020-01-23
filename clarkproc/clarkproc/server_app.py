@@ -72,5 +72,5 @@ if __name__ == '__main__':
         host=server_host,
         port=server_port,
         debug=False,
-        use_reloader=True,
+        use_reloader=False,
     )
