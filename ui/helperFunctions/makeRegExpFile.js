@@ -11,7 +11,7 @@ function makeRegExpFile(tab, data, sectionBreak, ignoreHeader, ignoreUnnamed) {
   });
   if (tab === 'sections') {
     const sections = {
-      section_break: sectionBreak,
+      section_break: (sectionBreak === '') ? null : sectionBreak,
       ignore_header: ignoreHeader,
       ignore_untagged: ignoreUnnamed,
       tags: json,
