@@ -14,7 +14,7 @@ from clarkproc.fhir.models import (DocumentReference,
                                    Resource,
                                    VitalSigns)
 
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 
 def ingest_fhir(paths):

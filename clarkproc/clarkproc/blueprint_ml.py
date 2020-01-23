@@ -12,7 +12,7 @@ import sklearn
 from clarkproc.engine import classification, onehot
 import clarkproc.state as state
 
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 bp_ml = Blueprint('ml', __name__)
 
@@ -210,7 +210,6 @@ def fhir_to_dataframe(patients, plan):
         })
 
         features.append(patient_features)
-    # logger.error(features)
     df = pd.DataFrame(features)
     df = df.set_index('id')
     return df

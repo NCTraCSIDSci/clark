@@ -1,4 +1,5 @@
 -e .
+appdirs
 attrs==19.3.0
 Click==7.0
 fhir.resources==5.0.1

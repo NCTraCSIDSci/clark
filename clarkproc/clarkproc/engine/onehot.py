@@ -3,7 +3,7 @@ import logging
 import pandas as pd
 import sklearn
 
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 
 class FhirOneHotEncoder():

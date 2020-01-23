@@ -1,6 +1,7 @@
 """Blueprint for FHIR endpoints."""
 from collections import defaultdict
 from functools import wraps
+import logging
 
 from flask import Blueprint, jsonify, request
 
@@ -11,6 +12,7 @@ from clarkproc.fhir.models import CodeValue
 bp_fhir = Blueprint('fhir', __name__)
 
 TEST_DATA_INDICATOR = 'is_test_data'
+LOGGER = logging.getLogger(__name__)
 
 
 def require_fhir(f):
