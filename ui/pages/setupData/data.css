@@ -1,7 +1,9 @@
 #setupDataContainer {
     display: flex;
     width: 98%;
-    height: 95%;
+    height: calc(100% - 75px);
+    flex-wrap: wrap;
+    margin-top: 15px;
 }
 #tabsContainer {
     width: 49%;
@@ -54,9 +56,10 @@
 #setupDataList {
     height: calc(100% - 60px);
 }
-.topRightButton {
-    position: fixed;
-    top: 15px;
-    right: 15px;
-    z-index: 3100;
+.bottomContinueButton {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px 0px;
 }

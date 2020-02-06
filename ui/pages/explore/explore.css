@@ -1,9 +1,12 @@
-#resultsExplorer {
-    width: 90%;
-    margin: 20px;
-    padding: 30px;
+#resultsContainer {
+    width: 100%;
     min-height: 400px;
     overflow: auto;
+}
+#resultsExplorer {
+    width: 90%;
+    padding: 30px;
+    margin: 15px auto;
 }
 #algoRunning {
     width: 100%;

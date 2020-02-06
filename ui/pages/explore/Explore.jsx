@@ -64,40 +64,42 @@ function Explore(props) {
   return (
     <>
       {tab === 'explore' && (
-        <Paper id="resultsExplorer">
-          {!algoRunning ? (
-            <>
-              {!recompute ? (
-                <>
-                  <div id="D3CrossFilterContainer" />
-                  <PatientModal
-                    type="fhir"
-                    container={document.getElementById('FilteredRecords')}
-                    popup={popup}
-                    patientDetails={patientDetails}
-                    regex={regex}
-                    explore
-                  />
-                </>
-              ) : (
-                <div id="recompute">
-                  <Button
-                    onClick={explore}
-                    variant="contained"
-                    id="recomputeButton"
-                  >
-                    Rerun Algorithm
-                  </Button>
-                </div>
-              )}
-            </>
-          ) : (
-            <div id="algoRunning">
-              <CircularProgress size={150} thickness={2} />
-              <h1>Algorithm Running...</h1>
-            </div>
-          )}
-        </Paper>
+        <div id="resultsContainer">
+          <Paper id="resultsExplorer">
+            {!algoRunning ? (
+              <>
+                {!recompute ? (
+                  <>
+                    <div id="D3CrossFilterContainer" />
+                    <PatientModal
+                      type="fhir"
+                      container={document.getElementById('FilteredRecords')}
+                      popup={popup}
+                      patientDetails={patientDetails}
+                      regex={regex}
+                      explore
+                    />
+                  </>
+                ) : (
+                  <div id="recompute">
+                    <Button
+                      onClick={explore}
+                      variant="contained"
+                      id="recomputeButton"
+                    >
+                      Rerun Algorithm
+                    </Button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div id="algoRunning">
+                <CircularProgress size={150} thickness={2} />
+                <h1>Algorithm Running...</h1>
+              </div>
+            )}
+          </Paper>
+        </div>
       )}
     </>
   );

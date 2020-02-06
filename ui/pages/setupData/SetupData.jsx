@@ -43,14 +43,17 @@ function SetupData(props) {
             type="fhir"
             popup={popup}
           />
-          <Button
-            onClick={submit}
-            className="topRightButton"
-            variant="contained"
-            disabled={!metaData.badgeNum && !regex.badgeNum}
-          >
-            Continue
-          </Button>
+          <div className="bottomContinueButton">
+            <Button
+              className="continueButton"
+              onClick={submit}
+              variant="contained"
+              disabled={!metaData.badgeNum && !regex.badgeNum}
+            >
+              Continue
+            </Button>
+
+          </div>
         </div>
       )}
     </>

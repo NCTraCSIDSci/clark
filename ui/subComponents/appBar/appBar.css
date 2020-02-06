@@ -1,5 +1,6 @@
 .appToolbar {
     padding: 0;
+    min-height: 50px;
 }
 #appTitle {
     margin-left: 20px;
@@ -19,7 +20,7 @@
     align-items: center;
     justify-content: flex-end;
     padding: 8px 10px;
-    height: 64px;
+    height: 50px;
 }
 .hide {
     display: none !important;
@@ -55,7 +56,7 @@
 #drawerList {
     display: flex;
     flex-direction: column;
-    height: calc(100% - 64px);
+    height: calc(100% - 50px);
 }
 .bottomDrawerButtons {
     margin-top: auto;

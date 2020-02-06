@@ -137,14 +137,16 @@ function SetupAlgo(props) {
               </div>
             )}
           </Paper>
-          <Button
-            className="topRightButton"
-            variant="contained"
-            onClick={explore}
-            disabled={!algo.loadedTestData && algo.evalMethod === 'Evaluation Corpus'}
-          >
-            Explore
-          </Button>
+          <div className="bottomContinueButton">
+            <Button
+              className="continueButton"
+              variant="contained"
+              onClick={explore}
+              disabled={!algo.loadedTestData && algo.evalMethod === 'Evaluation Corpus'}
+            >
+              Explore
+            </Button>
+          </div>
         </div>
       )}
     </>
