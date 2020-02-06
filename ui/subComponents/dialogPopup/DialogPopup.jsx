@@ -14,6 +14,7 @@ const DialogPopup = (props) => {
   const dialogHeaderId = popup.content.error ? 'errorDialogHeader' : 'dialogHeader';
   return (
     <Dialog
+      className="backdropCover"
       open={popup.show}
       onClose={() => popup.toggle(false)}
       maxWidth="sm"

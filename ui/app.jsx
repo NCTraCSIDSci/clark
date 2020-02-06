@@ -23,7 +23,7 @@ import useMetaData from './customHooks/useMetaData';
 import useRegex from './customHooks/useRegex';
 import useAlgo from './customHooks/useAlgoSetup';
 
-import loadDataFunction from './helperFunctions/dataAndSession/loadData';
+import { loadData as loadDataFunction } from './helperFunctions/dataAndSession/loadData';
 import saveSessionFunction from './helperFunctions/dataAndSession/saveSession';
 import loadSessionFunction from './helperFunctions/dataAndSession/loadSession';
 import pingServer from './helperFunctions/pingServer';
