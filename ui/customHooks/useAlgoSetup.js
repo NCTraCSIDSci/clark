@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import API from '../API';
 
 import getDirPath from '../helperFunctions/dataAndSession/getDirPath';
+import { validateParsing } from '../helperFunctions/dataAndSession/loadData';
 
 const defaultAlgoOptions = [
   { id: 'LinearSVM', name: 'Linear SVM' },
@@ -48,9 +49,11 @@ function useAlgoSetup(popup, serverUp) {
     if (filePath) {
       setLoading(true);
       API.load([filePath], 'test')
-        .then(() => {
+        .then((res) => {
           setLoading(false);
           setLoadedTestData(true);
+          validateParsing(res.messages, popup);
+          popup.receiveTestErrors(res.messages);
           setDirPath(filePath);
           popup.showSnackbar({
             text: 'Successfully loaded test data.',
@@ -59,10 +62,11 @@ function useAlgoSetup(popup, serverUp) {
         })
         .catch((err) => {
           setLoading(false);
+          popup.receiveTestErrors({});
           popup.showModal({
             disableBackdrop: false,
             error: true,
-            header: 'Error Uploading Data',
+            header: 'Error Uploading Test Data',
             text: err,
             actions: [{
               text: 'Close',

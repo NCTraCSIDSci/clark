@@ -17,6 +17,7 @@ import TuneIcon from '@material-ui/icons/Tune';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import SearchIcon from '@material-ui/icons/Search';
 import WarningIcon from '@material-ui/icons/Warning';
+import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
 import SaveIcon from '@material-ui/icons/Save';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
@@ -123,6 +124,18 @@ function MenuBar(props) {
                 <ListItemIcon><WarningIcon /></ListItemIcon>
               </Badge>
               <ListItemText primary="Data Errors" />
+            </ListItem>
+            <ListItem
+              button
+              onClick={popup.showTestErrors}
+              disabled={!popup.testErrors.length || algoRunning}
+            >
+              <Badge
+                badgeContent={popup.testErrors.length ? <ErrorIcon id="errorsPresent" /> : ''}
+              >
+                <ListItemIcon><ReportProblemOutlinedIcon /></ListItemIcon>
+              </Badge>
+              <ListItemText primary="Test Data Errors" />
             </ListItem>
             <ListItem
               button
