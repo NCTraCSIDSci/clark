@@ -9,15 +9,26 @@
 }
 #content {
     width: 100%;
-    margin-top: 64px;
+    margin-top: 50px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    /* justify-content: center; */
 }
 .hide {
     display: none;
 }
 .MuiPaper-rounded {
     border-radius: 15px;
+}
+.continueButton {
+    color: #183042;
+    background-color: #4E92C2;
+}
+.continueButton:hover {
+    background-color: #247ebf;
+}
+.continueButton:disabled {
+    color: #bcc8d1;
+    background-color: #80b2d6;
 }
