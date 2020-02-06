@@ -133,7 +133,10 @@ function RegexTable(props) {
                   >
                     {editable && (
                       <TableCell>
-                        <IconButton onClick={() => regex.openModal(i)}>
+                        <IconButton
+                          onClick={() => regex.openModal(i)}
+                          disabled={regex.gettingCoverage}
+                        >
                           <EditIcon />
                         </IconButton>
                       </TableCell>
@@ -153,10 +156,13 @@ function RegexTable(props) {
                     )}
                     {regex.tab === 'expressions' && editable && (
                       <TableCell>
-                        {row.hasOwnProperty('coverage') ? (
-                          row.coverage / numPatients
+                        {row.hasOwnProperty('coverage') ? ( // eslint-disable-line
+                          (row.coverage / numPatients).toPrecision(3)
                         ) : (
-                          <IconButton onClick={() => regex.getCoverage(i, row.compiled || row.regex)}>
+                          <IconButton
+                            onClick={() => regex.getCoverage(i, row.compiled || row.regex)}
+                            disabled={regex.gettingCoverage}
+                          >
                             <SearchIcon />
                           </IconButton>
                         )}
@@ -169,7 +175,10 @@ function RegexTable(props) {
                     )}
                     {editable && (
                       <TableCell>
-                        <IconButton onClick={() => regex.remove(i)}>
+                        <IconButton
+                          onClick={() => regex.remove(i)}
+                          disabled={regex.gettingCoverage}
+                        >
                           <DeleteIcon />
                         </IconButton>
                       </TableCell>
