@@ -51,7 +51,7 @@ function RegexTable(props) {
             <div id="sectionBreak">
               <h2>Section Breaker: </h2>
               <TextField
-                value={regex.sectionBreak}
+                value={(regex.sectionBreak === null) ? '' : regex.sectionBreak}
                 onChange={(e) => regex.updateSectionBreak(e.target.value)}
                 variant="outlined"
                 disabled={!editable}

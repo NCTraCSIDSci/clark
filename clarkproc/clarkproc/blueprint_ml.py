@@ -536,6 +536,9 @@ def apply_ml():
 
         confs = np.round(confs, 4)
 
+        if np.any(np.isnan(confs)):
+            raise ValueError('NaN value(s). Data may be constant.')
+
         scores = sklearn.model_selection.cross_val_score(clf.classifier, ds.data, ds.y, cv=fold_strategy)
 
         true_conf = [row[label] for row, label in zip(confs, ds.y)]

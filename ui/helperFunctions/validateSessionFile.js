@@ -173,7 +173,7 @@ const sessionSchema = {
           type: 'object',
           properties: {
             section_break: {
-              type: 'string',
+              type: ['string', 'null'],
             },
             ignore_header: {
               type: 'boolean',
