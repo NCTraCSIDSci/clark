@@ -47,6 +47,8 @@ MANIFEST
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
+# we want to include the spec file for building
+!clarkproc/server.spec
 
 # Installer logs
 pip-log.txt

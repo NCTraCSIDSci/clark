@@ -117,7 +117,7 @@ function createWindow() {
 
     let html = './build_ui/index.html';
     if (developmentMode) {
-      html = './ui/index.html';
+      html = './ui/devIndex.html';
     }
     // and load the index.html of the app.
     mainWindow.loadURL(url.format({
