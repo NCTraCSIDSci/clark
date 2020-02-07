@@ -58,6 +58,7 @@ function useRegex(popup) {
   const [ignore, updateIgnore] = useState(false);
   const [ignoreHeader, updateHeaderIgnore] = useState(false);
   const [ignoreUnnamed, updateUnnamedIgnore] = useState(false);
+  const [gettingCoverage, setGettingCoverage] = useState(false);
 
   function remove(i) {
     const tempRegex = cloneDeep(regexList);
@@ -235,13 +236,16 @@ function useRegex(popup) {
         tags: regexList.sections,
       },
     };
+    setGettingCoverage(true);
     API.coverage(data)
       .then((res) => {
+        setGettingCoverage(false);
         const tempRegex = cloneDeep(regexList);
         [tempRegex.expressions[i].coverage] = Object.values(res);
         updateRegexList(tempRegex);
       })
       .catch(() => {
+        setGettingCoverage(false);
         popup.showSnackbar({
           text: 'Unable to get coverage.',
           type: 'error',
@@ -392,6 +396,7 @@ function useRegex(popup) {
     uploadRegex,
     saveRegex,
     resetRegex,
+    gettingCoverage,
   };
 }
 
