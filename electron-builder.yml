@@ -17,7 +17,7 @@ files: [
 extraFiles: [
     {
         from: "clarkproc/dist/clark_server",
-        to: "server/clark_server"
+        to: "server"
     },
     {
         from: "config.json",
