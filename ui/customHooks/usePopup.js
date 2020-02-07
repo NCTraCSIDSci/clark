@@ -5,6 +5,7 @@ function usePopup() {
   const [content, setContent] = useState({});
   const [show, toggle] = useState(false);
   const [errors, updateErrors] = useState([]);
+  const [testErrors, updateTestErrors] = useState([]);
   const [showSnack, toggleSnackbar] = useState(false);
   const [snackbarContent, setSnackbarContent] = useState({});
 
@@ -33,15 +34,37 @@ function usePopup() {
   }
 
   function receiveErrors(errs) {
-    updateErrors(parseErrors(errs, showSnackbar, toggle));
+    updateErrors(parseErrors(errs, showSnackbar));
+  }
+
+  function receiveTestErrors(errs) {
+    updateTestErrors(parseErrors(errs, showSnackbar));
   }
 
   function showErrors() {
     const config = {
       disableBackdrop: false,
       error: true,
-      header: 'Errors',
+      header: 'Data Errors',
       text: errors,
+      actions: [
+        {
+          text: 'Close',
+          autoFocus: true,
+          click: () => toggle(false),
+        },
+      ],
+    };
+    setContent(config);
+    toggle(true);
+  }
+
+  function showTestErrors() {
+    const config = {
+      disableBackdrop: false,
+      error: true,
+      header: 'Test Data Errors',
+      text: testErrors,
       actions: [
         {
           text: 'Close',
@@ -59,9 +82,12 @@ function usePopup() {
     toggle,
     content,
     errors,
+    testErrors,
     receiveErrors,
+    receiveTestErrors,
     showModal,
     showErrors,
+    showTestErrors,
     showSnackbar,
     showSnack,
     toggleSnackbar,

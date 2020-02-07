@@ -22,3 +22,6 @@
 #dialogActions {
     background-color: #e6e7e8;
 }
+.backdropCover {
+    z-index: 3500 !important;
+}

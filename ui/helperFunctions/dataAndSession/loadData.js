@@ -79,4 +79,4 @@ function loadData(
   }
 }
 
-export default loadData;
+export { loadData, validateParsing };
