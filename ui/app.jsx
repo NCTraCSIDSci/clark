@@ -191,10 +191,10 @@ function App() {
               />
             </>
           ) : (
-            <>
+            <div id="initialLoading">
               <CircularProgress size={150} thickness={2} />
               <h1>Loading...</h1>
-            </>
+            </div>
           )}
         </div>
       </div>
