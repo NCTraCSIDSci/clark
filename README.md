@@ -10,12 +10,12 @@ CLARK is a cross-platform desktop application leveraging [Electron](https://elec
 ## Development Instructions
 
 ### Python setup:
-Python setup requires a python3 and several dependencies found in `./server/requirements.txt`. These requirements are best installed in a virtual environment
+Python setup requires a python3 and several dependencies found in `./clarkproc/requirements.txt`. These requirements are best installed in a virtual environment
 - Set up a virtual environment. Ex. `python3 -m virtualenv ~/.venv/clark`
 - Activate the virtual environment. Ex. `source ~/.venv/clark/bin/activate`
 - Install the requirements
   ```
-    cd server
+    cd clarkproc
     pip install -r requirements.txt
     cd ..
   ```
@@ -27,20 +27,18 @@ npm install
 ```
 
 ### Run the application:
-From a command line with the activated python environment the application can be started using:
-#### Hot Reloading
-Open two terminals, in one run:
-```
-npm run watch
-```
-and in the other, activate the python environment and run:
+From a command line with the activated python environment, the application can be started using:
+(note: this will require you to run this command after you make any changes)
 ```
 npm start
 ```
-- If you don't want hot reloading, in one terminal run: (note: this will require you to run these commands again to see your changes)
+- If you would like automatic reloading when you make ui changes, open a terminal and run:
 ```
-npm run build_ui
-npm run electron
+npm run watch
+```
+Open another terminal, activate the python environment, and run:
+```
+npm electron
 ```
 
 ### Packaging

@@ -65,8 +65,8 @@
   },
   "scripts": {
     "watch": "webpack-dev-server --config webpack.dev.js",
-    "start": "electron ./main.js -d",
-    "electron": "electron ./main.js",
+    "electron": "electron ./main.js -d",
+    "start": "webpack --config webpack.prod.js && electron ./main.js",
     "build_ui": "webpack --config webpack.prod.js",
     "build_server": "cd ./clarkproc && pyinstaller server.spec",
     "build_standalone": "electron-builder --dir",
