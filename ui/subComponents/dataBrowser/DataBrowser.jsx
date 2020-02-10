@@ -10,6 +10,10 @@ import './dataBrowser.css';
 import usePatientDetails from '../../customHooks/usePatientDetails';
 import PatientDetails from '../patientModal/PatientDetails';
 
+/**
+ * Panel list that shows all patients, sortable, can open a modal
+ * that shows specific patient info along with marked up notes
+ */
 function DataBrowser(props) {
   const {
     patients, w, h, regex, type, popup,

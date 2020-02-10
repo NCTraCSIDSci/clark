@@ -70,6 +70,14 @@ function addNonHighlight(ranges, length) {
   return inflated;
 }
 
+/**
+ * This highlight function iterates over the provided text to find all
+ * instances of the specified regex, splits the text and highlights
+ * all the matches based on the color in the regex object.
+ * @param {*} text plain text of the note needing mark up.
+ * @param {*} expressions a list of regular expressions to specify
+ * text that needs to be marked up.
+ */
 function highlight(text, expressions) {
   if (text) {
     if (!expressions || !expressions.length || (expressions.length === 1 && !expressions[0].regex)) return [text];

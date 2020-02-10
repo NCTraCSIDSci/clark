@@ -115,6 +115,7 @@ function createWindow() {
 
     process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true;
 
+    // the devIndex looks for the bundled js on localhost
     let html = './build_ui/index.html';
     if (developmentMode) {
       html = './ui/devIndex.html';

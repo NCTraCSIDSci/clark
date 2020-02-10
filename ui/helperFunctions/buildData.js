@@ -1,5 +1,11 @@
 import { cloneDeep } from 'lodash';
 
+/**
+ * buildData takes a session object and converts it into
+ * the structure expected by the backend server.
+ * @param {*} session The master session object from all data received
+ * in the app.
+ */
 function buildData(session) {
   const regex = cloneDeep(session.unstructured_data);
   regex.features.forEach((exp) => {

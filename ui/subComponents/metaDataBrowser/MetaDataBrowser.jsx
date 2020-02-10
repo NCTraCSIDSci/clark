@@ -7,6 +7,13 @@ import Avatar from '@material-ui/core/Avatar';
 import MetaDataTable from './structuredData/MetaDataTable';
 import RegexTable from './regexTable/RegexTable';
 
+/**
+ * Browser containing tabs for both meta data and regex.
+ * Metadata includes things like labs, meds, visits.
+ * The regex tab lets the user specify specific regex that will
+ * find instances of text in patient notes to provide connections
+ * between patients with similar observations.
+ */
 function MetaDataBrowser(props) {
   const {
     type, numPatients, height, regex, metaData,

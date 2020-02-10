@@ -17,6 +17,7 @@ Python setup requires a python3 and several dependencies found in `./clarkproc/r
   ```
     cd clarkproc
     pip install -r requirements.txt
+    pip install -r requirements-dev.txt
     cd ..
   ```
 
@@ -38,7 +39,7 @@ npm run watch
 ```
 Open another terminal, activate the python environment, and run:
 ```
-npm electron
+npm run electron
 ```
 
 ### Packaging

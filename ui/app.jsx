@@ -50,6 +50,7 @@ function App() {
   const regex = useRegex(popup);
   const algo = useAlgo(popup, serverUp);
 
+  // keeps track of user progress
   function setSteps(value) {
     if (Array.isArray(value)) {
       updateSteps(updateSessionSteps(steps, value));
@@ -58,6 +59,7 @@ function App() {
     }
   }
 
+  // reset app back to initial state
   function resetState() {
     metaData.resetMetaData();
     regex.resetRegex();
@@ -104,6 +106,7 @@ function App() {
     );
   }
 
+  // runs the specified algorithm with all the data
   function explore() {
     setAlgoRunning(true);
     setTab('explore');
@@ -134,6 +137,7 @@ function App() {
       });
   }
 
+  // ping server to make sure it's running
   useEffect(() => {
     pingServer(popup, updateServer);
   }, []);

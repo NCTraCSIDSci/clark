@@ -23,6 +23,10 @@ import PatientNotes from './PatientNotes';
 const blacklist = ['birthDate', 'gender', 'id', 'maritalStatus', 'label'];
 const Transition = React.forwardRef((props, ref) => <Zoom ref={ref} {...props} />); // eslint-disable-line react/jsx-props-no-spreading
 
+/**
+ * Individual patient modal, showing specific info for the patient
+ * selected.
+ */
 const PatientDetails = (props) => {
   const {
     patientDetails, container, regex, type, popup, explore,
