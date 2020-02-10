@@ -1,11 +1,16 @@
 # CLARK (Clinical Annotation Research Kit),
 
-CLARK is a natural language processing and machine learning-based application designed to make free-text data useful for computable phenotyping. CLARK takes free-text clinical notes as input and classifies those notes (and the associated patients) based on features (words and phrases) defined by the user. For each patient, CLARK outputs a classification (e.g., “Type 1 diabetic”), a confidence level, and significant features, essentially deriving structured “facts” from the contents of that patient’s unstructured notes. Thus far, CLARK has been applied at UNC to create computable phenotypes for diabetes, uterine fibroids, and primary ciliary dyskinesia (PCD).
+CLARK is a natural language processing and machine learning application designed to make free-text data useful for computable phenotyping. CLARK takes free-text clinical notes as input and classifies those notes (and the associated patients) based on features (words and phrases) defined by the user. For each patient, CLARK outputs a classification (e.g., “Type 1 diabetic”), a confidence level, and significant features, essentially deriving structured “facts” from the contents of that patient’s unstructured notes. Thus far, CLARK has been applied at UNC to create computable phenotypes for diabetes, uterine fibroids, and primary ciliary dyskinesia (PCD).
 
-CLARK was developed by [NC TRaCS](https://tracs.unc.edu) and [CoVar](https://covar.com).
+CLARK was developed by [NC TraCS](https://tracs.unc.edu) and [CoVar](https://covar.com).
 
 ## About
 CLARK is a cross-platform desktop application leveraging [Electron](https://electronjs.org), a Python based machine learning engine and a [React](http://Reactjs.org) based user interface.
+
+## Executable and User Documentation
+To download the CLARK executable without having to package it from source yourself, go to [the NC TraCS website](https://tracs.unc.edu/index.php/tracs-resources/sharehub/category/2-informatics) and download the CLARK zip file. (A demo dataset is also included.)
+
+User documentation is available in the /docs folder in this repo, and can also be viewed at [this link](https://htmlpreview.github.io/?https://raw.githubusercontent.com/NCTraCSIDSci/clark/master/docs/clark-documentation.html).
 
 ## Development Instructions
 
