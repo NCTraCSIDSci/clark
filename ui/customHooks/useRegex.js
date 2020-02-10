@@ -151,6 +151,8 @@ function useRegex(popup) {
     updateActiveRegex(value);
   }
 
+  // When the modal closes on the expressions or library tab,
+  // update the linked regex between the two
   useEffect(() => {
     if (tab !== 'sections' && !showModal && regexList.expressions.length) {
       const tempRegexList = updateCompiledExpressions(regexList);
@@ -158,6 +160,8 @@ function useRegex(popup) {
     }
   }, [tab, showModal]);
 
+  // when modifying the name of a library regex,
+  // update it's linked expression
   useEffect(() => {
     const debounced = setTimeout(() => {
       if (tab === 'library' && regexList.expressions.length) {
@@ -169,7 +173,8 @@ function useRegex(popup) {
   }, [activeName]);
 
   /**
-   * This use effect watches everything and updates the valid regex that's passed to the patient browser
+   * This use effect watches everything and updates
+   * the valid regex that's passed to the patient browser
    */
   useEffect(() => {
     const debounced = setTimeout(() => {
@@ -216,6 +221,8 @@ function useRegex(popup) {
     tab, regexList, showModal, sectionBreak, activeRegex, ignore,
   ]);
 
+  // If anything changes in the sections tab, remove all
+  // expression coverages
   useEffect(() => {
     if (tab === 'sections') {
       regexList.expressions.forEach((exp) => {
