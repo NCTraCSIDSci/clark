@@ -15,37 +15,45 @@ User documentation is available in the /docs folder in this repo, and can also b
 ## Development Instructions
 
 ### Python setup:
-Python setup requires a python3 and several dependencies found in `./server/requirements.txt`. These requirements are best installed in a virtual environment
+Python setup requires a python3 and several dependencies found in `./clarkproc/requirements.txt`. These requirements are best installed in a virtual environment
 - Set up a virtual environment. Ex. `python3 -m virtualenv ~/.venv/clark`
 - Activate the virtual environment. Ex. `source ~/.venv/clark/bin/activate`
 - Install the requirements
   ```
-    cd server
+    cd clarkproc
     pip install -r requirements.txt
+    pip install -r requirements-dev.txt
     cd ..
   ```
 
 ### User Interface
 Building the user interface requires [NPM](https://www.npmjs.com). Dependencies can be installed by calling
-
 ```
 npm install
 ```
 
-The user interface is transpiled and bundled using webpack
-```
-npm run build_ui
-```
-
 ### Run the application:
-From a command line with the activated python environment the application can be started using
+From a command line with the activated python environment, the application can be started using:
+(note: this will require you to run this command after you make any changes)
 ```
 npm start
+```
+- If you would like automatic reloading when you make ui changes, open a terminal and run:
+```
+npm run watch
+```
+Open another terminal, activate the python environment, and run:
+```
+npm run electron
 ```
 
 ### Packaging
 Packaging is handled using [PyInstaller](http://www.pyinstaller.org) to bundle the Python engine and [Electron Builder](http://electron.build) to package everything together and build standalone applications and/or installers. Execution of each of these commands can be done using npm scripts.
 
+- Bundles the javascript
+  ```
+  npm run build_ui
+  ```
 - Bundles python libraries into standalone binary
   ```
   npm run build_server

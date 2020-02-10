@@ -1,0 +1,88 @@
+#patientModalTitle {
+    text-align: center;
+    background-color: #97bedb;
+    color: #183042;
+    padding: 5px;
+    position: relative;
+}
+#patientModalTitle > h2 {
+    margin: 5px 0px;
+}
+#patientDetails {
+    position: relative;
+    background-color: #fafbfc;
+    font-size: 17px;
+    height: 300px;
+    padding: 0;
+}
+#drawerOpenButton {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+}
+#drawerCloseButton {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 5px;
+    padding: 2px 0px;
+}
+#changeRegexTabButton {
+    float: right;
+    top: 15px;
+    right: 15px;
+    background-color: #4E92C2;
+    color: #183042;
+}
+#changeRegexTabButton:hover {
+    background-color: #247ebf;
+}
+#patientNotes {
+    display: flex;
+    height: 100%;
+}
+#noteIds {
+    width: 30%;
+    height: 100%;
+    overflow: auto;
+}
+#patientNote {
+    width: 70%;
+    height: 100%;
+    overflow: auto;
+    text-align: left;
+}
+#patientNoteText {
+    margin: 25px;
+}
+#noNotes {
+    margin: 10px;
+    text-align: center;
+    width: 100%;
+}
+[data-md-tooltip] {
+    position: relative;
+}
+[data-md-tooltip]:before {
+    content: attr(data-md-tooltip);
+    position: absolute;
+    bottom: -35px;
+    left: 50%;
+    padding: 8px;
+    transform: translateX(-50%) scale(0);
+    transition: transform 0.1s ease-in-out;
+    transform-origin: top;
+    background: #616161e6;
+    color: white;
+    border-radius: 2px;
+    font-size: 12px;
+    font-family: Roboto,sans-serif;
+    font-weight: 400;
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    z-index: 9999;
+}
+[data-md-tooltip]:hover:before {
+    transform: translateX(-50%) scale(1);
+}

@@ -1,0 +1,42 @@
+#dataBrowser {
+    overflow: auto;
+    background-color: white;
+}
+.oddRow {
+    background-color: #f7f7f7;
+}
+.browserHeaderRow {
+    background-color: #97bedb;
+}
+.no-border {
+    border-bottom: none;
+}
+.browserCell {
+    display: flex;
+    justify-content: center;
+}
+.browserHeaderCell {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding-top: 5px !important;
+    color: #183042;
+}
+.browserHeaderContainer {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+.sortIcon {
+    display: inline-block;
+}
+.searchTextField {
+    background-color: #f8f8f8;
+    border-radius: 5px;
+}
+.evenRow:hover, .oddRow:hover {
+    cursor: pointer;
+    background-color: #e5e5e5;
+}

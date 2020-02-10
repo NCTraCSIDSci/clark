@@ -1,0 +1,56 @@
+#topRegexBar {
+    height: 40%;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+}
+#regexTable {
+    display: block;
+    overflow: auto;
+}
+#addRegexButton {
+    height: 58px;
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+}
+#regexModalContent {
+    display: flex;
+    flex-direction: column;
+}
+.regexIconCell {
+    width: 50px;
+}
+.regexColor {
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+}
+.regexTableRow {
+    border-bottom: 1px solid lightgrey;
+    border-collapse: collapse;
+}
+#sectionBreak {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding-top: 10px;
+}
+#bottomRegexButtons {
+    margin-top: auto;
+    display: flex;
+    justify-content: flex-end;
+    padding: 5px;
+    border-top: 2px solid lightgrey;
+}
+#bottomRegexButtons > * {
+    margin-right: 5px;
+}
+.sectionHeadAndUnnamed {
+    align-items: center;
+    padding: 0px 20px;
+}
+.sectionHeadAndUnnamed > h4 {
+    margin: 0;
+    margin-right: auto;
+}

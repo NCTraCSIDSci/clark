@@ -1,101 +1,81 @@
 {
   "name": "clark",
   "version": "1.0.0",
-  "description": "CLARK for UNC by CoVar",
+  "description": "CLARK: CLinical Annotation Research Kit",
   "main": "./main.js",
   "homepage": "https://github.com/NCTraCSIDSci/clark",
   "repository": "https://github.com/NCTraCSIDSci/clark",
-  "author": "Covar",
+  "author": "CoVar Applied Technologies",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
-    "@babel/preset-react": "^7.0.0",
-    "babel-cli": "^6.18.0",
+    "@babel/core": "^7.7.2",
+    "@babel/preset-env": "^7.7.1",
+    "@babel/preset-react": "^7.7.0",
+    "babel-cli": "^6.26.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-export-extensions": "^6.22.0",
-    "babel-plugin-transform-react-jsx": "^6.8.0",
-    "css-loader": "^3.1.0",
-    "electron": "^1.4.1",
-    "electron-builder": "^19.49.2",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "braces": "^3.0.2",
+    "css-loader": "^3.2.0",
+    "electron": "^7.1.1",
+    "electron-builder": "^22.1.0",
     "electron-devtools-installer": "^2.2.4",
-    "eslint": "^3.14.1",
-    "eslint-config-airbnb": "^14.0.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^3.0.2",
-    "eslint-plugin-react": "^6.9.0",
-    "file-loader": "^4.1.0",
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.16.0",
+    "eslint-plugin-react-hooks": "^2.3.0",
+    "file-loader": "^4.2.0",
     "html-webpack-plugin": "^3.2.0",
-    "style-loader": "^0.23.1",
-    "url-loader": "^2.1.0",
-    "webpack": "^4.36.1",
-    "webpack-cli": "^3.3.6",
-    "webpack-merge": "^4.2.1"
+    "pre-commit": "^1.2.2",
+    "style-loader": "^1.0.0",
+    "url-loader": "^2.2.0",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0",
+    "webpack-merge": "^4.2.2"
   },
   "dependencies": {
-    "ag-grid": "8.0.x",
-    "ag-grid-react": "8.0.x",
+    "@date-io/date-fns": "^1.3.13",
+    "@material-ui/core": "^4.6.0",
+    "@material-ui/icons": "^4.5.1",
+    "@material-ui/pickers": "^3.2.8",
+    "@material-ui/styles": "^4.6.0",
+    "ajv": "^6.10.2",
     "axios": "^0.19.0",
-    "bootstrap": "^3.3.7",
-    "crossfilter": "^1.3.12",
-    "d3": "^3.0",
-    "d3-tip": "^0.7.1",
-    "dc": "^2.1.2",
-    "electron-dl": "^1.6.0",
-    "jquery": "^3.1.1",
-    "markdown-it": "^9.1.0",
+    "crossfilter2": "^1.5.0",
+    "d3": "^5.14.2",
+    "date-fns": "^2.0.0-beta.5",
+    "dc": "^3.1.8",
+    "lodash": "^4.17.15",
+    "markdown-it": "^10.0.0",
     "minimist": "^1.2.0",
-    "react": "^15.4.1",
-    "react-bootstrap": "^0.30.7",
-    "react-data-grid": "^2.0.11",
-    "react-data-grid-addons": "^2.0.7",
-    "react-dom": "^15.4.1",
-    "remarkable": "^1.7.1",
-    "request": "^2.79.0",
-    "request-promise": "^4.1.1"
-  },
-  "build": {
-    "appId": "clark",
-    "mac": {
-      "category": "public.app-category.medical"
-    },
-    "win": {
-      "target": "nsis"
-    },
-    "directories": {
-      "buildResources": "./build_resources/",
-      "output": "./build_app"
-    },
-    "files": [
-      "build_resources/*",
-      "build_ui/*",
-      "main.js",
-      "config.json"
-    ],
-    "extraFiles": [
-      {
-        "from": "build_server/dist/clark_server",
-        "to": "server"
-      },
-      {
-        "from": "config.json",
-        "to": "server/config.json"
-      },
-      {
-        "from": "config.json",
-        "to": "Resources/app/config.json"
-      }
-    ],
-    "asar": false,
-    "compression": "normal",
-    "extends": null
+    "react": "^16.11.0",
+    "react-data-grid": "^7.0.0-alpha.22",
+    "react-dom": "^16.11.0",
+    "react-virtualized": "^9.21.1",
+    "react-virtualized-auto-sizer": "^1.0.2",
+    "react-virtuoso": "^0.12.3",
+    "react-window": "^1.8.5",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.5",
+    "shortid": "^2.2.15"
   },
   "scripts": {
-    "start": "npm run build_ui && electron ./main.js -d",
-    "build_ui": "webpack --config webpack.config.js",
-    "build_server": "cd ./server/installer && pyinstaller --clean --noconfirm --distpath=../../build_server/dist --workpath=../../build_server/work server.spec",
+    "watch": "webpack-dev-server --config webpack.dev.js",
+    "electron": "electron ./main.js -d",
+    "start": "webpack --config webpack.prod.js && electron ./main.js",
+    "build_ui": "webpack --config webpack.prod.js",
+    "build_server": "cd ./clarkproc && pyinstaller server.spec",
     "build_standalone": "electron-builder --dir",
-    "build_installer": "electron-builder"
-  }
+    "build_installer": "electron-builder",
+    "precommit-msg": "echo 'Checking for FHIR data files...' && exit 0",
+    "file-check": "pre-commit install"
+  },
+  "pre-commit": [
+    "precommit-msg",
+    "file-check"
+  ]
 }
