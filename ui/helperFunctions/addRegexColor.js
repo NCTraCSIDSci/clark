@@ -1,5 +1,11 @@
 const colors = ['rgb(242, 46, 78)', 'rgb(54, 173, 164)', 'rgb(220, 137, 50)', 'rgb(174, 157, 49)', 'rgb(119, 171, 49)', 'rgb(51, 176, 122)', 'rgb(56, 169, 197)', 'rgb(110, 155, 244)', 'rgb(204, 122, 244)', 'rgb(245, 101, 204)'];
 
+/**
+ * Provided a regex, assign it a color.
+ * @param {*} data Either a single regex object or an array of regex.
+ * @param {*} index If a single regex object, the index of that regex
+ * in the overall array.
+ */
 function addRegexColor(data, index) {
   if (Array.isArray(data)) {
     const dataWithColor = [];

@@ -2,6 +2,12 @@ function getRGB(color) {
   return color.split(/[()]/)[1].split(', ').map((x) => Number(x));
 }
 
+/**
+ * If multiple overlapping colors need to be applied to
+ * the text, this function takes in all the colors and
+ * returns the combination of all of them.
+ * @param {*} colors a list of colors.
+ */
 function getCombinedColor(colors) {
   let [r, g, b] = [255, 255, 255];
   for (let i = 0; i < colors.length; i += 1) {

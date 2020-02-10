@@ -34,6 +34,13 @@ function downloadErrors(pathname, errs, snackbar) {
   }
 }
 
+/**
+ * Turns error object into buttons that will download all errors.
+ * @param {*} errorObj Error object received from the backend with all
+ * errors found in uploaded files.
+ * @param {*} snackbar Snackbar hook to provide feedback on success of
+ * downloading errors.
+ */
 function parseErrors(errorObj, snackbar) {
   const errs = [];
   Object.keys(errorObj).forEach((key) => {
@@ -67,18 +74,6 @@ function parseErrors(errorObj, snackbar) {
     }
   });
   return errs;
-  // const fileErrs = Object.keys(files).map((file) => {
-  //   let errStr = '';
-  //   if (files[file].length) {
-  //     errStr += `${file}\n`;
-  //     files[file].forEach((err) => {
-  //       errStr += `${err}\n`;
-  //     });
-  //   }
-  //   return errStr;
-  // }).join('\n');
-  // const parsedErrors = `${fileErrs}\n\n${genErrs}\n\n${linkErrs}`;
-  // updateErrors(parsedErrors);
 }
 
 export default parseErrors;

@@ -5,6 +5,15 @@ import isValidRegex from './isValidRegex';
 const headerColor = 'rgb(198, 198, 198)';
 const unnamedColor = 'rgb(99, 190, 255)';
 
+/**
+ * addSections takes plain text and a regex object and returns a
+ * marked up note based on sections.
+ * @param {*} text Plain text from a note.
+ * @param {*} regex An object containing a required sectionBreak,
+ * ignoreUnnamed, ignoreHeader, and validRegex: a list
+ * of regular expressions to specify
+ * sections in the note.
+ */
 function addSections(text, regex) {
   if (text) {
     if (!isValidRegex(regex.sectionBreak)) {
