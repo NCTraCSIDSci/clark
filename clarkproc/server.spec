@@ -19,7 +19,8 @@ a = Analysis(['./clarkproc/server_app.py'],
                 'sklearn.neighbors.quad_tree',
                 'sklearn.tree._utils',
                 'sklearn.utils._cython_blas',
-                'sklearn.metrics.cluster'
+                'sklearn.metrics.cluster',
+                'pkg_resources.py2_warn'
              ],
              hookspath=[],
              runtime_hooks=[],
