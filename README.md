@@ -15,7 +15,7 @@ User documentation is available in the /docs folder in this repo, and can also b
 ## Development Instructions
 
 ### Python setup:
-Python setup requires a python3 and several dependencies found in `./clarkproc/requirements.txt`. These requirements are best installed in a virtual environment
+Python setup requires python 3.7.* and several dependencies found in `./clarkproc/requirements.txt`. These requirements are best installed in a virtual environment (Note: if you want to use python 3.8, checkout that branch for an updated requirements.txt. You can run the application locally, but building an installer will not work.)
 - Set up a virtual environment.
    - mac: `python3 -m virtualenv ~/.venv/clark`
    - windows: `python -m virtualenv %systemdrive%%homepath%\.venv\clark`
