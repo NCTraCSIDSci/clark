@@ -1,4 +1,4 @@
-# CLARK (Clinical Annotation Research Kit),
+# CLARK (Clinical Annotation Research Kit)
 
 CLARK is a natural language processing and machine learning application designed to make free-text data useful for computable phenotyping. CLARK takes free-text clinical notes as input and classifies those notes (and the associated patients) based on features (words and phrases) defined by the user. For each patient, CLARK outputs a classification (e.g., “Type 1 diabetic”), a confidence level, and significant features, essentially deriving structured “facts” from the contents of that patient’s unstructured notes. Thus far, CLARK has been applied at UNC to create computable phenotypes for diabetes, uterine fibroids, and primary ciliary dyskinesia (PCD).
 
@@ -16,23 +16,33 @@ User documentation is available in the /docs folder in this repo, and can also b
 
 ### Python setup:
 Python setup requires a python3 and several dependencies found in `./clarkproc/requirements.txt`. These requirements are best installed in a virtual environment
-- Set up a virtual environment. Ex. `python3 -m virtualenv ~/.venv/clark`
-- Activate the virtual environment. Ex. `source ~/.venv/clark/bin/activate`
+- Set up a virtual environment.
+   - mac: `python3 -m virtualenv ~/.venv/clark`
+   - windows: `python -m virtualenv %systemdrive%%homepath%\.venv\clark`
+- Activate the virtual environment.
+   - mac: `source ~/.venv/clark/bin/activate`
+   - windows: `%systemdrive%%homepath%\.venv\clark\Scripts\activate`
 - Install the requirements
   ```
     cd clarkproc
     pip install -r requirements.txt
+  ```
+- If you plan on making your own executable, you need to run this command as well:
+  ```
     pip install -r requirements-dev.txt
+  ```
+- Finally, go back one directory to get back to the main folder:
+  ```
     cd ..
   ```
 
-### User Interface
+### User Interface:
 Building the user interface requires [NPM](https://www.npmjs.com). Dependencies can be installed by calling
 ```
 npm install
 ```
 
-### Run the application:
+## Run the application locally:
 From a command line with the activated python environment, the application can be started using:
 (note: this will require you to run this command after you make any changes)
 ```
@@ -47,7 +57,7 @@ Open another terminal, activate the python environment, and run:
 npm run electron
 ```
 
-### Packaging
+## Packaging:
 Packaging is handled using [PyInstaller](http://www.pyinstaller.org) to bundle the Python engine and [Electron Builder](http://electron.build) to package everything together and build standalone applications and/or installers. Execution of each of these commands can be done using npm scripts.
 
 - Bundles the javascript
