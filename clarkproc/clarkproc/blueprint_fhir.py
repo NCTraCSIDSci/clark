@@ -165,7 +165,7 @@ def get_patients_summary(state, *args, **kwargs):
                 'num_categories': len(race_hist),
                 'histogram': race_hist
             },
-            'race': {
+            'ethnicity': {
                 'display': 'Ethnicity',
                 'type': 'categorical',
                 'percentDefined': sum(ethnicity_hist.values()) / count * 100.0,
