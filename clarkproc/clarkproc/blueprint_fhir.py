@@ -118,12 +118,24 @@ def get_patients_summary(state, *args, **kwargs):
 
     gender_hist = defaultdict(int)
     marital_hist = defaultdict(int)
+    race_hist = defaultdict(int)
+    ethnicity_hist = defaultdict(int)
 
     for p in state.patients.values():
         gender_hist[p.gender] += 1
 
         try:
             marital_hist[p.maritalStatus.display] += 1
+        except AttributeError:
+            pass
+
+        try:
+            race_hist[p.race.display] += 1
+        except AttributeError:
+            pass
+
+        try:
+            ethnicity_hist[p.ethnicity.display] += 1
         except AttributeError:
             pass
 
@@ -145,6 +157,20 @@ def get_patients_summary(state, *args, **kwargs):
                 'percentDefined': sum(marital_hist.values()) / count * 100.0,
                 'num_categories': len(marital_hist),
                 'histogram': marital_hist
+            },
+            'race': {
+                'display': 'Race',
+                'type': 'categorical',
+                'percentDefined': sum(race_hist.values()) / count * 100.0,
+                'num_categories': len(race_hist),
+                'histogram': race_hist
+            },
+            'race': {
+                'display': 'Ethnicity',
+                'type': 'categorical',
+                'percentDefined': sum(ethnicity_hist.values()) / count * 100.0,
+                'num_categories': len(ethnicity_hist),
+                'histogram': ethnicity_hist
             }
         }
     }
