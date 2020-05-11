@@ -20,7 +20,15 @@ import prettyString from '../../helperFunctions/prettyString';
 import PatientTable from './PatientTable';
 import PatientNotes from './PatientNotes';
 
-const blacklist = ['birthDate', 'gender', 'id', 'maritalStatus', 'label'];
+const blacklist = [
+  'birthDate',
+  'gender',
+  'id',
+  'maritalStatus',
+  'label',
+  'race',
+  'ethnicity',
+];
 const Transition = React.forwardRef((props, ref) => <Zoom ref={ref} {...props} />); // eslint-disable-line react/jsx-props-no-spreading
 
 /**
@@ -32,7 +40,7 @@ const PatientDetails = (props) => {
     patientDetails, container, regex, type, popup, explore,
   } = props;
   const {
-    birthDate, gender, id, maritalStatus,
+    birthDate, gender, id, maritalStatus, race, ethnicity,
   } = patientDetails.patient;
   const patientKeys = Object.keys(patientDetails.patient).filter((key) => blacklist.indexOf(key) < 0);
   const [open, setOpen] = useState('');
@@ -65,6 +73,8 @@ const PatientDetails = (props) => {
             </h2>
             <p>
               {`Birth Date: ${birthDate}, Gender: ${gender}, Marital Status: ${maritalStatus}`}
+              <br />
+              {`Race: ${race}, Ethnicity: ${ethnicity}`}
             </p>
             <h3>
               {prettyString(open)}

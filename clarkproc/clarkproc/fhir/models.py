@@ -149,9 +149,16 @@ class Patient(Resource):
                     msg_list.append(
                         f'{self.id_str} failed to parse marital status ({e}).')
 
-        # TODO Implement this
         self.race = None
         self.ethnicity = None
+        if fhir_patient.extension:
+            for extension in fhir_patient.extension:
+                if 'us-core-race' in extension.url:
+                    for value in extension.extension:
+                        self.race = CodeValue(**value.valueCoding.as_json())
+                elif 'us-core-ethnicity' in extension.url:
+                    for value in extension.extension:
+                        self.ethnicity = CodeValue(**value.valueCoding.as_json())
 
         if isinstance(msg_list, list):
             if fhir_patient.link is not None:
@@ -165,6 +172,8 @@ class Patient(Resource):
             'gender': self.gender,
             'birthDate': self.birthDate.isoformat(),
             'maritalStatus': self.maritalStatus.display if self.maritalStatus is not None else 'unspecified',
+            'race': self.race.display if self.race is not None else 'unspecified',
+            'ethnicity': self.ethnicity.display if self.ethnicity is not None else 'unspecified',
             'labs': self.labs.to_dict(),
             'vitals': self.vitals.to_dict(),
             'medications': self.medications.to_dict(),
@@ -181,6 +190,8 @@ class Patient(Resource):
             'gender': self.gender,
             'birthDate': self.birthDate.isoformat(),
             'maritalStatus': self.maritalStatus.display if self.maritalStatus is not None else 'unspecified',
+            'race': self.race.display if self.race is not None else 'unspecified',
+            'ethnicity': self.ethnicity.display if self.ethnicity is not None else 'unspecified',
             'num_labs': self.labs.unique_count,
             'num_vitals': self.vitals.unique_count,
             'num_medications': self.medications.unique_count,

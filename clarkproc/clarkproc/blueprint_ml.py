@@ -182,6 +182,16 @@ def fhir_to_dataframe(patients, plan):
                 ) else 0
         if 'one-hot' in patient_plan.get('marital_status', {}).get('features', []):
             patient_features['marital_status'] = patient.maritalStatus.code
+        if 'one-hot' in patient_plan.get('race', {}).get('features', []):
+            try:
+                patient_features['race'] = patient.race.code
+            except AttributeError:
+                patient_features['race'] = 'n/a'
+        if 'one-hot' in patient_plan.get('ethnicity', {}).get('features', []):
+            try:
+                patient_features['ethnicity'] = patient.ethnicity.code
+            except AttributeError:
+                patient_features['ethnicity'] = 'n/a'
         if 'one-hot' in patient_plan.get('gender', {}).get('features', []):
             patient_features['gender'] = patient.gender
 

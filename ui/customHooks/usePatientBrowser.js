@@ -29,6 +29,18 @@ const columns = [
     sortable: false,
   },
   {
+    dataKey: 'race',
+    label: 'Race',
+    width: 200,
+    sortable: false,
+  },
+  {
+    dataKey: 'ethnicity',
+    label: 'Ethnicity',
+    width: 200,
+    sortable: false,
+  },
+  {
     dataKey: 'num_labs',
     label: 'Labs',
     width: 80,
