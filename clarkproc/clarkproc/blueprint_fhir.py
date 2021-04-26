@@ -2,6 +2,7 @@
 from collections import defaultdict
 from functools import wraps
 import logging
+from urllib.parse import unquote
 
 from flask import Blueprint, jsonify, request
 
@@ -372,7 +373,7 @@ def get_patient_details(state, patient_id, detail_type, *args, **kwargs):
     return jsonify(d)
 
 
-@bp_fhir.route('/patient/<string:patient_id>/note/<string:note_id>', methods=['GET'])
+@bp_fhir.route('/patient/<string:patient_id>/note/<path:note_id>', methods=['GET'])
 @require_fhir
 def get_patient_note(state, patient_id, note_id, *args, **kwargs):
     """
@@ -424,7 +425,8 @@ def get_patient_note(state, patient_id, note_id, *args, **kwargs):
             {'Content-Type': 'text/plain'}
         )
 
-    n = p.notes.get(note_id)
+    decoded_note_id = unquote(note_id)
+    n = p.notes.get(decoded_note_id)
 
     if n is None:
         return (

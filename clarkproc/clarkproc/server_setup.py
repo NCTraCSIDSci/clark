@@ -1,9 +1,22 @@
+"""Clark server setup."""
 from flask import Flask
 from flasgger import Swagger
+from appdirs import user_data_dir
+import os
+import logging
 # from flask_cors import CORS
 
 from clarkproc.blueprint_fhir import TEST_DATA_INDICATOR, bp_fhir
 from clarkproc.blueprint_ml import bp_ml
+
+APPDIR = user_data_dir('clark', appauthor=False, roaming=True)
+if not os.path.exists(APPDIR):
+    os.makedirs(APPDIR)
+logging.basicConfig(
+    filename=os.path.join(APPDIR, 'clark-server.log'),
+    format="[%(asctime)s: %(levelname)s/%(name)s(%(processName)s)]: %(message)s",
+    level=logging.DEBUG,
+)
 
 app = Flask("clark_server")
 app.register_blueprint(bp_fhir, url_prefix='/fhir')
