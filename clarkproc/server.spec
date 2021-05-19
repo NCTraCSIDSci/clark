@@ -15,7 +15,12 @@ a = Analysis(['./clarkproc/server_app.py'],
                 'sklearn.tree._utils',
                 'sklearn.utils._cython_blas',
                 'sklearn.metrics.cluster',
-                'pkg_resources.py2_warn'
+                'pkg_resources.py2_warn',
+                'sklearn.utils.sparsetools._graph_validation',
+                'sklearn.utils.sparsetools._graph_tools',
+                'sklearn.utils.lgamma',
+                'sklearn.utils.weight_vector',
+                'sklearn.utils._weight_vector'
              ],
              hookspath=[],
              runtime_hooks=[],
