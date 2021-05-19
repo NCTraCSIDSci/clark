@@ -3,7 +3,7 @@ appdirs==1.4.3
 attrs==19.3.0
 Click==7.0
 fhir.resources==5.0.1
-flasgger==0.9.3
+flasgger==0.9.5
 Flask==1.1.1
 isodate==0.6.0
 itsdangerous==1.1.0
@@ -18,7 +18,7 @@ pyrsistent==0.15.6
 python-dateutil==2.8.1
 pytz==2019.3
 PyYAML==5.2
-scikit-learn==0.21.2
-scipy==1.3.0
+scikit-learn==0.24.2
+scipy==1.6.3
 six==1.13.0
 Werkzeug==0.16.0
