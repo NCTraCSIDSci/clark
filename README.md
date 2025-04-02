@@ -8,7 +8,7 @@ CLARK! was developed by [NC TraCS](https://tracs.unc.edu) and [CoVar](https://co
 CLARK! is a cross-platform desktop application leveraging [Electron](https://electronjs.org), a Python based machine learning engine and a [React](http://Reactjs.org) based user interface.
 
 ## Executable and User Documentation
-To download the CLARK! executable without having to package it from source yourself, go to [the Github release page](https://github.com/NCTraCSIDSci/clark/releases/tag/v2.0)) and download the CLARK zip file. (A demo dataset is also included.)
+To download the CLARK! executable without having to package it from source yourself, go to [the Github release page](https://github.com/NCTraCSIDSci/clark/releases) and download the CLARK zip file. (A demo dataset is also included.)
 
 User documentation is available in the /docs folder in this repo, and can also be viewed at [this link](https://htmlpreview.github.io/?https://raw.githubusercontent.com/NCTraCSIDSci/clark/master/docs/clark-documentation.html).
 
