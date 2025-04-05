@@ -70,7 +70,8 @@ const API = {
       });
   }),
   getPatientNote: (patientId, noteId, type) => new Promise((resolve, reject) => {
-    axios.get(url(`${type}/patient/${patientId}/note/${noteId}`))
+    const encodedNoteId = encodeURIComponent(noteId);
+    axios.get(url(`${type}/patient/${patientId}/note/${encodedNoteId}`))
       .then((res) => {
         resolve(res.data);
       })

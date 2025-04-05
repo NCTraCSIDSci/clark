@@ -1,24 +1,12 @@
 """Entry file for python server."""
 import logging
-import os
 import sys
 
-from appdirs import user_data_dir
 from flask import request
 import werkzeug
 
 from clarkproc import state
 from clarkproc.server_setup import app
-
-
-APPDIR = user_data_dir('clark', appauthor=False, roaming=True)
-if not os.path.exists(APPDIR):
-    os.makedirs(APPDIR)
-logging.basicConfig(
-    filename=os.path.join(APPDIR, 'clark-server.log'),
-    format="[%(asctime)s: %(levelname)s/%(name)s(%(processName)s)]: %(message)s",
-    level=logging.DEBUG,
-)
 
 LOGGER = logging.getLogger(__name__)
 
